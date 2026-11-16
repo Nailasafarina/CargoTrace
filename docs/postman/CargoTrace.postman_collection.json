@@ -1,0 +1,664 @@
+{
+	"info": {
+		"_postman_id": "cargotrace-rest-api-v1",
+		"name": "CargoTrace Global Shipment Visibility API",
+		"description": "Comprehensive REST API collection for CargoTrace: Global Shipment Visibility & Tracking Platform (Laravel 12 + Sanctum). Covers Authentication, Shipments, Milestone Tracking, Exception Management, and Master Data.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Aditya Pratama\",\n    \"email\": \"aditya.pratama@example.com\",\n    \"password\": \"Password123!\",\n    \"password_confirmation\": \"Password123!\",\n    \"role\": \"customer\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "register"]
+						},
+						"description": "Registers a new customer, operator, or administrator account and returns a Sanctum Bearer token."
+					},
+					"response": [
+						{
+							"name": "201 Created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Aditya Pratama\",\n    \"email\": \"aditya.pratama@example.com\",\n    \"password\": \"Password123!\",\n    \"password_confirmation\": \"Password123!\",\n    \"role\": \"customer\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/register",
+									"host": ["{{base_url}}"],
+									"path": ["api", "register"]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"message\": \"Registration successful.\",\n    \"access_token\": \"1|p4SSW0rdT0k3nEx4mpl3...\",\n    \"token_type\": \"Bearer\",\n    \"user\": {\n        \"id\": 5,\n        \"name\": \"Aditya Pratama\",\n        \"email\": \"aditya.pratama@example.com\",\n        \"role\": \"customer\",\n        \"created_at\": \"2026-11-17T00:30:00+07:00\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Login (Acquire Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.access_token) {",
+									"    pm.collectionVariables.set('token', jsonData.access_token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"operator@cargotrace.test\",\n    \"password\": \"Password123!\",\n    \"device_name\": \"postman_client\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "login"]
+						},
+						"description": "Authenticates user credentials with rate limiting (6 req/min) and saves token into collection variable."
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"operator@cargotrace.test\",\n    \"password\": \"Password123!\",\n    \"device_name\": \"postman_client\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/login",
+									"host": ["{{base_url}}"],
+									"path": ["api", "login"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"message\": \"Authentication successful.\",\n    \"access_token\": \"2|9k3jfa84jkfhs83jkshdf...\",\n    \"token_type\": \"Bearer\",\n    \"user\": {\n        \"id\": 2,\n        \"name\": \"Logistics Operator Demo\",\n        \"email\": \"operator@cargotrace.test\",\n        \"role\": \"operator\",\n        \"created_at\": \"2026-11-16T22:00:00+07:00\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Authenticated User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/user",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user"]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"user\": {\n        \"id\": 2,\n        \"name\": \"Logistics Operator Demo\",\n        \"email\": \"operator@cargotrace.test\",\n        \"role\": \"operator\",\n        \"created_at\": \"2026-11-16T22:00:00+07:00\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout (Revoke Token)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "logout"]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"message\": \"Successfully logged out and revoked access token.\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Shipments",
+			"item": [
+				{
+					"name": "List Shipments (Pagination, Filter & Sort)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/shipments?page=1&per_page=15&status=IN_TRANSIT&delay_status=ON_TIME&sort_by=created_at&sort_order=desc",
+							"host": ["{{base_url}}"],
+							"path": ["api", "shipments"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "15" },
+								{ "key": "status", "value": "IN_TRANSIT", "description": "CREATED, BOOKED, PICKED_UP, IN_TRANSIT, DELIVERED, CANCELLED" },
+								{ "key": "delay_status", "value": "ON_TIME", "description": "ON_TIME, LOW, MEDIUM, HIGH" },
+								{ "key": "carrier_id", "value": "1", "disabled": true },
+								{ "key": "search", "value": "Coffee", "disabled": true },
+								{ "key": "sort_by", "value": "created_at" },
+								{ "key": "sort_order", "value": "desc" }
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK (Paginated)",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"shipment_number\": \"CT-SEA-EUR-2026-001\",\n            \"cargo_type\": \"Specialty Coffee & Raw Spices (FCL)\",\n            \"weight_kg\": 24500,\n            \"volume_cbm\": 58.5,\n            \"expected_departure_at\": \"2026-03-02T10:00:00+00:00\",\n            \"expected_arrival_at\": \"2026-03-22T18:00:00+00:00\",\n            \"estimated_arrival_at\": \"2026-03-24T06:00:00+00:00\",\n            \"current_status\": \"IN_TRANSIT\",\n            \"current_status_label\": \"In Transit\",\n            \"delay_status\": \"HIGH\",\n            \"delay_status_label\": \"Delay: HIGH (>24h)\",\n            \"delay_hours\": 36,\n            \"delay_reason\": \"ETA 24 Mar 06:00 melebihi expected 22 Mar 18:00 sebesar 36 jam; threshold 24 jam → HIGH\",\n            \"customer\": {\n                \"id\": 3,\n                \"name\": \"PT Nusantara Mandiri Export\",\n                \"email\": \"customer1@cargotrace.test\",\n                \"role\": \"customer\"\n            },\n            \"carrier\": {\n                \"id\": 1,\n                \"name\": \"A.P. Moller – Maersk Line\",\n                \"code\": \"MSK\"\n            }\n        }\n    ],\n    \"links\": {\n        \"first\": \"http://127.0.0.1:8000/api/shipments?page=1\",\n        \"last\": \"http://127.0.0.1:8000/api/shipments?page=1\"\n    },\n    \"meta\": {\n        \"current_page\": 1,\n        \"per_page\": 15,\n        \"total\": 1\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Shipment Booking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" },
+							{ "key": "Content-Type", "value": "application/json", "type": "text" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customer_id\": 3,\n    \"carrier_id\": 1,\n    \"origin_location_id\": 1,\n    \"destination_location_id\": 8,\n    \"cargo_type\": \"Organic Sumatra Arabica Coffee (FCL 40ft)\",\n    \"volume_cbm\": 62.50,\n    \"expected_departure_at\": \"2026-04-01 08:00:00\",\n    \"expected_arrival_at\": \"2026-04-22 16:00:00\",\n    \"items\": [\n        {\n            \"description\": \"Mandheling G1 Green Beans (Jute Bags)\",\n            \"quantity\": 300,\n            \"weight_kg\": 18000.00\n        },\n        {\n            \"description\": \"Lintong Specialty Roasted Coffee\",\n            \"quantity\": 80,\n            \"weight_kg\": 3200.00\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/shipments",
+							"host": ["{{base_url}}"],
+							"path": ["api", "shipments"]
+						}
+					},
+					"response": [
+						{
+							"name": "201 Created",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": {\n        \"id\": 26,\n        \"shipment_number\": \"CT-SEA-EUR-2026-00026\",\n        \"cargo_type\": \"Organic Sumatra Arabica Coffee (FCL 40ft)\",\n        \"weight_kg\": 21200,\n        \"volume_cbm\": 62.5,\n        \"expected_departure_at\": \"2026-04-01T08:00:00+00:00\",\n        \"expected_arrival_at\": \"2026-04-22T16:00:00+00:00\",\n        \"current_status\": \"CREATED\",\n        \"delay_status\": \"ON_TIME\",\n        \"items\": [\n            {\n                \"id\": 52,\n                \"description\": \"Mandheling G1 Green Beans (Jute Bags)\",\n                \"quantity\": 300,\n                \"weight_kg\": 18000\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Shipment Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/shipments/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "shipments", "1"]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": {\n        \"id\": 1,\n        \"shipment_number\": \"CT-SEA-EUR-2026-001\",\n        \"cargo_type\": \"Specialty Coffee & Raw Spices (FCL)\",\n        \"weight_kg\": 24500,\n        \"volume_cbm\": 58.5,\n        \"current_status\": \"IN_TRANSIT\",\n        \"delay_status\": \"HIGH\",\n        \"delay_hours\": 36,\n        \"customer\": {\n            \"id\": 3,\n            \"name\": \"PT Nusantara Mandiri Export\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Shipment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "PUT",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" },
+							{ "key": "Content-Type", "value": "application/json", "type": "text" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shipment_number\": \"CT-SEA-EUR-2026-001\",\n    \"customer_id\": 3,\n    \"carrier_id\": 1,\n    \"origin_location_id\": 1,\n    \"destination_location_id\": 8,\n    \"cargo_type\": \"Specialty Coffee & High Grade Spices\",\n    \"weight_kg\": 25000.00,\n    \"volume_cbm\": 60.00,\n    \"expected_departure_at\": \"2026-03-02 10:00:00\",\n    \"expected_arrival_at\": \"2026-03-22 18:00:00\",\n    \"current_status\": \"IN_TRANSIT\",\n    \"delay_status\": \"HIGH\",\n    \"delay_hours\": 36\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/shipments/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "shipments", "1"]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": {\n        \"id\": 1,\n        \"shipment_number\": \"CT-SEA-EUR-2026-001\",\n        \"cargo_type\": \"Specialty Coffee & High Grade Spices\",\n        \"weight_kg\": 25000\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Shipment (Admin Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "DELETE",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/shipments/26",
+							"host": ["{{base_url}}"],
+							"path": ["api", "shipments", "26"]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"message\": \"Shipment CT-SEA-EUR-2026-00026 was deleted successfully.\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Tracking & Telemetry",
+			"item": [
+				{
+					"name": "Get Shipment Tracking Timeline & Position",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/shipments/1/tracking",
+							"host": ["{{base_url}}"],
+							"path": ["api", "shipments", "1", "tracking"]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"shipment_number\": \"CT-SEA-EUR-2026-001\",\n    \"current_status\": \"IN_TRANSIT\",\n    \"delay_status\": \"HIGH\",\n    \"current_location\": {\n        \"id\": 6,\n        \"name\": \"Port of Colombo\",\n        \"city\": \"Colombo\",\n        \"country\": \"Sri Lanka\",\n        \"latitude\": 6.9497,\n        \"longitude\": 79.8428\n    },\n    \"timeline\": [\n        {\n            \"id\": 1,\n            \"event_type\": \"PICKED_UP\",\n            \"event_type_label\": \"Cargo Picked Up\",\n            \"is_exception\": false,\n            \"occurred_at\": \"2026-03-02T10:00:00+00:00\",\n            \"description\": \"Container stuffed and sealed at Jakarta export CFS.\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Log Tracking Milestone (State Transition)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" },
+							{ "key": "Content-Type", "value": "application/json", "type": "text" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"IN_TRANSIT\",\n    \"event_type\": \"IN_TRANSIT\",\n    \"location_id\": 6,\n    \"occurred_at\": \"2026-03-10 14:00:00\",\n    \"latitude\": 6.9497000,\n    \"longitude\": 79.8428000,\n    \"description\": \"Vessel completed transshipment feeder operations at Port of Colombo; en route to Suez Canal.\",\n    \"is_exception\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/shipments/1/tracking",
+							"host": ["{{base_url}}"],
+							"path": ["api", "shipments", "1", "tracking"]
+						}
+					},
+					"response": [
+						{
+							"name": "201 Created",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": {\n        \"id\": 15,\n        \"shipment_id\": 1,\n        \"event_type\": \"IN_TRANSIT\",\n        \"is_exception\": false,\n        \"occurred_at\": \"2026-03-10T14:00:00+00:00\",\n        \"description\": \"Vessel completed transshipment feeder operations at Port of Colombo; en route to Suez Canal.\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Shipment Exceptions",
+			"item": [
+				{
+					"name": "List Exceptions for Shipment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/shipments/1/exceptions",
+							"host": ["{{base_url}}"],
+							"path": ["api", "shipments", "1", "exceptions"]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"shipment_id\": 1,\n            \"type\": \"CUSTOMS_HOLD\",\n            \"severity\": \"HIGH\",\n            \"status\": \"OPEN\",\n            \"detected_at\": \"2026-03-16T12:00:00+00:00\",\n            \"description\": \"Container placed under CUSTOMS_HOLD by Rotterdam Port Customs for phytosanitary verification.\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Flag New Shipment Exception",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" },
+							{ "key": "Content-Type", "value": "application/json", "type": "text" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"CUSTOMS_HOLD\",\n    \"severity\": \"HIGH\",\n    \"detected_at\": \"2026-03-16 12:00:00\",\n    \"description\": \"Container placed under CUSTOMS_HOLD for physical sampling and phytosanitary review.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/shipments/1/exceptions",
+							"host": ["{{base_url}}"],
+							"path": ["api", "shipments", "1", "exceptions"]
+						}
+					},
+					"response": [
+						{
+							"name": "201 Created",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": {\n        \"id\": 4,\n        \"shipment_id\": 1,\n        \"type\": \"CUSTOMS_HOLD\",\n        \"severity\": \"HIGH\",\n        \"status\": \"OPEN\",\n        \"detected_at\": \"2026-03-16T12:00:00+00:00\",\n        \"description\": \"Container placed under CUSTOMS_HOLD for physical sampling and phytosanitary review.\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Exception Lifecycle Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "PATCH",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" },
+							{ "key": "Content-Type", "value": "application/json", "type": "text" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"RESOLVED\",\n    \"resolution_notes\": \"Phytosanitary certificate verified by EU port authority. Hold released.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/exceptions/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "exceptions", "1"]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": {\n        \"id\": 1,\n        \"type\": \"CUSTOMS_HOLD\",\n        \"status\": \"RESOLVED\",\n        \"resolved_at\": \"2026-03-17T09:30:00+00:00\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Master Data",
+			"item": [
+				{
+					"name": "List Carriers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/carriers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "carriers"]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"A.P. Moller – Maersk Line\",\n            \"code\": \"MSK\",\n            \"is_active\": true\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Carrier (Admin Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" },
+							{ "key": "Content-Type", "value": "application/json", "type": "text" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Yang Ming Marine Transport\",\n    \"code\": \"YML\",\n    \"contact_email\": \"global.support@yangming.com\",\n    \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/carriers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "carriers"]
+						}
+					},
+					"response": [
+						{
+							"name": "201 Created",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": {\n        \"id\": 7,\n        \"name\": \"Yang Ming Marine Transport\",\n        \"code\": \"YML\",\n        \"is_active\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "List Locations",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "GET",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/locations",
+							"host": ["{{base_url}}"],
+							"path": ["api", "locations"]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Port of Tanjung Priok\",\n            \"type\": \"port\",\n            \"country\": \"Indonesia\",\n            \"city\": \"Jakarta\",\n            \"latitude\": -6.1018,\n            \"longitude\": 106.8833\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Location (Admin Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+						},
+						"method": "POST",
+						"header": [
+							{ "key": "Accept", "value": "application/json", "type": "text" },
+							{ "key": "Content-Type", "value": "application/json", "type": "text" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Port of Le Havre\",\n    \"type\": \"port\",\n    \"country\": \"France\",\n    \"city\": \"Le Havre\",\n    \"latitude\": 49.4944000,\n    \"longitude\": 0.1079000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/locations",
+							"host": ["{{base_url}}"],
+							"path": ["api", "locations"]
+						}
+					},
+					"response": [
+						{
+							"name": "201 Created",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"body": "{\n    \"data\": {\n        \"id\": 16,\n        \"name\": \"Port of Le Havre\",\n        \"type\": \"port\",\n        \"country\": \"France\",\n        \"city\": \"Le Havre\",\n        \"latitude\": 49.4944,\n        \"longitude\": 0.1079\n    }\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

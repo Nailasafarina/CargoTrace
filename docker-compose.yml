@@ -1,0 +1,89 @@
+services:
+  # Laravel PHP-FPM Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cargotrace-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    environment:
+      APP_NAME: "CargoTrace"
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: "http://localhost:8080"
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: cargotrace
+      DB_USERNAME: cargotrace_user
+      DB_PASSWORD: cargotrace_secret_password
+      CACHE_STORE: redis
+      SESSION_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - ./storage/app/public:/var/www/html/storage/app/public
+    networks:
+      - cargotrace-network
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  # Nginx Web Server Service
+  web:
+    image: nginx:alpine
+    container_name: cargotrace-web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - cargotrace-network
+    depends_on:
+      - app
+
+  # MySQL Database Service
+  db:
+    image: mysql:8.0
+    container_name: cargotrace-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: cargotrace
+      MYSQL_USER: cargotrace_user
+      MYSQL_PASSWORD: cargotrace_secret_password
+      MYSQL_ROOT_PASSWORD: cargotrace_root_secret
+    volumes:
+      - cargotrace-db-data:/var/lib/mysql
+    networks:
+      - cargotrace-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis In-Memory Cache & Queue
+  redis:
+    image: redis:7-alpine
+    container_name: cargotrace-redis
+    restart: unless-stopped
+    volumes:
+      - cargotrace-redis-data:/data
+    networks:
+      - cargotrace-network
+
+networks:
+  cargotrace-network:
+    driver: bridge
+
+volumes:
+  cargotrace-db-data:
+    driver: local
+  cargotrace-redis-data:
+    driver: local
