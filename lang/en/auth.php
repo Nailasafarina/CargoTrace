@@ -1,0 +1,33 @@
+<?php
+
+return [
+    'failed' => 'These credentials do not match our records.',
+    'password' => 'The provided password is incorrect.',
+    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+
+    'login_title' => 'Sign in to CargoTrace',
+    'login_subtitle' => 'Enter your credentials to access your dashboard',
+    'email' => 'Email Address',
+    'password_label' => 'Password',
+    'password_confirmation' => 'Confirm Password',
+    'name' => 'Full Name',
+    'remember_me' => 'Remember this device',
+    'sign_in_button' => 'Sign In',
+    'sign_up_button' => 'Create Account',
+    'register_title' => 'Create CargoTrace Account',
+    'register_subtitle' => 'Join our logistics management and cargo tracking ecosystem',
+    'dont_have_account' => "Don't have an account?",
+    'already_registered' => 'Already registered?',
+    'demo_accounts' => 'Demo Access Credentials',
+    'demo_admin' => 'System Administrator',
+    'demo_operator' => 'Logistics Operator',
+    'demo_customer' => 'Consignee Customer',
+    'password_all' => 'Password for all accounts:',
+    'fill_form' => 'Fill',
+    'click_autofill' => 'Click to autofill',
+    'check_errors' => 'Please check the errors below:',
+    'logged_out_status' => 'You have been successfully logged out.',
+    'registration_success' => 'Registration successful.',
+    'login_success' => 'Authentication successful.',
+    'logout_success' => 'Successfully logged out and revoked access token.',
+];

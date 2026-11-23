@@ -12,7 +12,8 @@ readonly class EtaEvaluationResult
         public int $thresholdHours,
         public DelayStatus $delayStatus,
         public string $classification,
-        public string $reason
+        public string $reason,
+        public ?string $reasonPayload = null
     ) {}
 
     /**

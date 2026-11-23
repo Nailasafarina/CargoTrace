@@ -123,7 +123,14 @@ class TrackingService
                 'user_id' => $shipment->customer_id,
                 'shipment_id' => $shipment->id,
                 'type' => 'SHIPMENT_MILESTONE_UPDATED',
-                'message' => "Shipment {$shipment->shipment_number} status updated to {$targetStatus->label()}: {$event->description}",
+                'message' => json_encode([
+                    'key' => 'notifications.messages.shipment_milestone_updated',
+                    'params' => [
+                        'number' => $shipment->shipment_number,
+                        'status' => $targetStatus->value,
+                        'description' => $event->description,
+                    ],
+                ]),
                 'read_at' => null,
             ]);
 

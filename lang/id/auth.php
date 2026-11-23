@@ -1,0 +1,33 @@
+<?php
+
+return [
+    'failed' => 'Kredensial yang diberikan tidak cocok dengan data kami.',
+    'password' => 'Kata sandi yang dimasukkan salah.',
+    'throttle' => 'Terlalu banyak percobaan masuk. Silakan coba lagi dalam :seconds detik.',
+
+    'login_title' => 'Masuk ke CargoTrace',
+    'login_subtitle' => 'Masukkan kredensial Anda untuk mengakses dasbor',
+    'email' => 'Alamat Email',
+    'password_label' => 'Kata Sandi',
+    'password_confirmation' => 'Konfirmasi Kata Sandi',
+    'name' => 'Nama Lengkap',
+    'remember_me' => 'Ingat perangkat ini',
+    'sign_in_button' => 'Masuk',
+    'sign_up_button' => 'Buat Akun',
+    'register_title' => 'Buat Akun CargoTrace',
+    'register_subtitle' => 'Bergabunglah dengan ekosistem pelacakan kargo & manajemen logistik kami',
+    'dont_have_account' => 'Belum memiliki akun?',
+    'already_registered' => 'Sudah terdaftar?',
+    'demo_accounts' => 'Kredensial Akun Demo',
+    'demo_admin' => 'Administrator Sistem',
+    'demo_operator' => 'Operator Logistik',
+    'demo_customer' => 'Pelanggan Penerima',
+    'password_all' => 'Kata sandi semua akun:',
+    'fill_form' => 'Isi',
+    'click_autofill' => 'Klik untuk isi otomatis',
+    'check_errors' => 'Silakan periksa kesalahan di bawah ini:',
+    'logged_out_status' => 'Anda telah berhasil keluar dari sistem.',
+    'registration_success' => 'Pendaftaran berhasil.',
+    'login_success' => 'Autentikasi berhasil.',
+    'logout_success' => 'Berhasil keluar dan mencabut token akses.',
+];

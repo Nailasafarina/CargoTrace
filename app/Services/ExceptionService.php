@@ -53,7 +53,14 @@ class ExceptionService
                 'user_id' => $shipment->customer_id,
                 'shipment_id' => $shipment->id,
                 'type' => 'SHIPMENT_EXCEPTION_ALERT',
-                'message' => "Shipment {$shipment->shipment_number} exception recorded [{$type->label()}]: {$exception->description}",
+                'message' => json_encode([
+                    'key' => 'notifications.messages.shipment_exception_alert',
+                    'params' => [
+                        'number' => $shipment->shipment_number,
+                        'type' => $type->value,
+                        'description' => $exception->description,
+                    ],
+                ]),
                 'read_at' => null,
             ]);
 
@@ -64,7 +71,14 @@ class ExceptionService
                     'user_id' => $operator->id,
                     'shipment_id' => $shipment->id,
                     'type' => 'SHIPMENT_EXCEPTION_INTERNAL',
-                    'message' => "Exception alert on {$shipment->shipment_number} [{$type->label()} - Severity: {$severity->value}]. Operator action required.",
+                    'message' => json_encode([
+                        'key' => 'notifications.messages.shipment_exception_internal',
+                        'params' => [
+                            'number' => $shipment->shipment_number,
+                            'type' => $type->value,
+                            'severity' => $severity->value,
+                        ],
+                    ]),
                     'read_at' => null,
                 ]);
             }
@@ -140,7 +154,13 @@ class ExceptionService
                     'user_id' => $exception->shipment->customer_id,
                     'shipment_id' => $exception->shipment_id,
                     'type' => 'SHIPMENT_EXCEPTION_RESOLVED',
-                    'message' => "Shipment {$exception->shipment->shipment_number} exception resolved [{$exception->type->label()}].",
+                    'message' => json_encode([
+                        'key' => 'notifications.messages.shipment_exception_resolved',
+                        'params' => [
+                            'number' => $exception->shipment->shipment_number,
+                            'type' => $exception->type->value,
+                        ],
+                    ]),
                     'read_at' => null,
                 ]);
             }

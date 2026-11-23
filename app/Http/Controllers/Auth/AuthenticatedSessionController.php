@@ -30,6 +30,13 @@ class AuthenticatedSessionController extends Controller
 
         $user = $request->user();
 
+        // Synchronize locale preferences upon login
+        if (! empty($user->locale)) {
+            $request->session()->put('locale', $user->locale);
+        } elseif ($request->session()->has('locale')) {
+            $user->update(['locale' => $request->session()->get('locale')]);
+        }
+
         // Redirect based on the authenticated user's role
         return match ($user->role) {
             'admin' => redirect()->intended(route('admin.dashboard')),

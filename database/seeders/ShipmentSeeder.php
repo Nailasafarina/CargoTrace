@@ -762,7 +762,13 @@ class ShipmentSeeder extends Seeder
                     'user_id' => $data['customer']->id,
                     'shipment_id' => $shipment->id,
                     'type' => 'EXCEPTION_ALERT',
-                    'message' => "Shipment {$shipment->shipment_number} has an active exception: {$exData['type']->label()}.",
+                    'message' => json_encode([
+                        'key' => 'notifications.messages.active_exception',
+                        'params' => [
+                            'number' => $shipment->shipment_number,
+                            'type' => $exData['type']->value,
+                        ],
+                    ]),
                     'read_at' => null,
                 ]);
             }

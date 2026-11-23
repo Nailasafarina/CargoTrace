@@ -49,10 +49,28 @@ class LocationController extends Controller
             $query->where('type', $type);
         }
 
+        $mapMarkers = (clone $query)
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->limit(100)
+            ->get(['id', 'name', 'type', 'city', 'country', 'latitude', 'longitude'])
+            ->map(fn ($loc) => [
+                'lat' => (float) $loc->latitude,
+                'lng' => (float) $loc->longitude,
+                'title' => $loc->name,
+                'type' => $loc->type->value,
+                'typeLabel' => $loc->type->label(),
+                'city' => $loc->city,
+                'country' => $loc->country,
+                'url' => route('locations.show', $loc),
+            ])
+            ->values()
+            ->all();
+
         $locations = $query->orderBy('country')->orderBy('city')->paginate(12)->withQueryString();
         $types = LocationType::cases();
 
-        return view('locations.index', compact('locations', 'types'));
+        return view('locations.index', compact('locations', 'types', 'mapMarkers'));
     }
 
     /**

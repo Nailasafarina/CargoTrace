@@ -14,9 +14,9 @@ enum ExceptionStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Open => 'Open',
-            self::Investigating => 'Under Investigation',
-            self::Resolved => 'Resolved & Cleared',
+            self::Open => __('exceptions.status.open'),
+            self::Investigating => __('exceptions.status.investigating'),
+            self::Resolved => __('exceptions.status.resolved'),
         };
     }
 
@@ -58,9 +58,9 @@ enum ExceptionStatus: string
     public function badgeClasses(): string
     {
         return match ($this) {
-            self::Open => 'bg-rose-500/10 text-rose-400 border border-rose-500/30',
-            self::Investigating => 'bg-amber-500/10 text-amber-400 border border-amber-500/30',
-            self::Resolved => 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30',
+            self::Open => 'bg-rose-50 text-rose-700 border border-rose-200',
+            self::Investigating => 'bg-amber-50 text-amber-800 border border-amber-200',
+            self::Resolved => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
         };
     }
 }

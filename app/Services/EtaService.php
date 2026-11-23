@@ -39,16 +39,22 @@ class EtaService
 
         // 1. Check if estimated arrival is past expected arrival
         if ($estimated->lessThanOrEqualTo($expected)) {
+            $reasonKey = 'shipments.delay_reasons.on_schedule';
+            $reasonParams = [
+                'estimated' => $estimated->format('d M H:i'),
+                'expected' => $expected->format('d M H:i'),
+            ];
+            $reasonPayload = json_encode(['key' => $reasonKey, 'params' => $reasonParams]);
+            $reasonText = __($reasonKey, $reasonParams);
+
             return new EtaEvaluationResult(
                 isDelayed: false,
                 delayHours: 0,
                 thresholdHours: $threshold,
                 delayStatus: DelayStatus::OnTime,
                 classification: 'ON_TIME',
-                reason: sprintf(
-                    'ETA %s sesuai jadwal; tidak ada keterlambatan.',
-                    $estimated->format('d M H:i')
-                )
+                reason: $reasonText,
+                reasonPayload: $reasonPayload
             );
         }
 
@@ -71,14 +77,16 @@ class EtaService
                 default => DelayStatus::Delayed,
             };
 
-            $reason = sprintf(
-                'ETA %s melebihi expected %s sebesar %d jam; threshold %d jam → %s',
-                $estimated->format('d M H:i'),
-                $expected->format('d M H:i'),
-                $delayHours,
-                $threshold,
-                $classification
-            );
+            $reasonKey = 'shipments.delay_reasons.exceeded_threshold';
+            $reasonParams = [
+                'estimated' => $estimated->format('d M H:i'),
+                'expected' => $expected->format('d M H:i'),
+                'hours' => $delayHours,
+                'threshold' => $threshold,
+                'classification' => $classification,
+            ];
+            $reasonPayload = json_encode(['key' => $reasonKey, 'params' => $reasonParams]);
+            $reasonText = __($reasonKey, $reasonParams);
 
             return new EtaEvaluationResult(
                 isDelayed: true,
@@ -86,24 +94,30 @@ class EtaService
                 thresholdHours: $threshold,
                 delayStatus: $delayStatus,
                 classification: $classification,
-                reason: $reason
+                reason: $reasonText,
+                reasonPayload: $reasonPayload
             );
         }
 
         // Delay exists but is below threshold tolerance
+        $reasonKey = 'shipments.delay_reasons.below_threshold';
+        $reasonParams = [
+            'estimated' => $estimated->format('d M H:i'),
+            'expected' => $expected->format('d M H:i'),
+            'hours' => $delayHours,
+            'threshold' => $threshold,
+        ];
+        $reasonPayload = json_encode(['key' => $reasonKey, 'params' => $reasonParams]);
+        $reasonText = __($reasonKey, $reasonParams);
+
         return new EtaEvaluationResult(
             isDelayed: false,
             delayHours: $delayHours,
             thresholdHours: $threshold,
             delayStatus: DelayStatus::OnTime,
             classification: 'ON_TIME',
-            reason: sprintf(
-                'ETA %s melebihi expected %s sebesar %d jam; di bawah threshold %d jam → ON_TIME',
-                $estimated->format('d M H:i'),
-                $expected->format('d M H:i'),
-                $delayHours,
-                $threshold
-            )
+            reason: $reasonText,
+            reasonPayload: $reasonPayload
         );
     }
 
@@ -124,7 +138,7 @@ class EtaService
 
             $shipment->delay_status = $result->delayStatus;
             $shipment->delay_hours = $result->delayHours;
-            $shipment->delay_reason = $result->reason;
+            $shipment->delay_reason = $result->reasonPayload ?? $result->reason;
             $shipment->save();
 
             // Trigger notification & audit log if shipment transitioned into an active delay
@@ -137,7 +151,15 @@ class EtaService
                     'user_id' => $shipment->customer_id,
                     'shipment_id' => $shipment->id,
                     'type' => 'SHIPMENT_DELAY_ALERT',
-                    'message' => "Shipment {$shipment->shipment_number} delay alert ({$result->classification}): {$result->reason}",
+                    'message' => json_encode([
+                        'key' => 'notifications.messages.shipment_delay_alert',
+                        'params' => [
+                            'number' => $shipment->shipment_number,
+                            'classification' => $result->classification,
+                            'delay_hours' => $result->delayHours,
+                            'reason' => $result->reason,
+                        ],
+                    ]),
                     'read_at' => null,
                 ]);
 
@@ -148,7 +170,14 @@ class EtaService
                         'user_id' => $operator->id,
                         'shipment_id' => $shipment->id,
                         'type' => 'SHIPMENT_DELAY_INTERNAL',
-                        'message' => "Operator Alert: {$shipment->shipment_number} flagged as {$result->classification} delay ({$result->delayHours}h).",
+                        'message' => json_encode([
+                            'key' => 'notifications.messages.shipment_delay_internal',
+                            'params' => [
+                                'number' => $shipment->shipment_number,
+                                'classification' => $result->classification,
+                                'delay_hours' => $result->delayHours,
+                            ],
+                        ]),
                         'read_at' => null,
                     ]);
                 }

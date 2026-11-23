@@ -17,12 +17,12 @@ enum ShipmentStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Created => 'Created',
-            self::Booked => 'Booked',
-            self::PickedUp => 'Picked Up',
-            self::InTransit => 'In Transit',
-            self::Delivered => 'Delivered',
-            self::Cancelled => 'Cancelled',
+            self::Created => __('shipments.status.created'),
+            self::Booked => __('shipments.status.booked'),
+            self::PickedUp => __('shipments.status.picked_up'),
+            self::InTransit => __('shipments.status.in_transit'),
+            self::Delivered => __('shipments.status.delivered'),
+            self::Cancelled => __('shipments.status.cancelled'),
         };
     }
 
@@ -68,12 +68,12 @@ enum ShipmentStatus: string
     public function badgeClasses(): string
     {
         return match ($this) {
-            self::Created => 'bg-slate-800 text-slate-300 border border-slate-700',
-            self::Booked => 'bg-blue-500/10 text-blue-400 border border-blue-500/30',
-            self::PickedUp => 'bg-amber-500/10 text-amber-400 border border-amber-500/30',
-            self::InTransit => 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30',
-            self::Delivered => 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30',
-            self::Cancelled => 'bg-rose-500/10 text-rose-400 border border-rose-500/30',
+            self::Created => 'bg-slate-100 text-slate-700 border border-slate-300',
+            self::Booked => 'bg-blue-50 text-blue-700 border border-blue-200',
+            self::PickedUp => 'bg-indigo-50 text-indigo-700 border border-indigo-200',
+            self::InTransit => 'bg-amber-50 text-amber-800 border border-amber-200',
+            self::Delivered => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+            self::Cancelled => 'bg-rose-50 text-rose-700 border border-rose-200',
         };
     }
 

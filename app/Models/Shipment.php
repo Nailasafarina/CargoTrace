@@ -49,6 +49,33 @@ class Shipment extends Model
     }
 
     /**
+     * Get the translated delay reason.
+     * Decodes JSON structure {"key": "...", "params": {...}} if present.
+     */
+    public function getDelayReasonAttribute($value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        $decoded = json_decode($value, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded) && isset($decoded['key'])) {
+            $params = $decoded['params'] ?? [];
+            return __($decoded['key'], $params);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Get raw underlying delay reason.
+     */
+    public function getRawDelayReasonAttribute(): ?string
+    {
+        return $this->attributes['delay_reason'] ?? null;
+    }
+
+    /**
      * Shipment to Customer relationship.
      * Cardinality: Many Shipments belong to 1 Customer User (N:1).
      *

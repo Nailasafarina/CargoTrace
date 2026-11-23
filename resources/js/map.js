@@ -1,0 +1,357 @@
+import L from 'leaflet';
+
+/**
+ * HTML Sanitization Helper to prevent DOM-based XSS attacks in Leaflet popups.
+ */
+function escapeHtml(value) {
+    if (value === null || value === undefined) return '';
+    const div = document.createElement('div');
+    div.textContent = String(value);
+    return div.innerHTML;
+}
+
+/**
+ * Resolve facility pin styling by location type.
+ */
+function getPinStyle(type) {
+    const normalized = String(type || '').toLowerCase();
+    switch (normalized) {
+        case 'port':
+            return {
+                color: '#2563eb', // blue
+                svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a3 3 0 00-3 3v2H6a2 2 0 00-2 2v2a2 2 0 002 2h1v4a5 5 0 0010 0v-4h1a2 2 0 002-2V9a2 2 0 00-2-2h-3V5a3 3 0 00-3-3z"/>'
+            };
+        case 'airport':
+            return {
+                color: '#4f46e5', // indigo
+                svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>'
+            };
+        case 'warehouse':
+            return {
+                color: '#d97706', // amber
+                svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>'
+            };
+        case 'city':
+        default:
+            return {
+                color: '#059669', // emerald
+                svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>'
+            };
+    }
+}
+
+/**
+ * Generate a modern, retina-ready Leaflet divIcon with clean light-theme styling.
+ */
+function createLocationPin(type, isDraggable = false) {
+    const style = getPinStyle(type);
+    const pulseRing = isDraggable ? '<span class="absolute -inset-1 rounded-full bg-blue-500/20 animate-ping"></span>' : '';
+
+    return L.divIcon({
+        className: 'cargotrace-pin-wrapper',
+        html: `
+            <div class="relative flex items-center justify-center">
+                ${pulseRing}
+                <div style="background-color: ${style.color};" class="w-8 h-8 rounded-full border-2 border-white shadow-md flex items-center justify-center text-white transition-transform hover:scale-110">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        ${style.svg}
+                    </svg>
+                </div>
+            </div>
+        `,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+        popupAnchor: [0, -18],
+    });
+}
+
+/**
+ * Safely format popup content with sanitized HTML strings.
+ */
+function buildPopupContent(marker) {
+    const i18n = window.i18n?.leaflet || {};
+    const title = escapeHtml(marker.title || marker.name || '');
+    const typeLabel = escapeHtml(marker.typeLabel || marker.type || '');
+    const locationStr = escapeHtml(
+        marker.location ||
+        (marker.city ? (marker.country ? `${marker.city}, ${marker.country}` : marker.city) : '')
+    );
+
+    const lat = Number(marker.lat ?? marker.latitude);
+    const lng = Number(marker.lng ?? marker.longitude);
+    const coordsValid = !isNaN(lat) && !isNaN(lng);
+    const coordsStr = coordsValid ? `${lat.toFixed(4)}, ${lng.toFixed(4)}` : '';
+    const url = marker.url ? encodeURI(marker.url) : null;
+
+    return `
+        <div class="text-xs space-y-1.5 p-1 min-w-[200px]">
+            ${typeLabel ? `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">${typeLabel}</span>` : ''}
+            <strong class="text-slate-900 text-sm font-bold block">${title}</strong>
+            ${locationStr ? `<div class="text-slate-600 text-xs flex items-center gap-1">${locationStr}</div>` : ''}
+            ${coordsStr ? `<div class="text-[10px] font-mono text-slate-500">${escapeHtml(i18n.coordinates || 'Coordinates')}: ${coordsStr}</div>` : ''}
+            ${url ? `<div class="pt-1.5 border-t border-slate-100"><a href="${url}" class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-xs inline-flex items-center gap-1">${escapeHtml(i18n.view_details || 'View Details')} &rarr;</a></div>` : ''}
+        </div>
+    `;
+}
+
+/**
+ * Attach OpenStreetMap tile layer with attribution and graceful failure handler.
+ */
+function attachTileLayer(map) {
+    const tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">OpenStreetMap</a> contributors'
+    });
+
+    tileLayer.on('tileerror', function (err) {
+        console.warn('Map tile loading issue handled gracefully:', err);
+    });
+
+    tileLayer.addTo(map);
+    return tileLayer;
+}
+
+/**
+ * Handle initial sizing and dynamic resize observer.
+ */
+function setupResizeObserver(map, container) {
+    setTimeout(() => {
+        try { map.invalidateSize(); } catch (e) {}
+    }, 200);
+
+    window.addEventListener('resize', () => {
+        try { map.invalidateSize(); } catch (e) {}
+    });
+
+    if (window.ResizeObserver) {
+        const ro = new ResizeObserver(() => {
+            try { map.invalidateSize(); } catch (e) {}
+        });
+        ro.observe(container);
+    }
+}
+
+/**
+ * Initialize a single location map (detail view).
+ */
+function initSingleMap(container, config) {
+    const lat = parseFloat(config.latitude);
+    const lng = parseFloat(config.longitude);
+
+    if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        return null;
+    }
+
+    const zoom = parseInt(config.zoom, 10) || 12;
+    const map = L.map(container, {
+        zoomControl: true,
+        scrollWheelZoom: false,
+    }).setView([lat, lng], zoom);
+
+    attachTileLayer(map);
+
+    const markerData = config.marker || {
+        lat: lat,
+        lng: lng,
+        title: config.title || '',
+        type: config.type || '',
+        typeLabel: config.typeLabel || '',
+        city: config.city || '',
+        country: config.country || '',
+    };
+
+    const marker = L.marker([lat, lng], {
+        icon: createLocationPin(markerData.type)
+    }).addTo(map);
+
+    marker.bindPopup(buildPopupContent(markerData));
+    
+    // Auto-open popup on initial load for instant clarity
+    setTimeout(() => {
+        try { marker.openPopup(); } catch (e) {}
+    }, 300);
+
+    setupResizeObserver(map, container);
+    return map;
+}
+
+/**
+ * Initialize a multi-location summary map (index view).
+ */
+function initMultiMap(container, config) {
+    const markers = Array.isArray(config.markers) ? config.markers : [];
+    const validMarkers = markers.filter(m => {
+        const lat = parseFloat(m.lat ?? m.latitude);
+        const lng = parseFloat(m.lng ?? m.longitude);
+        return !isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+    });
+
+    if (validMarkers.length === 0) {
+        return null;
+    }
+
+    const map = L.map(container, {
+        zoomControl: true,
+        scrollWheelZoom: false,
+    });
+
+    attachTileLayer(map);
+
+    const featureGroup = L.featureGroup();
+
+    validMarkers.forEach(m => {
+        const lat = parseFloat(m.lat ?? m.latitude);
+        const lng = parseFloat(m.lng ?? m.longitude);
+        const pin = L.marker([lat, lng], {
+            icon: createLocationPin(m.type)
+        });
+        pin.bindPopup(buildPopupContent(m));
+        pin.addTo(featureGroup);
+    });
+
+    featureGroup.addTo(map);
+
+    if (validMarkers.length === 1) {
+        const first = validMarkers[0];
+        map.setView([parseFloat(first.lat ?? first.latitude), parseFloat(first.lng ?? first.longitude)], 12);
+    } else {
+        map.fitBounds(featureGroup.getBounds().pad(0.12), { maxZoom: 13 });
+    }
+
+    setupResizeObserver(map, container);
+    return map;
+}
+
+/**
+ * Initialize an interactive coordinate picker map (create/edit forms).
+ */
+function initPickerMap(container, config) {
+    const latInput = config.latInput ? document.querySelector(config.latInput) : null;
+    const lngInput = config.lngInput ? document.querySelector(config.lngInput) : null;
+
+    let initLat = parseFloat(config.latitude || (latInput ? latInput.value : null));
+    let initLng = parseFloat(config.longitude || (lngInput ? lngInput.value : null));
+
+    const hasValidCoords = !isNaN(initLat) && !isNaN(initLng) && initLat >= -90 && initLat <= 90 && initLng >= -180 && initLng <= 180;
+
+    const center = hasValidCoords ? [initLat, initLng] : [20, 0];
+    const zoom = hasValidCoords ? (parseInt(config.zoom, 10) || 12) : 2;
+
+    const map = L.map(container, {
+        zoomControl: true,
+        scrollWheelZoom: true,
+    }).setView(center, zoom);
+
+    attachTileLayer(map);
+
+    let marker = null;
+
+    function updateInputs(lat, lng) {
+        if (latInput) {
+            latInput.value = lat.toFixed(7);
+            latInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        if (lngInput) {
+            lngInput.value = lng.toFixed(7);
+            lngInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    }
+
+    function setMarkerPosition(lat, lng, pan = false) {
+        if (!marker) {
+            marker = L.marker([lat, lng], {
+                draggable: true,
+                icon: createLocationPin('port', true)
+            }).addTo(map);
+
+            marker.on('dragend', function (e) {
+                const pos = e.target.getLatLng();
+                updateInputs(pos.lat, pos.lng);
+            });
+        } else {
+            marker.setLatLng([lat, lng]);
+        }
+
+        if (pan) {
+            map.panTo([lat, lng]);
+        }
+    }
+
+    if (hasValidCoords) {
+        setMarkerPosition(initLat, initLng, false);
+    }
+
+    // Map click: move marker and populate inputs
+    map.on('click', function (e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+        setMarkerPosition(lat, lng, false);
+        updateInputs(lat, lng);
+    });
+
+    // Inputs change: update marker position
+    function handleInputChange() {
+        if (!latInput || !lngInput) return;
+        const lat = parseFloat(latInput.value);
+        const lng = parseFloat(lngInput.value);
+        if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+            setMarkerPosition(lat, lng, true);
+        }
+    }
+
+    if (latInput) latInput.addEventListener('input', handleInputChange);
+    if (lngInput) lngInput.addEventListener('input', handleInputChange);
+
+    setupResizeObserver(map, container);
+    return map;
+}
+
+/**
+ * Master initializer for all data-component="map" containers on the page.
+ */
+export function initCargoTraceMaps() {
+    const mapElements = document.querySelectorAll('[data-component="map"]');
+    mapElements.forEach(container => {
+        if (container._cargoTraceMapInitialized) {
+            return;
+        }
+
+        let config = {};
+        try {
+            config = JSON.parse(container.getAttribute('data-map-config') || '{}');
+        } catch (e) {
+            console.error('Invalid map config JSON:', e);
+            return;
+        }
+
+        const mode = config.mode || 'single';
+        let instance = null;
+
+        if (mode === 'single') {
+            instance = initSingleMap(container, config);
+        } else if (mode === 'multi') {
+            instance = initMultiMap(container, config);
+        } else if (mode === 'picker') {
+            instance = initPickerMap(container, config);
+        }
+
+        if (instance) {
+            container._cargoTraceMapInitialized = true;
+            container._leafletMapInstance = instance;
+        }
+    });
+}
+
+// Auto-boot on DOM ready
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCargoTraceMaps);
+    } else {
+        initCargoTraceMaps();
+    }
+}
+
+// Expose globally for dynamic components / SPA navigations
+if (typeof window !== 'undefined') {
+    window.initCargoTraceMaps = initCargoTraceMaps;
+}

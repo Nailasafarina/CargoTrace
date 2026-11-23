@@ -22,17 +22,17 @@ enum TrackingEventType: string
     public function label(): string
     {
         return match ($this) {
-            self::OrderCreated => 'Booking Order Created',
-            self::PickedUp => 'Cargo Picked Up',
-            self::Departed => 'Vessel Departed Port',
-            self::InTransit => 'In Transit / Ocean Passage',
-            self::TransshipmentArrival => 'Arrived at Transshipment Hub',
-            self::CustomsHold => 'Customs Hold Placed',
-            self::CustomsCleared => 'Customs Cleared',
-            self::ArrivedDestination => 'Arrived at Destination Port',
-            self::OutForDelivery => 'Out for Final Delivery',
-            self::Delivered => 'Delivered to Consignee',
-            self::ExceptionAlert => 'Shipment Exception Alert',
+            self::OrderCreated => __('tracking.event_types.order_created'),
+            self::PickedUp => __('tracking.event_types.picked_up'),
+            self::Departed => __('tracking.event_types.departed'),
+            self::InTransit => __('tracking.event_types.in_transit'),
+            self::TransshipmentArrival => __('tracking.event_types.transshipment_arrival'),
+            self::CustomsHold => __('tracking.event_types.customs_hold'),
+            self::CustomsCleared => __('tracking.event_types.customs_cleared'),
+            self::ArrivedDestination => __('tracking.event_types.arrived_destination'),
+            self::OutForDelivery => __('tracking.event_types.out_for_delivery'),
+            self::Delivered => __('tracking.event_types.delivered'),
+            self::ExceptionAlert => __('tracking.event_types.exception_alert'),
         };
     }
 }

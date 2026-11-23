@@ -24,6 +24,7 @@ class EtaServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        app()->setLocale('id');
         $this->etaService = app(EtaService::class);
     }
 

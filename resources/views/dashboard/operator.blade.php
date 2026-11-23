@@ -1,27 +1,27 @@
 @extends('layouts.app')
 
-@section('title', 'Logistics Operator Dashboard')
+@section('title', __('dashboard.operator.title'))
 
 @section('content')
 <div class="space-y-6">
     <!-- Header with Operational Role Badge -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-800">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
             <div class="flex items-center gap-3">
-                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Logistics Operations Control Hub</h1>
-                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/30">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                    role: operator
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">{{ __('dashboard.operator.title') }}</h1>
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                    {{ __('dashboard.operator.role_badge') }}
                 </span>
             </div>
-            <p class="text-sm text-slate-400 mt-1">
-                Dispatch execution, milestone telemetry updates, exception mitigation, and active fleet monitoring.
+            <p class="text-sm text-slate-500 mt-1">
+                {{ __('dashboard.operator.subtitle') }}
             </p>
         </div>
         <div class="flex items-center gap-2">
-            <a href="{{ route('shipments.create') }}" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white text-xs font-semibold shadow-md shadow-amber-500/20 transition flex items-center gap-1.5 cursor-pointer">
+            <a href="{{ route('shipments.create') }}" class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition flex items-center gap-1.5 cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                Book New Shipment
+                {{ __('shipments.new_shipment') }}
             </a>
         </div>
     </div>
@@ -29,95 +29,95 @@
     <!-- Metric Summary Cards -->
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         <!-- Total Shipments -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800">
-            <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-                <span>Total Fleet</span>
-                <span class="p-1.5 rounded-lg bg-sky-500/10 text-sky-400">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                <span class="font-medium">{{ __('dashboard.operator.total_fleet') }}</span>
+                <span class="p-1.5 rounded-lg bg-blue-50 text-blue-600">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
                 </span>
             </div>
-            <div class="text-2xl font-bold text-white">{{ $metrics['total_shipments'] }}</div>
-            <div class="text-[11px] text-slate-500 mt-1">Managed Shipments</div>
+            <div class="text-2xl font-bold text-slate-900">{{ $metrics['total_shipments'] }}</div>
+            <div class="text-[11px] text-slate-500 mt-1">{{ __('dashboard.operator.managed_shipments') }}</div>
         </div>
 
         <!-- In Transit -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800">
-            <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-                <span>In Transit</span>
-                <span class="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                <span class="font-medium">{{ __('dashboard.operator.in_transit') }}</span>
+                <span class="p-1.5 rounded-lg bg-amber-50 text-amber-600">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </span>
             </div>
-            <div class="text-2xl font-bold text-indigo-400">{{ $metrics['in_transit'] }}</div>
-            <div class="text-[11px] text-slate-500 mt-1">En Route on Sea/Air</div>
+            <div class="text-2xl font-bold text-amber-700">{{ $metrics['in_transit'] }}</div>
+            <div class="text-[11px] text-slate-500 mt-1">{{ __('dashboard.operator.en_route') }}</div>
         </div>
 
         <!-- Delivered -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800">
-            <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-                <span>Delivered</span>
-                <span class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                <span class="font-medium">{{ __('dashboard.operator.delivered') }}</span>
+                <span class="p-1.5 rounded-lg bg-emerald-50 text-emerald-600">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 </span>
             </div>
-            <div class="text-2xl font-bold text-emerald-400">{{ $metrics['delivered'] }}</div>
-            <div class="text-[11px] text-slate-500 mt-1">Successfully Fulfilled</div>
+            <div class="text-2xl font-bold text-emerald-700">{{ $metrics['delivered'] }}</div>
+            <div class="text-[11px] text-slate-500 mt-1">{{ __('dashboard.operator.successfully_fulfilled') }}</div>
         </div>
 
         <!-- Delayed -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800">
-            <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-                <span>Delayed</span>
-                <span class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                <span class="font-medium">{{ __('dashboard.operator.delayed') }}</span>
+                <span class="p-1.5 rounded-lg bg-orange-50 text-orange-600">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </span>
             </div>
-            <div class="text-2xl font-bold text-amber-400">{{ $metrics['delayed'] }}</div>
-            <div class="text-[11px] text-slate-500 mt-1">Exceeding ETA Window</div>
+            <div class="text-2xl font-bold text-orange-700">{{ $metrics['delayed'] }}</div>
+            <div class="text-[11px] text-slate-500 mt-1">{{ __('dashboard.operator.exceeding_window') }}</div>
         </div>
 
         <!-- Open Exceptions -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 col-span-2 sm:col-span-1">
-            <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-                <span>Open Incidents</span>
-                <span class="p-1.5 rounded-lg bg-rose-500/10 text-rose-400">
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm col-span-2 sm:col-span-1">
+            <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                <span class="font-medium">{{ __('dashboard.operator.open_incidents') }}</span>
+                <span class="p-1.5 rounded-lg bg-rose-50 text-rose-600">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                 </span>
             </div>
-            <div class="text-2xl font-bold text-rose-400">{{ $metrics['open_exceptions'] }}</div>
-            <div class="text-[11px] text-slate-500 mt-1">Requires Operator Action</div>
+            <div class="text-2xl font-bold text-rose-700">{{ $metrics['open_exceptions'] }}</div>
+            <div class="text-[11px] text-slate-500 mt-1">{{ __('dashboard.operator.requires_action') }}</div>
         </div>
     </div>
 
     <!-- Operational KPIs -->
-    <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800">
-        <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between">
+    <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+        <div class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3 flex items-center justify-between">
             <span class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                Operations Performance KPIs (Corridor Southeast Asia &rarr; Europe)
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                {{ __('dashboard.operator.ops_kpis') }}
             </span>
-            <span class="text-[11px] text-slate-500">Fleet Evaluation Active</span>
+            <span class="text-[11px] text-slate-500">{{ __('dashboard.operator.fleet_eval_active') }}</span>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                <div class="text-[11px] text-slate-400 uppercase tracking-wider">On-Time Delivery Rate</div>
-                <div class="text-2xl font-bold text-emerald-400 mt-1">{{ $metrics['kpis']['on_time_delivery_rate'] }}%</div>
-                <div class="w-full bg-slate-800 h-1.5 rounded-full mt-3 overflow-hidden">
-                    <div class="bg-emerald-500 h-1.5 rounded-full" style="width: {{ min(100, $metrics['kpis']['on_time_delivery_rate']) }}%"></div>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('dashboard.admin.on_time_rate') }}</div>
+                <div class="text-2xl font-bold text-emerald-700 mt-1">{{ $metrics['kpis']['on_time_delivery_rate'] }}%</div>
+                <div class="w-full bg-slate-200 h-1.5 rounded-full mt-3 overflow-hidden">
+                    <div class="bg-emerald-600 h-1.5 rounded-full" style="width: {{ min(100, $metrics['kpis']['on_time_delivery_rate']) }}%"></div>
                 </div>
             </div>
-            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                <div class="text-[11px] text-slate-400 uppercase tracking-wider">Average Delay Duration</div>
-                <div class="text-2xl font-bold text-amber-400 mt-1">{{ $metrics['kpis']['avg_delay_duration_hours'] }} <span class="text-sm font-normal text-slate-400">hrs</span></div>
-                <div class="w-full bg-slate-800 h-1.5 rounded-full mt-3 overflow-hidden">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('dashboard.admin.avg_delay') }}</div>
+                <div class="text-2xl font-bold text-amber-700 mt-1">{{ $metrics['kpis']['avg_delay_duration_hours'] }} <span class="text-sm font-normal text-slate-500">{{ __('settings.hours_suffix') }}</span></div>
+                <div class="w-full bg-slate-200 h-1.5 rounded-full mt-3 overflow-hidden">
                     <div class="bg-amber-500 h-1.5 rounded-full" style="width: {{ min(100, ($metrics['kpis']['avg_delay_duration_hours'] / 48) * 100) }}%"></div>
                 </div>
             </div>
-            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                <div class="text-[11px] text-slate-400 uppercase tracking-wider">Avg Exception Resolution Time</div>
-                <div class="text-2xl font-bold text-sky-400 mt-1">{{ $metrics['kpis']['avg_exception_resolution_hours'] }} <span class="text-sm font-normal text-slate-400">hrs</span></div>
-                <div class="w-full bg-slate-800 h-1.5 rounded-full mt-3 overflow-hidden">
-                    <div class="bg-sky-500 h-1.5 rounded-full" style="width: {{ min(100, ($metrics['kpis']['avg_exception_resolution_hours'] / 72) * 100) }}%"></div>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('dashboard.admin.exception_res_time') }}</div>
+                <div class="text-2xl font-bold text-blue-700 mt-1">{{ $metrics['kpis']['avg_exception_resolution_hours'] }} <span class="text-sm font-normal text-slate-500">{{ __('settings.hours_suffix') }}</span></div>
+                <div class="w-full bg-slate-200 h-1.5 rounded-full mt-3 overflow-hidden">
+                    <div class="bg-blue-600 h-1.5 rounded-full" style="width: {{ min(100, ($metrics['kpis']['avg_exception_resolution_hours'] / 72) * 100) }}%"></div>
                 </div>
             </div>
         </div>
@@ -126,16 +126,16 @@
     <!-- Charts Row -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Status Doughnut -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
-            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Lifecycle Status Distribution</h2>
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">{{ __('dashboard.operator.lifecycle_distribution') }}</h2>
             <div class="relative h-64 flex items-center justify-center">
                 <canvas id="operatorStatusChart"></canvas>
             </div>
         </div>
 
         <!-- Carrier Bar Chart -->
-        <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
-            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Carrier Allocation</h2>
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">{{ __('dashboard.operator.carrier_allocation') }}</h2>
             <div class="relative h-64">
                 <canvas id="operatorCarrierChart"></canvas>
             </div>
@@ -143,46 +143,46 @@
     </div>
 
     <!-- Immediate Action Queue (Open Exceptions) -->
-    <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
+    <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-                    Immediate Operational Action Queue
+                <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                    {{ __('dashboard.operator.action_queue_title') }}
                 </h2>
-                <p class="text-xs text-slate-400 mt-0.5">Exceptions pending investigation or resolution</p>
+                <p class="text-xs text-slate-500 mt-0.5">{{ __('dashboard.operator.action_queue_desc') }}</p>
             </div>
-            <a href="{{ route('shipments.index', ['delay_status' => 'DELAYED_HIGH']) }}" class="text-xs text-sky-400 hover:underline">
-                View Critical Delayed &rarr;
+            <a href="{{ route('shipments.index', ['delay_status' => 'DELAYED_HIGH']) }}" class="text-xs text-blue-600 hover:text-blue-800 hover:underline font-semibold">
+                {{ __('dashboard.operator.view_critical_delayed') }} &rarr;
             </a>
         </div>
         <div class="space-y-3">
             @forelse($metrics['recent_exceptions'] as $ex)
-                <div class="p-4 rounded-xl bg-slate-950 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="space-y-1">
                         <div class="flex items-center gap-2">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider {{ $ex->severity === 'CRITICAL' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40' : 'bg-amber-500/20 text-amber-400 border border-amber-500/40' }}">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider {{ $ex->severity === 'CRITICAL' ? 'bg-red-100 text-red-800 border border-red-300 font-bold' : ($ex->severity === 'HIGH' ? 'bg-rose-50 text-rose-700 border border-rose-200' : ($ex->severity === 'MEDIUM' ? 'bg-orange-50 text-orange-800 border border-orange-200' : 'bg-yellow-50 text-yellow-800 border border-yellow-300')) }}">
                                 {{ $ex->severity }}
                             </span>
-                            <span class="text-xs font-mono font-semibold text-white">{{ $ex->type }}</span>
-                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-mono">{{ $ex->status }}</span>
+                            <span class="text-xs font-mono font-semibold text-slate-800">{{ $ex->type }}</span>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 font-mono font-medium">{{ $ex->status }}</span>
                         </div>
-                        <p class="text-xs text-slate-300">{{ $ex->description }}</p>
+                        <p class="text-xs text-slate-600">{{ $ex->description }}</p>
                         <div class="text-[11px] text-slate-500 font-mono">
-                            Shipment: <span class="text-sky-400">{{ $ex->shipment->shipment_number }}</span>
-                            &bull; Carrier: {{ $ex->shipment->carrier->name }}
-                            &bull; Detected: {{ $ex->detected_at->diffForHumans() }}
+                            {{ __('shipments.fields.shipment_number') }}: <span class="text-blue-600 font-semibold">{{ $ex->shipment->shipment_number }}</span>
+                            &bull; {{ __('carriers.fields.name') }}: {{ $ex->shipment->carrier->name }}
+                            &bull; {{ __('common.labels.timestamp') }}: {{ $ex->detected_at->diffForHumans() }}
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <a href="{{ route('shipments.show', $ex->shipment) }}" class="px-3 py-1.5 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border border-sky-500/30 text-xs font-semibold transition">
-                            Open Shipment &rarr;
+                        <a href="{{ route('shipments.show', $ex->shipment) }}" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-semibold shadow-2xs transition">
+                            {{ __('dashboard.operator.open_shipment') }} &rarr;
                         </a>
                     </div>
                 </div>
             @empty
                 <div class="text-center py-8 text-xs text-slate-500">
-                    No open exceptions currently require intervention. Fleet running smoothly.
+                    {{ __('dashboard.operator.no_open_exceptions') }}
                 </div>
             @endforelse
         </div>
@@ -194,7 +194,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    Chart.defaults.color = '#94a3b8';
+    // Light Theme chart styling
+    Chart.defaults.color = '#64748b';
     Chart.defaults.font.family = 'Instrument Sans, system-ui, sans-serif';
 
     // Status Chart
@@ -205,8 +206,8 @@ document.addEventListener('DOMContentLoaded', function () {
             labels: @json($metrics['status_chart']['labels']),
             datasets: [{
                 data: @json($metrics['status_chart']['data']),
-                backgroundColor: ['#64748b', '#3b82f6', '#f59e0b', '#6366f1', '#10b981'],
-                borderColor: '#0f172a',
+                backgroundColor: ['#94a3b8', '#2563eb', '#6366f1', '#f59e0b', '#10b981'],
+                borderColor: '#ffffff',
                 borderWidth: 2
             }]
         },
@@ -214,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12, color: '#cbd5e1' } }
+                legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12, color: '#475569' } }
             }
         }
     });
@@ -228,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
             datasets: [{
                 label: 'Assigned Shipments',
                 data: @json($metrics['carrier_chart']['data']),
-                backgroundColor: '#f59e0b',
+                backgroundColor: '#2563eb',
                 borderRadius: 8,
                 barThickness: 24
             }]
@@ -238,8 +239,8 @@ document.addEventListener('DOMContentLoaded', function () {
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
             scales: {
-                x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
-                y: { grid: { color: '#334155' }, ticks: { precision: 0, color: '#94a3b8' }, beginAtZero: true }
+                x: { grid: { display: false }, ticks: { color: '#64748b' } },
+                y: { grid: { color: '#e2e8f0' }, ticks: { precision: 0, color: '#64748b' }, beginAtZero: true }
             }
         }
     });

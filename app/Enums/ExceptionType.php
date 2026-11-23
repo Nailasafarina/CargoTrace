@@ -17,12 +17,12 @@ enum ExceptionType: string
     public function label(): string
     {
         return match ($this) {
-            self::CustomsHold => 'Customs Regulatory Hold',
-            self::WeatherDelay => 'Adverse Weather Delay',
-            self::PortCongestion => 'Port Berth Congestion',
-            self::Damaged => 'Cargo Packaging Damage',
-            self::Misrouted => 'Carrier Transshipment Misroute',
-            self::DocumentationIssue => 'Missing Documentation Issue',
+            self::CustomsHold => __('exceptions.types.customs_hold'),
+            self::WeatherDelay => __('exceptions.types.weather_delay'),
+            self::PortCongestion => __('exceptions.types.port_congestion'),
+            self::Damaged => __('exceptions.types.damaged'),
+            self::Misrouted => __('exceptions.types.misrouted'),
+            self::DocumentationIssue => __('exceptions.types.documentation_issue'),
         };
     }
 }

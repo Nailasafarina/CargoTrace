@@ -19,12 +19,12 @@ enum DelayStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::OnTime => 'On Time',
-            self::Low => 'Delay: LOW (≤6h)',
-            self::Medium => 'Delay: MEDIUM (6–24h)',
-            self::High => 'Delay: HIGH (>24h)',
-            self::Delayed => 'Delayed',
-            self::CriticalDelay => 'Critical Delay',
+            self::OnTime => __('shipments.delay_status.on_time'),
+            self::Low => __('shipments.delay_status.low'),
+            self::Medium => __('shipments.delay_status.medium'),
+            self::High => __('shipments.delay_status.high'),
+            self::Delayed => __('shipments.delay_status.delayed'),
+            self::CriticalDelay => __('shipments.delay_status.critical_delay'),
         };
     }
 
@@ -42,11 +42,11 @@ enum DelayStatus: string
     public function badgeClasses(): string
     {
         return match ($this) {
-            self::OnTime => 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30',
-            self::Low => 'bg-sky-500/10 text-sky-400 border border-sky-500/30',
-            self::Medium => 'bg-amber-500/10 text-amber-400 border border-amber-500/30',
-            self::High, self::CriticalDelay => 'bg-rose-500/10 text-rose-400 border border-rose-500/30 animate-pulse',
-            self::Delayed => 'bg-amber-500/10 text-amber-400 border border-amber-500/30',
+            self::OnTime => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+            self::Low => 'bg-yellow-50 text-yellow-800 border border-yellow-300',
+            self::Medium => 'bg-orange-50 text-orange-800 border border-orange-200',
+            self::High, self::CriticalDelay => 'bg-rose-50 text-rose-700 border border-rose-200 animate-pulse',
+            self::Delayed => 'bg-orange-50 text-orange-800 border border-orange-200',
         };
     }
 

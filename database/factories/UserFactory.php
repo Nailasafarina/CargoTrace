@@ -45,6 +45,16 @@ class UserFactory extends Factory
     }
 
     /**
+     * Indicate user preferred locale.
+     */
+    public function locale(string $locale): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'locale' => $locale,
+        ]);
+    }
+
+    /**
      * Indicate that the user is an Administrator.
      */
     public function admin(): static
