@@ -8,24 +8,24 @@
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700,800|instrument-sans:400,500,600,700|jetbrains-mono:400,500,600,700" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-full flex flex-col font-sans antialiased bg-[#FAF7F8] text-[#4A2C35] selection:bg-[#BE2B5B] selection:text-white">
+<body class="min-h-full flex flex-col font-sans antialiased bg-[#FAF7F8] text-[#4A2C35] selection:bg-[#BE2B5B] selection:text-white overflow-x-hidden">
     @php
         $isId = app()->getLocale() === 'id';
     @endphp
 
-    <!-- 1. Clean Sticky Navbar (SwiftDrop Layout + Berry Pink Palette) -->
+    <!-- 1. Clean Sticky Navbar (SwiftDrop Layout + Berry Pink Palette, Mobile-Responsive on Android) -->
     <header class="w-full bg-[#FAF7F8]/95 backdrop-blur-md sticky top-0 z-50 border-b border-[#EFE6EA]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
             <!-- Brand Logo & Tagline -->
-            <a href="{{ route('home') }}" class="flex items-center gap-3 shrink-0 group">
-                <div class="h-10 w-10 rounded-xl bg-[#BE2B5B] group-hover:bg-[#A0224B] flex items-center justify-center text-white shadow-xs transition-colors">
+            <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 min-w-0 group">
+                <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-[#BE2B5B] group-hover:bg-[#A0224B] flex items-center justify-center text-white shadow-xs transition-colors shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                 </div>
-                <div>
-                    <span class="text-xl font-extrabold tracking-tight text-[#4A2C35] block leading-none">CargoTrace</span>
-                    <span class="text-[10px] font-medium text-[#826871] tracking-tight block mt-1">{{ __('welcome.tagline') }}</span>
+                <div class="min-w-0">
+                    <span class="text-base sm:text-xl font-extrabold tracking-tight text-[#4A2C35] block leading-none truncate">CargoTrace</span>
+                    <span class="hidden sm:block text-[10px] font-medium text-[#826871] tracking-tight mt-1 truncate">{{ __('welcome.tagline') }}</span>
                 </div>
             </a>
 
@@ -46,26 +46,26 @@
             </nav>
 
             <!-- Right Controls: Language Switcher (ID | EN) + Auth Buttons -->
-            <div class="flex items-center gap-2.5 sm:gap-3">
+            <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
                 <!-- Language Switcher (ID | EN) -->
-                <div class="relative z-20 pointer-events-auto inline-flex items-center rounded-full bg-white border border-[#EFE6EA] p-1 shadow-2xs text-xs font-semibold shrink-0" title="{{ __('common.labels.quick_switch') }}">
-                    <a href="{{ route('locale.set', 'id') }}" class="px-2.5 py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'id' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="Bahasa Indonesia">
+                <div class="relative z-20 pointer-events-auto inline-flex items-center rounded-full bg-white border border-[#EFE6EA] p-0.5 sm:p-1 shadow-2xs text-[11px] sm:text-xs font-semibold shrink-0" title="{{ __('common.labels.quick_switch') }}">
+                    <a href="{{ route('locale.set', 'id') }}" class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'id' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="Bahasa Indonesia">
                         ID
                     </a>
-                    <a href="{{ route('locale.set', 'en') }}" class="px-2.5 py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'en' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="English">
+                    <a href="{{ route('locale.set', 'en') }}" class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'en' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="English">
                         EN
                     </a>
                 </div>
 
                 @auth
-                    <a href="{{ route('dashboard') }}" class="px-5 py-2.5 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-sm transition">
+                    <a href="{{ route('dashboard') }}" class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-[11px] sm:text-xs font-semibold shadow-sm transition whitespace-nowrap">
                         {{ __('common.navigation.dashboard') }} &rarr;
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="px-4 sm:px-5 py-2.5 rounded-full bg-white border border-[#EFE6EA] text-xs font-semibold text-[#4A2C35] hover:border-[#BE2B5B]/40 hover:bg-[#FCECF1]/50 transition">
+                    <a href="{{ route('login') }}" class="px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white border border-[#EFE6EA] text-[11px] sm:text-xs font-semibold text-[#4A2C35] hover:border-[#BE2B5B]/40 hover:bg-[#FCECF1]/50 transition whitespace-nowrap">
                         {{ __('common.navigation.login') }}
                     </a>
-                    <a href="{{ route('register') }}" class="px-5 py-2.5 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-sm transition">
+                    <a href="{{ route('register') }}" class="px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-[11px] sm:text-xs font-semibold shadow-sm transition whitespace-nowrap">
                         {{ __('common.navigation.register') }}
                     </a>
                 @endauth
@@ -75,12 +75,12 @@
 
     <main class="flex-grow">
         <!-- 2. Hero Section + 4-Item Feature Strip (Clean & Calm Composition) -->
-        <section id="hero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-12 space-y-12">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <section id="hero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-16 pb-10 sm:pb-12 space-y-10 sm:space-y-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                 <!-- Left Editorial Column -->
-                <div class="lg:col-span-6 space-y-6">
+                <div class="lg:col-span-6 space-y-5 sm:space-y-6">
                     <!-- Hero Headline -->
-                    <h1 class="text-4xl sm:text-5xl lg:text-[50px] font-extrabold tracking-tight text-[#4A2C35] leading-[1.14]">
+                    <h1 class="text-3xl sm:text-5xl lg:text-[50px] font-extrabold tracking-tight text-[#4A2C35] leading-[1.16]">
                         {{ __('welcome.hero_title_prefix') }}
                         <span class="text-[#BE2B5B]">{{ __('welcome.hero_title_highlight') }}</span>
                         {{ __('welcome.hero_title_suffix') }}
@@ -92,11 +92,11 @@
                     </p>
 
                     <!-- Hero Action Buttons -->
-                    <div class="flex flex-wrap items-center gap-3 pt-1">
-                        <a href="{{ route('login') }}" class="px-6 py-3 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-sm font-semibold shadow-sm transition">
+                    <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-1">
+                        <a href="{{ route('login') }}" class="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs sm:text-sm font-semibold shadow-sm transition">
                             {{ __('welcome.access_platform') }} &rarr;
                         </a>
-                        <a href="#services" class="px-6 py-3 rounded-full bg-white text-[#4A2C35] hover:bg-[#FCECF1] hover:text-[#BE2B5B] border border-[#EFE6EA] text-sm font-semibold shadow-2xs transition">
+                        <a href="#services" class="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white text-[#4A2C35] hover:bg-[#FCECF1] hover:text-[#BE2B5B] border border-[#EFE6EA] text-xs sm:text-sm font-semibold shadow-2xs transition">
                             {{ __('welcome.explore_services') }}
                         </a>
                     </div>
@@ -104,34 +104,34 @@
 
                 <!-- Right Hero Visual Stage: Clean Soft Blush Stage + Studio Truck + Telemetry Card -->
                 <div class="lg:col-span-6 relative">
-                    <div class="relative rounded-[28px] bg-gradient-to-b from-[#FCECF1]/75 via-[#FCECF1]/35 to-white border border-[#EFE6EA] p-6 sm:p-7 shadow-[0_12px_30px_-12px_rgba(26,23,24,0.05)] overflow-hidden">
+                    <div class="relative rounded-[24px] sm:rounded-[28px] bg-gradient-to-b from-[#FCECF1]/75 via-[#FCECF1]/35 to-white border border-[#EFE6EA] p-4 sm:p-7 shadow-[0_12px_30px_-12px_rgba(26,23,24,0.05)] overflow-hidden">
                         <!-- Top Header Bar Inside Stage -->
-                        <div class="relative z-10 flex flex-wrap items-center justify-between gap-2 mb-5">
-                            <div class="flex items-center gap-2">
-                                <span class="w-8 h-8 rounded-full bg-white text-[#BE2B5B] border border-[#EFE6EA] flex items-center justify-center shadow-2xs">
+                        <div class="relative z-10 flex flex-wrap items-center justify-between gap-2 mb-4 sm:mb-5">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="w-8 h-8 rounded-full bg-white text-[#BE2B5B] border border-[#EFE6EA] flex items-center justify-center shadow-2xs shrink-0">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                     </svg>
                                 </span>
-                                <span class="text-sm font-bold text-[#4A2C35]">{{ __('common.navigation.shipments') }}</span>
+                                <span class="text-xs sm:text-sm font-bold text-[#4A2C35] truncate">{{ __('common.navigation.shipments') }}</span>
                             </div>
-                            <span class="px-3 py-1 rounded-full bg-white text-[#BE2B5B] border border-[#EFE6EA] text-[11px] font-bold shadow-2xs">
+                            <span class="px-2.5 sm:px-3 py-1 rounded-full bg-white text-[#BE2B5B] border border-[#EFE6EA] text-[10px] sm:text-[11px] font-bold shadow-2xs whitespace-nowrap">
                                 OpenStreetMap + Live Telemetry
                             </span>
                         </div>
 
                         <!-- Truck + Cargo Boxes Illustration Stage -->
-                        <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 py-2">
-                            <div class="relative flex items-end justify-center">
+                        <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 py-1 sm:py-2">
+                            <div class="relative flex items-end justify-center max-w-full">
                                 <img
                                     src="{{ asset('images/scania-cab.png') }}"
                                     alt="CargoTrace freight tractor"
-                                    class="w-56 sm:w-64 h-auto object-contain select-none drop-shadow-[0_14px_20px_rgba(26,23,24,0.14)]"
+                                    class="w-44 sm:w-64 h-auto object-contain select-none drop-shadow-[0_14px_20px_rgba(26,23,24,0.14)]"
                                 />
                                 <img
                                     src="{{ asset('images/cargo-boxes.png') }}"
                                     alt="Cargo packages"
-                                    class="w-24 sm:w-28 h-auto object-contain -ml-10 -mb-1 select-none drop-shadow-[0_10px_14px_rgba(120,75,35,0.18)]"
+                                    class="w-20 sm:w-28 h-auto object-contain -ml-8 sm:-ml-10 -mb-1 select-none drop-shadow-[0_10px_14px_rgba(120,75,35,0.18)]"
                                 />
                             </div>
 

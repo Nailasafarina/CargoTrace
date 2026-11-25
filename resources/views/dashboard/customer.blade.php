@@ -11,10 +11,10 @@
     <div id="operational-analytics" class="nex-card p-6 space-y-5">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#EFE6EA]">
             <div>
-                <div class="flex items-center gap-3">
+                <div class="flex flex-wrap items-center gap-2.5">
                     <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-[#4A2C35]">{{ __('dashboard.customer.title') }}</h1>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#BE2B5B] text-white">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#BE2B5B]"></span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#BE2B5B] text-white whitespace-nowrap">
+                        <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
                         {{ __('dashboard.customer.role_badge') }}
                     </span>
                 </div>
@@ -23,9 +23,9 @@
                 </p>
             </div>
             <div>
-                <a href="{{ route('shipments.index') }}" class="px-4 py-2 rounded-full bg-[#FAF7F8] hover:bg-[#FCECF1] text-[#4A2C35] hover:text-[#BE2B5B] text-xs font-semibold border border-[#EFE6EA] transition flex items-center gap-2">
-                    <svg class="w-4 h-4 text-[#BE2B5B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                    {{ __('dashboard.customer.view_all_my_cargo') }}
+                <a href="{{ route('shipments.index') }}" class="px-4 py-2 rounded-xl bg-[#FAF7F8] hover:bg-[#FCECF1] text-[#4A2C35] hover:text-[#BE2B5B] text-xs font-semibold border border-[#EFE6EA] transition inline-flex items-center gap-2 whitespace-nowrap">
+                    <svg class="w-4 h-4 text-[#BE2B5B] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                    <span>{{ __('dashboard.customer.view_all_my_cargo') }}</span>
                 </a>
             </div>
         </div>

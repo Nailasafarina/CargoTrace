@@ -485,19 +485,19 @@
                     </div>
                 </div>
 
-                <!-- 3-Column Specs (Carrier ID | Cargo | Departure) with Full Readability -->
-                <div class="grid grid-cols-3 gap-2.5">
-                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5">
-                        <div class="text-[10.5px] text-[#6B6467]">{{ __('dashboard.workspace.carrier_id') }}</div>
-                        <div id="ws-truck-id" class="text-xs font-bold text-[#1A1718] mt-0.5 font-mono">{{ $firstShipment['carrier_code'] }}</div>
+                <!-- 3-Column Specs (Carrier ID | Cargo | Departure) with Full Readability on Android & Desktop -->
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2 sm:p-2.5 min-w-0">
+                        <div class="text-[10px] sm:text-[10.5px] text-[#6B6467] truncate">{{ __('dashboard.workspace.carrier_id') }}</div>
+                        <div id="ws-truck-id" class="text-[11px] sm:text-xs font-bold text-[#1A1718] mt-0.5 font-mono truncate">{{ $firstShipment['carrier_code'] }}</div>
                     </div>
-                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5">
-                        <div class="text-[10.5px] text-[#6B6467]">{{ __('dashboard.workspace.cargo_load') }}</div>
-                        <div id="ws-dock-label" class="text-xs font-bold text-[#1A1718] mt-0.5">{{ $firstShipment['weight_formatted'] }}</div>
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2 sm:p-2.5 min-w-0">
+                        <div class="text-[10px] sm:text-[10.5px] text-[#6B6467] truncate">{{ __('dashboard.workspace.cargo_load') }}</div>
+                        <div id="ws-dock-label" class="text-[11px] sm:text-xs font-bold text-[#1A1718] mt-0.5 truncate">{{ $firstShipment['weight_formatted'] }}</div>
                     </div>
-                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5">
-                        <div class="text-[10.5px] text-[#6B6467]">{{ __('dashboard.workspace.departure') }}</div>
-                        <div id="ws-started-time" class="text-xs font-bold text-[#1A1718] mt-0.5 tabular-nums whitespace-nowrap">{{ $firstShipment['started_time'] }}</div>
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2 sm:p-2.5 min-w-0">
+                        <div class="text-[10px] sm:text-[10.5px] text-[#6B6467] truncate">{{ __('dashboard.workspace.departure') }}</div>
+                        <div id="ws-started-time" class="text-[11px] sm:text-xs font-bold text-[#1A1718] mt-0.5 tabular-nums truncate">{{ $firstShipment['started_time'] }}</div>
                     </div>
                 </div>
 
@@ -723,18 +723,18 @@
                 </div>
 
                 <!-- 3 Real DB Metric Columns with Aligned Baseline -->
-                <div class="grid grid-cols-3 gap-2.5 items-stretch">
-                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5 flex flex-col justify-between h-full">
-                        <div class="text-[10.5px] text-[#6B6467] leading-tight">{{ __('dashboard.workspace.shipments') }}</div>
-                        <div class="text-sm font-extrabold text-[#1A1718] mt-1.5 tabular-nums whitespace-nowrap">{{ $metrics['total_shipments'] ?? 0 }} units</div>
+                <div class="grid grid-cols-3 gap-2 items-stretch">
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2 sm:p-2.5 flex flex-col justify-between h-full min-w-0">
+                        <div class="text-[10px] sm:text-[10.5px] text-[#6B6467] leading-tight truncate">{{ __('dashboard.workspace.shipments') }}</div>
+                        <div class="text-xs sm:text-sm font-extrabold text-[#1A1718] mt-1.5 tabular-nums whitespace-nowrap truncate">{{ $metrics['total_shipments'] ?? 0 }} units</div>
                     </div>
-                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5 flex flex-col justify-between h-full">
-                        <div class="text-[10.5px] text-[#6B6467] leading-tight">{{ __('dashboard.workspace.on_time_sla') }}</div>
-                        <div class="text-sm font-extrabold text-emerald-700 mt-1.5 tabular-nums whitespace-nowrap">{{ $metrics['kpis']['on_time_delivery_rate'] ?? 100 }}%</div>
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2 sm:p-2.5 flex flex-col justify-between h-full min-w-0">
+                        <div class="text-[10px] sm:text-[10.5px] text-[#6B6467] leading-tight truncate">{{ __('dashboard.workspace.on_time_sla') }}</div>
+                        <div class="text-xs sm:text-sm font-extrabold text-emerald-700 mt-1.5 tabular-nums whitespace-nowrap truncate">{{ $metrics['kpis']['on_time_delivery_rate'] ?? 100 }}%</div>
                     </div>
-                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5 flex flex-col justify-between h-full">
-                        <div class="text-[10.5px] text-[#6B6467] leading-tight">{{ __('dashboard.workspace.active_alert') }}</div>
-                        <div class="text-sm font-extrabold text-[#BE2B5B] mt-1.5 tabular-nums whitespace-nowrap">{{ $metrics['open_exceptions'] ?? 0 }}</div>
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2 sm:p-2.5 flex flex-col justify-between h-full min-w-0">
+                        <div class="text-[10px] sm:text-[10.5px] text-[#6B6467] leading-tight truncate">{{ __('dashboard.workspace.active_alert') }}</div>
+                        <div class="text-xs sm:text-sm font-extrabold text-[#BE2B5B] mt-1.5 tabular-nums whitespace-nowrap truncate">{{ $metrics['open_exceptions'] ?? 0 }}</div>
                     </div>
                 </div>
             </div>

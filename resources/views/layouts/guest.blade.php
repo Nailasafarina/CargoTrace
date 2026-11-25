@@ -12,7 +12,7 @@
         window.i18n = @json(__('js'));
     </script>
 </head>
-<body class="min-h-screen font-sans antialiased bg-[#FAF7F8] text-[#4A2C35] selection:bg-[#BE2B5B] selection:text-white">
+<body class="min-h-screen font-sans antialiased bg-[#FAF7F8] text-[#4A2C35] selection:bg-[#BE2B5B] selection:text-white overflow-x-hidden">
     @php
         $isId = app()->getLocale() === 'id';
     @endphp
@@ -130,29 +130,29 @@
         </aside>
 
         <!-- Right Form Panel -->
-        <div class="flex-1 flex flex-col justify-between px-6 py-5 sm:px-10 sm:py-6 lg:px-12 lg:py-8 bg-[#FAF7F8]">
-            <div class="flex items-center justify-between gap-4">
-                <div class="flex items-center gap-3 lg:hidden">
-                    <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-                        <div class="h-9 w-9 rounded-xl bg-[#BE2B5B] flex items-center justify-center text-white shadow-xs">
+        <div class="flex-1 flex flex-col justify-between px-4 py-4 sm:px-10 sm:py-6 lg:px-12 lg:py-8 bg-[#FAF7F8]">
+            <div class="flex items-center justify-between gap-2 sm:gap-4">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0 lg:hidden">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 min-w-0">
+                        <div class="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-[#BE2B5B] flex items-center justify-center text-white shadow-xs shrink-0">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                             </svg>
                         </div>
-                        <span class="text-lg font-extrabold tracking-tight text-[#4A2C35]">CargoTrace</span>
+                        <span class="text-base sm:text-lg font-extrabold tracking-tight text-[#4A2C35] truncate">CargoTrace</span>
                     </a>
                 </div>
                 <div class="hidden lg:block"></div>
 
-                <div class="flex items-center gap-2.5 ml-auto">
-                    <a href="{{ route('home') }}" class="lg:hidden px-3.5 py-1.5 rounded-full bg-white border border-[#EFE6EA] text-xs font-semibold text-[#4A2C35] hover:bg-[#FCECF1]/50 transition">
+                <div class="flex items-center gap-1.5 sm:gap-2.5 ml-auto shrink-0">
+                    <a href="{{ route('home') }}" class="lg:hidden px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white border border-[#EFE6EA] text-[11px] sm:text-xs font-semibold text-[#4A2C35] hover:bg-[#FCECF1]/50 transition whitespace-nowrap">
                         &larr; {{ __('common.actions.back') }}
                     </a>
-                    <div class="relative z-20 pointer-events-auto inline-flex items-center rounded-full bg-white border border-[#EFE6EA] p-1 shadow-2xs text-xs font-semibold shrink-0" title="{{ __('common.labels.quick_switch') }}">
-                        <a href="{{ route('locale.set', 'id') }}" class="px-2.5 py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'id' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="Bahasa Indonesia">
+                    <div class="relative z-20 pointer-events-auto inline-flex items-center rounded-full bg-white border border-[#EFE6EA] p-0.5 sm:p-1 shadow-2xs text-[11px] sm:text-xs font-semibold shrink-0" title="{{ __('common.labels.quick_switch') }}">
+                        <a href="{{ route('locale.set', 'id') }}" class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'id' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="Bahasa Indonesia">
                             ID
                         </a>
-                        <a href="{{ route('locale.set', 'en') }}" class="px-2.5 py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'en' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="English">
+                        <a href="{{ route('locale.set', 'en') }}" class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'en' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="English">
                             EN
                         </a>
                     </div>

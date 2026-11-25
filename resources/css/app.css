@@ -82,6 +82,39 @@ input:-webkit-autofill:active {
     }
 }
 
+/* Mobile / Android safety nets: no horizontal page scroll, no oversized inline icons */
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+}
+
+svg:not([class*='w-']):not([width]) {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+img,
+canvas {
+    max-width: 100%;
+}
+
+@media (max-width: 640px) {
+    .nex-card {
+        border-radius: 16px;
+    }
+
+    .leaflet-control-layers {
+        max-width: 70vw;
+    }
+
+    .leaflet-tooltip.cargotrace-leaflet-tooltip {
+        white-space: normal;
+        max-width: 60vw;
+    }
+}
+
 /* Subtle diagonal hatch inside Cargo Bay cards */
 .cargo-bay-hatch {
     background-color: #ffffff;

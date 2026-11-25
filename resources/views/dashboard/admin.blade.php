@@ -11,10 +11,10 @@
     <div id="operational-analytics" class="nex-card p-6 space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-[#EFE6EA]">
             <div>
-                <div class="flex items-center gap-3">
+                <div class="flex flex-wrap items-center gap-2.5">
                     <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-[#4A2C35]">{{ __('dashboard.admin.title') }}</h1>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#BE2B5B] text-white">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#BE2B5B]"></span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#BE2B5B] text-white whitespace-nowrap">
+                        <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
                         {{ __('dashboard.admin.role_badge') }}
                     </span>
                 </div>
@@ -23,17 +23,17 @@
                 </p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
-                <a href="{{ route('admin.audit-logs.index') }}" class="px-4 py-2 rounded-full border border-[#EFE6EA] bg-[#FAF7F8] text-xs font-semibold text-[#4A2C35] hover:bg-[#FCECF1] hover:text-[#BE2B5B] transition flex items-center gap-1.5">
-                    <svg class="w-4 h-4 text-[#826871]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    {{ __('dashboard.admin.audit_trails') }}
+                <a href="{{ route('admin.audit-logs.index') }}" class="px-3.5 py-2 rounded-xl border border-[#EFE6EA] bg-[#FAF7F8] text-xs font-semibold text-[#4A2C35] hover:bg-[#FCECF1] hover:text-[#BE2B5B] transition inline-flex items-center gap-1.5 whitespace-nowrap">
+                    <svg class="w-4 h-4 text-[#826871] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>{{ __('dashboard.admin.audit_trails') }}</span>
                 </a>
-                <a href="{{ route('admin.settings.index') }}" class="px-4 py-2 rounded-full border border-[#EFE6EA] bg-[#FAF7F8] text-xs font-semibold text-[#4A2C35] hover:bg-[#FCECF1] hover:text-[#BE2B5B] transition flex items-center gap-1.5">
-                    <svg class="w-4 h-4 text-[#BE2B5B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    {{ __('dashboard.admin.delay_threshold_config') }}
+                <a href="{{ route('admin.settings.index') }}" class="px-3.5 py-2 rounded-xl border border-[#EFE6EA] bg-[#FAF7F8] text-xs font-semibold text-[#4A2C35] hover:bg-[#FCECF1] hover:text-[#BE2B5B] transition inline-flex items-center gap-1.5 whitespace-nowrap">
+                    <svg class="w-4 h-4 text-[#BE2B5B] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span>{{ __('dashboard.admin.delay_threshold_config') }}</span>
                 </a>
-                <a href="{{ route('shipments.create') }}" class="px-4 py-2 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    {{ __('dashboard.admin.new_shipment') }}
+                <a href="{{ route('shipments.create') }}" class="px-3.5 py-2 rounded-xl bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-sm transition inline-flex items-center gap-1.5 whitespace-nowrap">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <span>{{ __('dashboard.admin.new_shipment') }}</span>
                 </a>
             </div>
         </div>
@@ -221,22 +221,22 @@
             </div>
             <div class="space-y-3">
                 @forelse($metrics['recent_exceptions'] as $ex)
-                    <div class="nex-inset p-4 flex items-start justify-between gap-3">
-                        <div class="space-y-1">
-                            <div class="flex items-center gap-2">
+                    <div class="nex-inset p-4 flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                        <div class="space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-1.5">
                                 <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider {{ $ex->severity === 'CRITICAL' ? 'bg-[#BE2B5B] text-[#F8C9DC] border border-[#9E224B]' : ($ex->severity === 'HIGH' ? 'bg-red-50 text-red-700 border border-red-200' : ($ex->severity === 'MEDIUM' ? 'bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC]' : 'bg-amber-50 text-amber-800 border border-amber-200')) }}">
                                     {{ $ex->severity }}
                                 </span>
                                 <span class="text-xs font-mono text-[#6E545D] font-semibold">{{ $ex->type }}</span>
                                 <span class="text-[10px] px-1.5 py-0.5 rounded bg-white border border-[#ECE4E8] text-[#6E545D] font-mono font-medium">{{ $ex->status }}</span>
                             </div>
-                            <p class="text-xs text-[#7D626B] line-clamp-1">{{ $ex->description }}</p>
+                            <p class="text-xs text-[#7D626B] line-clamp-2 sm:line-clamp-1">{{ $ex->description }}</p>
                             <div class="text-[11px] text-[#8C737B] font-mono">
                                 {{ __('shipments.fields.shipment_number') }}: <a href="{{ route('shipments.show', $ex->shipment) }}" class="text-[#C93565] hover:underline font-semibold">{{ $ex->shipment->shipment_number }}</a>
                                 &bull; {{ __('common.labels.timestamp') }}: {{ $ex->detected_at->diffForHumans() }}
                             </div>
                         </div>
-                        <a href="{{ route('shipments.show', $ex->shipment) }}" class="px-3 py-1.5 rounded-full bg-white border border-[#ECE4E8] hover:bg-[#FDF2F6] text-[11px] text-[#4A2C35] shrink-0 font-semibold transition">
+                        <a href="{{ route('shipments.show', $ex->shipment) }}" class="px-3 py-1.5 rounded-full bg-white border border-[#ECE4E8] hover:bg-[#FDF2F6] text-[11px] text-[#4A2C35] shrink-0 font-semibold transition self-start sm:self-auto">
                             {{ __('dashboard.admin.resolve_action') }} &rarr;
                         </a>
                     </div>
@@ -263,9 +263,9 @@
             </div>
             <div class="space-y-3">
                 @forelse($metrics['recent_shipments'] as $sh)
-                    <div class="nex-inset p-4 flex items-center justify-between gap-3">
-                        <div class="space-y-1">
-                            <div class="flex items-center gap-2">
+                    <div class="nex-inset p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
+                        <div class="space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <a href="{{ route('shipments.show', $sh) }}" class="text-xs font-mono font-bold text-[#4A2C35] hover:text-[#C93565] hover:underline">
                                     {{ $sh->shipment_number }}
                                 </a>
@@ -273,7 +273,7 @@
                                     {{ $sh->current_status->label() }}
                                 </span>
                             </div>
-                            <div class="text-xs text-[#8C737B] flex items-center gap-1.5">
+                            <div class="text-xs text-[#8C737B] flex flex-wrap items-center gap-1.5">
                                 <span class="text-[#4A2C35] font-medium">{{ $sh->originLocation->city }}</span>
                                 <span class="text-zinc-400">&rarr;</span>
                                 <span class="text-[#4A2C35] font-medium">{{ $sh->destinationLocation->city }}</span>
@@ -281,11 +281,11 @@
                                 <span class="text-[#8C737B] font-mono">{{ $sh->carrier->name }}</span>
                             </div>
                         </div>
-                        <div class="text-right shrink-0">
+                        <div class="flex sm:block items-center justify-between sm:text-right shrink-0">
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border {{ $sh->delay_status->badgeClass() }}">
                                 {{ $sh->delay_status->label() }}
                             </span>
-                            <span class="text-[10px] text-[#8C737B] font-mono block mt-1">
+                            <span class="text-[10px] text-[#8C737B] font-mono block sm:mt-1">
                                 {{ $sh->updated_at->diffForHumans() }}
                             </span>
                         </div>

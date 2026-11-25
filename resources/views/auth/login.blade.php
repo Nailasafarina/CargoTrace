@@ -24,7 +24,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen font-sans antialiased bg-[#FAF7F8] text-[#4A2C35] selection:bg-[#BE2B5B] selection:text-white">
+<body class="min-h-screen font-sans antialiased bg-[#FAF7F8] text-[#4A2C35] selection:bg-[#BE2B5B] selection:text-white overflow-x-hidden">
     @php
         $isId = app()->getLocale() === 'id';
     @endphp
@@ -177,33 +177,33 @@
         </aside>
 
         <!-- 2. Right Login Form Panel (~50% Desktop, Soft Blush #FAF7F8) -->
-        <div class="flex-1 flex flex-col justify-between px-6 py-5 sm:px-10 sm:py-6 lg:px-12 lg:py-8 bg-[#FAF7F8]">
+        <div class="flex-1 flex flex-col justify-between px-4 py-4 sm:px-10 sm:py-6 lg:px-12 lg:py-8 bg-[#FAF7F8]">
             <!-- Top Right Language Switcher & Mobile Brand Header -->
-            <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center justify-between gap-2 sm:gap-4">
                 <!-- Mobile Brand + Back Link (visible when left panel is hidden) -->
-                <div class="flex items-center gap-3 lg:hidden">
-                    <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-                        <div class="h-9 w-9 rounded-xl bg-[#BE2B5B] flex items-center justify-center text-white shadow-xs">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0 lg:hidden">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 min-w-0">
+                        <div class="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-[#BE2B5B] flex items-center justify-center text-white shadow-xs shrink-0">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                             </svg>
                         </div>
-                        <span class="text-lg font-extrabold tracking-tight text-[#4A2C35]">CargoTrace</span>
+                        <span class="text-base sm:text-lg font-extrabold tracking-tight text-[#4A2C35] truncate">CargoTrace</span>
                     </a>
                 </div>
                 <div class="hidden lg:block"></div>
 
                 <!-- Language Switcher (ID | EN) + Mobile Back Button -->
-                <div class="flex items-center gap-2.5 ml-auto">
-                    <a href="{{ route('home') }}" class="lg:hidden px-3.5 py-1.5 rounded-full bg-white border border-[#EFE6EA] text-xs font-semibold text-[#4A2C35] hover:bg-[#FCECF1]/50 transition">
+                <div class="flex items-center gap-1.5 sm:gap-2.5 ml-auto shrink-0">
+                    <a href="{{ route('home') }}" class="lg:hidden px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white border border-[#EFE6EA] text-[11px] sm:text-xs font-semibold text-[#4A2C35] hover:bg-[#FCECF1]/50 transition whitespace-nowrap">
                         &larr; {{ __('common.actions.back') }}
                     </a>
 
-                    <div class="relative z-20 pointer-events-auto inline-flex items-center rounded-full bg-white border border-[#EFE6EA] p-1 shadow-2xs text-xs font-semibold shrink-0" title="{{ __('common.labels.quick_switch') }}">
-                        <a href="{{ route('locale.set', 'id') }}" class="px-2.5 py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'id' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="Bahasa Indonesia">
+                    <div class="relative z-20 pointer-events-auto inline-flex items-center rounded-full bg-white border border-[#EFE6EA] p-0.5 sm:p-1 shadow-2xs text-[11px] sm:text-xs font-semibold shrink-0" title="{{ __('common.labels.quick_switch') }}">
+                        <a href="{{ route('locale.set', 'id') }}" class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'id' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="Bahasa Indonesia">
                             ID
                         </a>
-                        <a href="{{ route('locale.set', 'en') }}" class="px-2.5 py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'en' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="English">
+                        <a href="{{ route('locale.set', 'en') }}" class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition cursor-pointer select-none inline-flex items-center justify-center {{ app()->getLocale() === 'en' ? 'bg-[#BE2B5B] text-white font-bold' : 'text-[#826871] hover:text-[#4A2C35]' }}" aria-label="English">
                             EN
                         </a>
                     </div>
@@ -232,10 +232,10 @@
                     </div>
                 @endif
 
-                <div class="bg-white rounded-[28px] border border-[#EFE6EA] p-6 sm:p-8 shadow-[0_12px_30px_-10px_rgba(26,23,24,0.05)]">
+                <div class="bg-white rounded-[24px] sm:rounded-[28px] border border-[#EFE6EA] p-5 sm:p-8 shadow-[0_12px_30px_-10px_rgba(26,23,24,0.05)]">
                     <!-- Heading & Subtitle -->
                     <div class="mb-5">
-                        <h1 class="text-2xl sm:text-[26px] font-extrabold text-[#4A2C35] tracking-tight">
+                        <h1 class="text-xl sm:text-[26px] font-extrabold text-[#4A2C35] tracking-tight">
                             {{ __('auth.login_title') }}
                         </h1>
                         <p class="text-xs sm:text-sm text-[#826871] mt-1 leading-relaxed">
@@ -244,12 +244,12 @@
                     </div>
 
                     <!-- Sleek Demo Account Credentials Box (3-Column Grid without Truncation) -->
-                    <div class="mb-5 p-3.5 bg-[#FAF7F8] border border-[#EFE6EA] rounded-2xl">
-                        <div class="flex items-center justify-between gap-2 mb-2.5">
+                    <div class="mb-5 p-3 sm:p-3.5 bg-[#FAF7F8] border border-[#EFE6EA] rounded-2xl">
+                        <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2.5">
                             <span class="text-[11px] font-bold text-[#4A2C35]">{{ __('auth.demo_accounts') }}</span>
                             <span class="text-[10px] text-[#BE2B5B] font-bold">{{ __('auth.click_autofill') }}</span>
                         </div>
-                        <div class="grid grid-cols-3 gap-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                             <button
                                 type="button"
                                 onclick="fillDemo('admin@cargotrace.test', 'Password123!')"

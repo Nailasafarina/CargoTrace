@@ -11,10 +11,10 @@
     <div id="operational-analytics" class="nex-card p-6 space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-[#EFE6EA]">
             <div>
-                <div class="flex items-center gap-3">
+                <div class="flex flex-wrap items-center gap-2.5">
                     <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-[#4A2C35]">{{ __('dashboard.operator.title') }}</h1>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#BE2B5B] text-white">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#BE2B5B]"></span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#BE2B5B] text-white whitespace-nowrap">
+                        <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
                         {{ __('dashboard.operator.role_badge') }}
                     </span>
                 </div>
@@ -23,9 +23,9 @@
                 </p>
             </div>
             <div class="flex items-center gap-2">
-                <a href="{{ route('shipments.create') }}" class="px-4 py-2 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-sm transition flex items-center gap-1.5 cursor-pointer">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    {{ __('shipments.new_shipment') }}
+                <a href="{{ route('shipments.create') }}" class="px-4 py-2 rounded-xl bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-sm transition inline-flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <span>{{ __('shipments.new_shipment') }}</span>
                 </a>
             </div>
         </div>
