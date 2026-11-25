@@ -54,48 +54,73 @@
 
 @if($hasValidCoords)
     <div {{ $attributes->merge(['class' => 'nex-card p-6 space-y-4']) }}>
-        @if($title || $subtitle || $osmUrl)
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 border-b border-[#F5F0F3]">
+        @if($title || $subtitle || $osmUrl || $mode === 'multi')
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 pb-3.5 border-b border-[#EFE6EA]">
                 <div>
                     @if($title)
-                        <h2 class="text-base font-bold text-zinc-900 tracking-tight flex items-center gap-2">
-                            <svg class="w-4 h-4 text-[#E04879] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <h2 class="text-base font-bold text-[#1A1718] tracking-tight flex items-center gap-2">
+                            <svg class="w-4 h-4 text-[#BE2B5B] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                             </svg>
                             {{ $title }}
                         </h2>
                     @endif
                     @if($subtitle)
-                        <p class="text-xs text-zinc-500 mt-0.5">{{ $subtitle }}</p>
+                        <p class="text-xs text-[#6B6467] mt-0.5">{{ $subtitle }}</p>
                     @endif
                 </div>
 
-                @if($osmUrl)
-                    <div class="flex items-center gap-2 shrink-0">
+                <div class="flex flex-wrap items-center gap-2 shrink-0">
+                    @if($mode === 'multi')
+                        <!-- Compact Facility Type Legend in Top-Right Map Header -->
+                        <div class="flex flex-wrap items-center gap-2 bg-[#FAF7F8] border border-[#EFE6EA] px-3 py-1.5 rounded-xl text-[11px] font-semibold text-[#1A1718]">
+                            <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#e04879] ring-2 ring-[#FCECF1]"></span>
+                                <span>{{ __('locations.types.port') }}</span>
+                            </span>
+                            <span class="text-[#E5DCE0]">|</span>
+                            <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#1f171b] ring-2 ring-zinc-200"></span>
+                                <span>{{ __('locations.types.airport') }}</span>
+                            </span>
+                            <span class="text-[#E5DCE0]">|</span>
+                            <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#9e224b] ring-2 ring-[#FCECF1]"></span>
+                                <span>{{ __('locations.types.warehouse') }}</span>
+                            </span>
+                            <span class="text-[#E5DCE0]">|</span>
+                            <span class="inline-flex items-center gap-1.5 whitespace-nowrap">
+                                <span class="w-2.5 h-2.5 rounded-full bg-[#10b981] ring-2 ring-emerald-100"></span>
+                                <span>{{ __('locations.types.city') }}</span>
+                            </span>
+                        </div>
+                    @endif
+
+                    @if($osmUrl)
                         <a
                             href="{{ $osmUrl }}"
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#C93565] hover:text-[#9E224B] hover:underline transition"
+                            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#BE2B5B] hover:text-[#9E224B] hover:underline transition"
                         >
                             <span>{{ __('locations.view_osm') }}</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
                         </a>
-                    </div>
-                @endif
+                    @endif
+                </div>
             </div>
         @endif
 
         <!-- Leaflet Map Canvas Container -->
-        <div class="rounded-2xl overflow-hidden border border-[#ECE4E8] relative">
+        <div class="rounded-xl overflow-hidden border border-[#EFE6EA] relative">
             <div
                 id="{{ $id }}"
                 data-component="map"
                 data-map-config="{{ json_encode($mapConfig, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
                 style="height: {{ $height }}; min-height: 280px;"
-                class="w-full z-0 bg-[#FAF7F9]"
+                class="w-full z-0 bg-[#FAF7F8]"
             ></div>
         </div>
     </div>
@@ -110,8 +135,8 @@
             </svg>
         </div>
         <div>
-            <h4 class="text-sm font-bold text-zinc-900 tracking-tight">{{ __('locations.map.no_coordinates') }}</h4>
-            <p class="text-xs text-zinc-500 max-w-sm mt-1 leading-relaxed">{{ __('locations.map.no_coordinates_desc') }}</p>
+            <h4 class="text-sm font-bold text-[#4A2C35] tracking-tight">{{ __('locations.map.no_coordinates') }}</h4>
+            <p class="text-xs text-[#8C737B] max-w-sm mt-1 leading-relaxed">{{ __('locations.map.no_coordinates_desc') }}</p>
         </div>
         @if($editUrl)
             <a

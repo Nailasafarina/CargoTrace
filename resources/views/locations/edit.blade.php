@@ -7,10 +7,10 @@
     <!-- Top Bar -->
     <div class="nex-card p-6 flex items-center justify-between gap-4">
         <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-[#1F171B] tracking-tight">{{ __('locations.edit_location') }}: {{ $location->name }}</h1>
-            <p class="text-xs text-zinc-500 mt-0.5">{{ __('locations.subtitle') }}</p>
+            <h1 class="text-xl sm:text-2xl font-bold text-[#4A2C35] tracking-tight">{{ __('locations.edit_location') }}: {{ $location->name }}</h1>
+            <p class="text-xs text-[#8C737B] mt-0.5">{{ __('locations.subtitle') }}</p>
         </div>
-        <a href="{{ route('locations.index') }}" class="px-4 py-2 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-zinc-700 transition shrink-0">
+        <a href="{{ route('locations.index') }}" class="px-4 py-2 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-[#6E545D] transition shrink-0">
             &larr; {{ __('common.actions.back') }}
         </a>
     </div>
@@ -23,13 +23,13 @@
         <div class="lg:col-span-6 nex-card p-6 space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label for="name" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('locations.fields.name') }} *</label>
+                    <label for="name" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('locations.fields.name') }} *</label>
                     <input type="text" id="name" name="name" value="{{ old('name', $location->name) }}" required class="nex-input text-sm py-2.5" />
                     @error('name') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label for="type" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('locations.fields.type') }} *</label>
+                    <label for="type" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('locations.fields.type') }} *</label>
                     <select id="type" name="type" required class="nex-input text-sm py-2.5">
                         @foreach($types as $type)
                             <option value="{{ $type->value }}" {{ old('type', $location->type->value) === $type->value ? 'selected' : '' }}>
@@ -43,13 +43,13 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label for="city" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('locations.fields.city') }} *</label>
+                    <label for="city" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('locations.fields.city') }} *</label>
                     <input type="text" id="city" name="city" value="{{ old('city', $location->city) }}" required class="nex-input text-sm py-2.5" />
                     @error('city') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label for="country" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('locations.fields.country') }} *</label>
+                    <label for="country" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('locations.fields.country') }} *</label>
                     <input type="text" id="country" name="country" value="{{ old('country', $location->country) }}" required class="nex-input text-sm py-2.5" />
                     @error('country') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
                 </div>
@@ -58,13 +58,13 @@
             <!-- Automatic Geocoding Toolbar -->
             <div class="nex-inset p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <span class="text-xs font-semibold text-zinc-900 flex items-center gap-1.5">
+                    <span class="text-xs font-semibold text-[#4A2C35] flex items-center gap-1.5">
                         <svg class="w-4 h-4 text-[#E04879]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         {{ __('locations.geocoding.toolbar_title') }}
                     </span>
-                    <p id="geocode-status" class="text-[11px] text-zinc-500 mt-0.5">{{ __('locations.geocoding.toolbar_desc') }}</p>
+                    <p id="geocode-status" class="text-[11px] text-[#8C737B] mt-0.5">{{ __('locations.geocoding.toolbar_desc') }}</p>
                 </div>
-                <button type="button" id="btn-geocode" class="px-4 py-2 rounded-full bg-[#1F171B] hover:bg-[#C93565] text-white text-xs font-semibold transition shrink-0 flex items-center gap-1.5 cursor-pointer shadow-xs">
+                <button type="button" id="btn-geocode" class="px-4 py-2 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold transition shrink-0 flex items-center gap-1.5 cursor-pointer shadow-xs">
                     <span id="geocode-spinner" class="hidden animate-spin">&circlearrowright;</span>
                     <span>{{ __('locations.geocoding.lookup_button') }}</span>
                 </button>
@@ -72,23 +72,23 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label for="latitude" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('locations.fields.latitude') }} (Decimal -90 to +90) *</label>
+                    <label for="latitude" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('locations.fields.latitude') }} (Decimal -90 to +90) *</label>
                     <input type="number" step="0.0000001" id="latitude" name="latitude" value="{{ old('latitude', $location->latitude) }}" required class="nex-input text-sm py-2.5 font-mono" />
                     @error('latitude') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label for="longitude" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('locations.fields.longitude') }} (Decimal -180 to +180) *</label>
+                    <label for="longitude" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('locations.fields.longitude') }} (Decimal -180 to +180) *</label>
                     <input type="number" step="0.0000001" id="longitude" name="longitude" value="{{ old('longitude', $location->longitude) }}" required class="nex-input text-sm py-2.5 font-mono" />
                     @error('longitude') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
                 </div>
             </div>
 
             <div class="pt-4 border-t border-[#F5F0F3] flex justify-end gap-3">
-                <a href="{{ route('locations.index') }}" class="px-5 py-2.5 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-zinc-700 transition">
+                <a href="{{ route('locations.index') }}" class="px-5 py-2.5 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-[#6E545D] transition">
                     {{ __('common.actions.cancel') }}
                 </a>
-                <button type="submit" class="px-6 py-2.5 rounded-full bg-[#1F171B] hover:bg-[#C93565] text-white text-xs font-semibold shadow-sm transition cursor-pointer">
+                <button type="submit" class="px-6 py-2.5 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-sm transition cursor-pointer">
                     {{ __('locations.edit_location') }}
                 </button>
             </div>

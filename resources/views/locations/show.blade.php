@@ -12,13 +12,13 @@
                     <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC]">
                         {{ $location->type->label() }}
                     </span>
-                    <h1 class="text-2xl font-bold tracking-tight text-[#1F171B] mt-3">{{ $location->name }}</h1>
-                    <p class="text-xs text-zinc-500 mt-1">{{ $location->city }}, {{ $location->country }}</p>
+                    <h1 class="text-2xl font-bold tracking-tight text-[#4A2C35] mt-3">{{ $location->name }}</h1>
+                    <p class="text-xs text-[#8C737B] mt-1">{{ $location->city }}, {{ $location->country }}</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2 pt-1">
-                <a href="{{ route('locations.index') }}" class="flex-1 py-2.5 px-4 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-zinc-700 text-center transition">
+                <a href="{{ route('locations.index') }}" class="flex-1 py-2.5 px-4 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-[#6E545D] text-center transition">
                     &larr; {{ __('common.actions.back') }}
                 </a>
                 @can('update', $location)
@@ -32,29 +32,29 @@
         <!-- Hub Throughput Bento Strip -->
         <div class="grid grid-cols-3 gap-3">
             <div class="nex-card p-4">
-                <span class="text-[11px] text-zinc-500 block">{{ __('locations.departing_shipments') }}</span>
+                <span class="text-[11px] text-[#8C737B] block">{{ __('locations.departing_shipments') }}</span>
                 <div class="text-xl font-bold text-[#C93565] mt-1 tabular-nums">{{ $location->origin_shipments_count }}</div>
             </div>
             <div class="nex-card p-4">
-                <span class="text-[11px] text-zinc-500 block">{{ __('locations.arriving_shipments') }}</span>
+                <span class="text-[11px] text-[#8C737B] block">{{ __('locations.arriving_shipments') }}</span>
                 <div class="text-xl font-bold text-emerald-700 mt-1 tabular-nums">{{ $location->destination_shipments_count }}</div>
             </div>
             <div class="nex-card p-4">
-                <span class="text-[11px] text-zinc-500 block">{{ __('locations.milestone_events') }}</span>
-                <div class="text-xl font-bold text-[#1F171B] mt-1 tabular-nums">{{ $location->tracking_events_count }}</div>
+                <span class="text-[11px] text-[#8C737B] block">{{ __('locations.milestone_events') }}</span>
+                <div class="text-xl font-bold text-[#4A2C35] mt-1 tabular-nums">{{ $location->tracking_events_count }}</div>
             </div>
         </div>
 
         <!-- Geographic Coordinates (WGS84 Format) -->
         <div class="nex-card p-6 space-y-3">
-            <h2 class="text-sm font-bold text-[#1F171B]">{{ __('locations.coords_title') }}</h2>
-            <div class="nex-inset p-4 font-mono text-xs text-zinc-800 space-y-2">
+            <h2 class="text-sm font-bold text-[#4A2C35]">{{ __('locations.coords_title') }}</h2>
+            <div class="nex-inset p-4 font-mono text-xs text-[#4A2C35] space-y-2">
                 <div class="flex items-center justify-between">
-                    <span class="text-zinc-500">{{ __('locations.fields.latitude') }}:</span>
+                    <span class="text-[#8C737B]">{{ __('locations.fields.latitude') }}:</span>
                     <span class="text-[#C93565] font-semibold tabular-nums">{{ $location->latitude !== null ? number_format($location->latitude, 7) : '—' }}</span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span class="text-zinc-500">{{ __('locations.fields.longitude') }}:</span>
+                    <span class="text-[#8C737B]">{{ __('locations.fields.longitude') }}:</span>
                     <span class="text-emerald-700 font-semibold tabular-nums">{{ $location->longitude !== null ? number_format($location->longitude, 7) : '—' }}</span>
                 </div>
                 @if($location->latitude !== null && $location->longitude !== null)

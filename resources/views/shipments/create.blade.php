@@ -11,11 +11,11 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             </span>
             <div>
-                <h1 class="text-2xl font-bold tracking-tight text-[#1F171B]">{{ __('shipments.new_shipment') }}</h1>
-                <p class="text-xs text-zinc-500 mt-0.5">{{ __('shipments.subtitle') }}</p>
+                <h1 class="text-2xl font-bold tracking-tight text-[#4A2C35]">{{ __('shipments.new_shipment') }}</h1>
+                <p class="text-xs text-[#8C737B] mt-0.5">{{ __('shipments.subtitle') }}</p>
             </div>
         </div>
-        <a href="{{ route('shipments.index') }}" class="px-4 py-2 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-zinc-700 transition self-start sm:self-auto">
+        <a href="{{ route('shipments.index') }}" class="px-4 py-2 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-[#6E545D] transition self-start sm:self-auto">
             &larr; {{ __('common.actions.back') }}
         </a>
     </div>
@@ -31,7 +31,7 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
                     <div>
-                        <label for="shipment_number" class="block text-xs font-semibold text-zinc-700 mb-1.5 truncate" title="{{ __('shipments.form.tracking_number') }} {{ __('shipments.form.auto_generated') }}">
+                        <label for="shipment_number" class="block text-xs font-semibold text-[#6E545D] mb-1.5 truncate" title="{{ __('shipments.form.tracking_number') }} {{ __('shipments.form.auto_generated') }}">
                             {{ __('shipments.form.tracking_number') }}
                         </label>
                         <input type="text" id="shipment_number" name="shipment_number" value="{{ old('shipment_number') }}" placeholder="e.g. CT-SEA-EUR-2026-99001" class="nex-input font-mono uppercase" />
@@ -39,7 +39,7 @@
                     </div>
 
                     <div>
-                        <label for="customer_id" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('shipments.form.customer_account') }}</label>
+                        <label for="customer_id" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.form.customer_account') }}</label>
                         <select id="customer_id" name="customer_id" required class="nex-input">
                             <option value="">{{ __('shipments.form.select_customer') }}</option>
                             @foreach($customers as $cust)
@@ -52,7 +52,7 @@
                     </div>
 
                     <div>
-                        <label for="carrier_id" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('shipments.form.carrier') }}</label>
+                        <label for="carrier_id" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.form.carrier') }}</label>
                         <select id="carrier_id" name="carrier_id" required class="nex-input">
                             <option value="">{{ __('shipments.form.select_carrier') }}</option>
                             @foreach($carriers as $carrier)
@@ -67,7 +67,7 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                     <div>
-                        <label for="origin_location_id" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('shipments.form.origin_port') }}</label>
+                        <label for="origin_location_id" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.form.origin_port') }}</label>
                         <select id="origin_location_id" name="origin_location_id" required class="nex-input">
                             <option value="">{{ __('shipments.form.select_origin') }}</option>
                             @foreach($locations as $loc)
@@ -80,7 +80,7 @@
                     </div>
 
                     <div>
-                        <label for="destination_location_id" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('shipments.form.destination_port') }}</label>
+                        <label for="destination_location_id" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.form.destination_port') }}</label>
                         <select id="destination_location_id" name="destination_location_id" required class="nex-input">
                             <option value="">{{ __('shipments.form.select_destination') }}</option>
                             @foreach($locations as $loc)
@@ -95,13 +95,13 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                     <div>
-                        <label for="expected_departure_at" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('shipments.form.exp_departure') }}</label>
+                        <label for="expected_departure_at" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.form.exp_departure') }}</label>
                         <input type="datetime-local" id="expected_departure_at" name="expected_departure_at" value="{{ old('expected_departure_at', now()->addDays(2)->format('Y-m-d\TH:i')) }}" required class="nex-input" />
                         @error('expected_departure_at') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
-                        <label for="expected_arrival_at" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('shipments.form.exp_arrival') }}</label>
+                        <label for="expected_arrival_at" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.form.exp_arrival') }}</label>
                         <input type="datetime-local" id="expected_arrival_at" name="expected_arrival_at" value="{{ old('expected_arrival_at', now()->addDays(22)->format('Y-m-d\TH:i')) }}" required class="nex-input" />
                         @error('expected_arrival_at') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
                     </div>
@@ -114,19 +114,19 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                        <label for="cargo_type" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('shipments.form.cargo_type') }}</label>
+                        <label for="cargo_type" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.form.cargo_type') }}</label>
                         <input type="text" id="cargo_type" name="cargo_type" value="{{ old('cargo_type') }}" required placeholder="e.g. Specialty Green Coffee (FCL)" class="nex-input" />
                         @error('cargo_type') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
-                        <label for="volume_cbm" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('shipments.form.volume_cbm') }}</label>
+                        <label for="volume_cbm" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.form.volume_cbm') }}</label>
                         <input type="number" step="0.01" id="volume_cbm" name="volume_cbm" value="{{ old('volume_cbm', '45.00') }}" required class="nex-input font-mono" />
                         @error('volume_cbm') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
-                        <label for="current_status" class="block text-xs font-semibold text-zinc-700 mb-1.5">{{ __('shipments.form.initial_status') }}</label>
+                        <label for="current_status" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.form.initial_status') }}</label>
                         <select id="current_status" name="current_status" class="nex-input">
                             @foreach($statuses as $st)
                                 <option value="{{ $st->value }}" {{ old('current_status', 'BOOKED') === $st->value ? 'selected' : '' }}>
@@ -143,7 +143,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-sm font-bold uppercase tracking-wider text-[#C93565]">{{ __('shipments.form.manifest_title') }}</h2>
-                        <p class="text-xs text-zinc-500 mt-0.5">{{ __('shipments.form.manifest_desc') }}</p>
+                        <p class="text-xs text-[#8C737B] mt-0.5">{{ __('shipments.form.manifest_desc') }}</p>
                     </div>
                     <button type="button" onclick="addItemRow()" class="px-3.5 py-1.5 rounded-full bg-[#FDF2F6] hover:bg-[#FCE5EE] text-[#9E224B] border border-[#F8C9DC] text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -154,15 +154,15 @@
                 <div id="items-container" class="space-y-3">
                     <div class="item-row grid grid-cols-1 sm:grid-cols-12 gap-3 p-3.5 bg-[#FAF7F9] rounded-2xl border border-[#ECE4E8] items-end">
                         <div class="sm:col-span-6">
-                            <label class="block text-[11px] font-semibold text-zinc-600 mb-1">{{ __('shipments.form.item_description') }}</label>
+                            <label class="block text-[11px] font-semibold text-[#7D626B] mb-1">{{ __('shipments.form.item_description') }}</label>
                             <input type="text" name="items[0][description]" value="{{ old('items.0.description', 'Industrial Microcontroller Trays') }}" required placeholder="Description of packaged cargo" class="nex-input bg-white" />
                         </div>
                         <div class="sm:col-span-2">
-                            <label class="block text-[11px] font-semibold text-zinc-600 mb-1">{{ __('shipments.form.quantity') }}</label>
+                            <label class="block text-[11px] font-semibold text-[#7D626B] mb-1">{{ __('shipments.form.quantity') }}</label>
                             <input type="number" name="items[0][quantity]" value="{{ old('items.0.quantity', 150) }}" min="1" required class="nex-input bg-white font-mono" />
                         </div>
                         <div class="sm:col-span-3">
-                            <label class="block text-[11px] font-semibold text-zinc-600 mb-1">{{ __('shipments.form.weight_kg') }}</label>
+                            <label class="block text-[11px] font-semibold text-[#7D626B] mb-1">{{ __('shipments.form.weight_kg') }}</label>
                             <input type="number" step="0.01" name="items[0][weight_kg]" value="{{ old('items.0.weight_kg', 6500.00) }}" min="0.01" required class="nex-input bg-white font-mono" />
                         </div>
                         <div class="sm:col-span-1 text-right">
@@ -179,7 +179,7 @@
         <aside class="lg:col-span-4 lg:sticky lg:top-20 space-y-4">
             <div class="nex-card p-6 space-y-4">
                 <div class="flex items-center justify-between gap-2">
-                    <h2 class="text-sm font-bold text-[#1F171B]">{{ __('shipments.form.booking_info') }}</h2>
+                    <h2 class="text-sm font-bold text-[#4A2C35]">{{ __('shipments.form.booking_info') }}</h2>
                     <img src="{{ asset('images/fleet-truck-mini.png') }}" alt="Dispatch preview" class="w-20 h-10 object-contain shrink-0 select-none" />
                 </div>
 
@@ -187,7 +187,7 @@
                     <div class="h-full bg-[#E04879] rounded-full w-1/3"></div>
                 </div>
 
-                <div class="nex-inset p-4 space-y-2 text-xs text-zinc-600">
+                <div class="nex-inset p-4 space-y-2 text-xs text-[#7D626B]">
                     <p>{{ __('shipments.form.manifest_desc') }}</p>
                 </div>
 
@@ -195,7 +195,7 @@
                     <button type="submit" class="w-full py-3 px-6 rounded-full bg-[#C93565] hover:bg-[#b32956] text-white text-xs font-semibold shadow-sm shadow-[#C93565]/20 transition cursor-pointer">
                         {{ __('shipments.form.confirm_create') }}
                     </button>
-                    <a href="{{ route('shipments.index') }}" class="block w-full py-2.5 px-5 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-zinc-700 text-center transition">
+                    <a href="{{ route('shipments.index') }}" class="block w-full py-2.5 px-5 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-[#6E545D] text-center transition">
                         {{ __('common.actions.cancel') }}
                     </a>
                 </div>
@@ -213,15 +213,15 @@
         div.className = 'item-row grid grid-cols-1 sm:grid-cols-12 gap-3 p-3.5 bg-[#FAF7F9] rounded-2xl border border-[#ECE4E8] items-end';
         div.innerHTML = `
             <div class="sm:col-span-6">
-                <label class="block text-[11px] font-semibold text-zinc-600 mb-1">{{ __('shipments.form.item_description') }}</label>
+                <label class="block text-[11px] font-semibold text-[#7D626B] mb-1">{{ __('shipments.form.item_description') }}</label>
                 <input type="text" name="items[${itemIndex}][description]" required placeholder="{{ __('shipments.form.item_placeholder') }}" class="nex-input bg-white" />
             </div>
             <div class="sm:col-span-2">
-                <label class="block text-[11px] font-semibold text-zinc-600 mb-1">{{ __('shipments.form.quantity') }}</label>
+                <label class="block text-[11px] font-semibold text-[#7D626B] mb-1">{{ __('shipments.form.quantity') }}</label>
                 <input type="number" name="items[${itemIndex}][quantity]" value="1" min="1" required class="nex-input bg-white font-mono" />
             </div>
             <div class="sm:col-span-3">
-                <label class="block text-[11px] font-semibold text-zinc-600 mb-1">{{ __('shipments.form.weight_kg') }}</label>
+                <label class="block text-[11px] font-semibold text-[#7D626B] mb-1">{{ __('shipments.form.weight_kg') }}</label>
                 <input type="number" step="0.01" name="items[${itemIndex}][weight_kg]" value="100.00" min="0.01" required class="nex-input bg-white font-mono" />
             </div>
             <div class="sm:col-span-1 text-right">

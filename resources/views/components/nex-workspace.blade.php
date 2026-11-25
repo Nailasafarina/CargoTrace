@@ -84,19 +84,19 @@
 @endphp
 
 <!-- Interactive Cargo & Route Workspace -->
-<section class="space-y-4 mb-10" aria-label="Interactive Cargo & Route Workspace">
-    <!-- Top Section: Left Controls + Studio Cutaway Tractor & Cargo Bays -->
-    <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+<section class="space-y-5 mb-8" aria-label="Interactive Cargo & Route Workspace">
+    <!-- Top Section: Left Controls (5 Cols on XL) + Studio Cutaway Tractor & Cargo Bays (7 Cols on XL) -->
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-stretch">
 
-        <!-- Left Column (3 Cols on XL): Mode Filter Circles, Active Carrier Card & Shipment Plannings -->
-        <div class="xl:col-span-3 space-y-2.5">
+        <!-- Left Column (5 Cols on XL): Mode Filter Circles, Active Carrier Card & Shipment Plannings -->
+        <div class="xl:col-span-5 space-y-3.5">
             <!-- 3 Circular Mode Filter Buttons -->
             <div class="flex items-center gap-2">
                 <button
                     type="button"
                     data-ws-filter="all"
                     onclick="window.filterCargoWorkspace('all')"
-                    class="w-9 h-9 rounded-full bg-[#C93565] text-white flex items-center justify-center shadow-sm shadow-[#C93565]/25 transition hover:scale-105 cursor-pointer"
+                    class="w-9 h-9 rounded-full bg-[#BE2B5B] text-white flex items-center justify-center shadow-2xs transition cursor-pointer"
                     title="All Active Shipments"
                     aria-label="All Active Shipments"
                 >
@@ -109,7 +109,7 @@
                     type="button"
                     data-ws-filter="transit"
                     onclick="window.filterCargoWorkspace('transit')"
-                    class="w-9 h-9 rounded-full bg-white text-zinc-700 hover:text-[#1F171B] hover:bg-[#FDF2F6] flex items-center justify-center shadow-[0_2px_10px_rgba(31,23,27,0.03)] transition hover:scale-105 cursor-pointer"
+                    class="w-9 h-9 rounded-full bg-white border border-[#EFE6EA] text-[#6B6467] hover:text-[#BE2B5B] hover:bg-[#FCECF1] flex items-center justify-center transition cursor-pointer"
                     title="Filter In Transit Cargo"
                     aria-label="Filter In Transit Cargo"
                 >
@@ -121,7 +121,7 @@
                     type="button"
                     data-ws-filter="delayed"
                     onclick="window.filterCargoWorkspace('delayed')"
-                    class="w-9 h-9 rounded-full bg-white text-zinc-700 hover:text-[#1F171B] hover:bg-[#FDF2F6] flex items-center justify-center shadow-[0_2px_10px_rgba(31,23,27,0.03)] transition hover:scale-105 cursor-pointer"
+                    class="w-9 h-9 rounded-full bg-white border border-[#EFE6EA] text-[#6B6467] hover:text-[#BE2B5B] hover:bg-[#FCECF1] flex items-center justify-center transition cursor-pointer"
                     title="Filter Delayed / Alerted Shipments"
                     aria-label="Filter Delayed Shipments"
                 >
@@ -131,20 +131,20 @@
                 </button>
             </div>
 
-            <!-- Active Carrier / Vehicle Card -->
-            <div class="bg-white rounded-[20px] px-4 py-3 shadow-sm flex items-center justify-between gap-2">
+            <!-- Active Carrier / Vehicle Card (Spacious so Carrier Name & Shipment Code Never Truncate to 'CM...') -->
+            <div class="bg-white rounded-2xl border border-[#EFE6EA] px-4 py-3.5 shadow-sm flex items-center justify-between gap-3">
                 <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-1.5">
-                        <span id="ws-carrier-title" class="text-[13px] font-bold text-zinc-900 truncate">{{ $firstShipment['carrier_name'] }}</span>
-                        <span id="ws-top-status-pill" class="px-2 py-0.5 rounded-full bg-[#F2F3F5] text-zinc-700 text-[9.5px] font-semibold whitespace-nowrap shrink-0">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span id="ws-carrier-title" class="text-sm font-extrabold text-[#1A1718] leading-snug">{{ $firstShipment['carrier_name'] }}</span>
+                        <span id="ws-top-status-pill" class="px-2.5 py-0.5 rounded-full bg-[#FCECF1] text-[#BE2B5B] text-[10px] font-bold whitespace-nowrap shrink-0">
                             {{ strtolower($firstShipment['status_label']) }}
                         </span>
                     </div>
-                    <div id="ws-carrier-sub" class="text-[11px] text-zinc-400 mt-0.5 truncate">
+                    <div id="ws-carrier-sub" class="text-xs text-[#6B6467] font-mono mt-1">
                         {{ $firstShipment['carrier_code'] }} &bull; {{ $firstShipment['number'] }}
                     </div>
                 </div>
-                <div class="w-20 h-10 shrink-0 flex items-center justify-end select-none">
+                <div class="w-20 h-11 shrink-0 flex items-center justify-end select-none">
                     <img
                         src="{{ asset('images/fleet-truck-mini.png') }}"
                         alt="Active fleet transport unit"
@@ -154,48 +154,48 @@
             </div>
 
             <!-- Shipment Plannings Card -->
-            <div class="bg-white rounded-[22px] p-4 shadow-sm space-y-3">
+            <div class="bg-white rounded-2xl border border-[#EFE6EA] p-5 shadow-sm space-y-3.5">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-full bg-[#F4F5F7] text-zinc-800 flex items-center justify-center">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-8 h-8 rounded-xl bg-[#FCECF1] text-[#BE2B5B] flex items-center justify-center shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                     </div>
-                    <h2 class="text-sm font-bold text-zinc-900">{{ __('dashboard.workspace.plannings') }}</h2>
+                    <h2 class="text-sm font-extrabold text-[#1A1718]">{{ __('dashboard.workspace.plannings') }}</h2>
                 </div>
 
-                <!-- Action Pill Buttons (RBAC-Aware) -->
-                <div class="grid grid-cols-2 gap-2">
+                <!-- Action Buttons (RBAC-Aware, Rounded-XL, Proper Gap & Padding so '+' Never Hits Edge) -->
+                <div class="flex flex-wrap items-center gap-2.5">
                     @if($canCreateShipment)
-                        <a href="{{ route('shipments.create') }}" class="py-2 px-3 rounded-full bg-[#1F171B] hover:bg-[#C93565] text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 shadow-xs transition whitespace-nowrap">
+                        <a href="{{ route('shipments.create') }}" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-2xs transition whitespace-nowrap">
                             <span>{{ __('dashboard.workspace.new_shipment') }}</span>
-                            <span class="text-sm leading-none font-normal">+</span>
+                            <span class="text-sm leading-none font-bold">+</span>
                         </a>
-                        <a id="ws-directory-link" href="{{ route('shipments.index') }}" class="py-2 px-3 rounded-full bg-[#FAF7F9] hover:bg-[#FDF2F6] border border-[#ECE4E8] text-zinc-700 text-[11px] font-medium flex items-center justify-center gap-1.5 transition whitespace-nowrap">
+                        <a id="ws-directory-link" href="{{ route('shipments.index') }}" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#FAF7F8] hover:bg-[#FCECF1] border border-[#EFE6EA] text-[#1A1718] hover:text-[#BE2B5B] text-xs font-semibold transition whitespace-nowrap">
                             <span>{{ __('dashboard.workspace.all_shipments') }}</span>
-                            <svg class="w-3.5 h-3.5 text-zinc-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-3.5 h-3.5 text-[#6B6467] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </a>
                     @else
-                        <a href="{{ route('shipments.index') }}" class="py-2 px-3 rounded-full bg-[#1F171B] hover:bg-[#C93565] text-white text-[11px] font-semibold flex items-center justify-center gap-1.5 shadow-xs transition whitespace-nowrap">
+                        <a href="{{ route('shipments.index') }}" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-2xs transition whitespace-nowrap">
                             <span>{{ __('dashboard.workspace.my_shipments') }}</span>
                         </a>
-                        <a id="ws-directory-link" href="{{ $firstShipment['show_url'] }}" class="py-2 px-3 rounded-full bg-[#FAF7F9] hover:bg-[#FDF2F6] border border-[#ECE4E8] text-zinc-700 text-[11px] font-medium flex items-center justify-center gap-1.5 transition whitespace-nowrap">
+                        <a id="ws-directory-link" href="{{ $firstShipment['show_url'] }}" class="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#FAF7F8] hover:bg-[#FCECF1] border border-[#EFE6EA] text-[#1A1718] hover:text-[#BE2B5B] text-xs font-semibold transition whitespace-nowrap">
                             <span>{{ __('dashboard.workspace.inspect_cargo') }}</span>
                         </a>
                     @endif
                 </div>
 
-                <!-- Plannings Table Header -->
-                <div class="grid grid-cols-12 text-[11px] text-zinc-400 pt-0.5 px-2">
-                    <div class="col-span-3">{{ __('dashboard.workspace.items') }}</div>
+                <!-- Plannings Table Header (Proportional 2 / 6 / 4 Columns) -->
+                <div class="grid grid-cols-12 gap-2 text-[11px] font-semibold text-[#6B6467] pt-1 px-2.5 border-t border-[#EFE6EA]">
+                    <div class="col-span-2">{{ __('dashboard.workspace.items') }}</div>
                     <div class="col-span-6">{{ __('dashboard.workspace.route') }}</div>
-                    <div class="col-span-3 text-right">{{ __('dashboard.workspace.status') }}</div>
+                    <div class="col-span-4 text-right">{{ __('dashboard.workspace.status') }}</div>
                 </div>
 
-                <!-- Interactive Plannings Rows (with soft bottom fade on 5th item) -->
-                <div class="relative space-y-0.5">
+                <!-- Interactive Plannings Rows -->
+                <div class="relative space-y-1">
                     @forelse(collect($workspaceShipments)->take(5) as $idx => $ws)
                         <button
                             type="button"
@@ -203,24 +203,24 @@
                             data-ws-row="{{ $idx }}"
                             data-ws-status="{{ $ws['status_value'] }}"
                             data-ws-delayed="{{ $ws['is_delayed'] ? '1' : '0' }}"
-                            class="w-full grid grid-cols-12 items-center py-1.5 px-2 rounded-xl text-xs transition cursor-pointer text-left {{ $idx === 0 ? 'bg-[#FDF2F6] text-[#1F171B] font-semibold' : 'hover:bg-[#FAF7F9] text-zinc-700' }} {{ $idx === 4 ? 'opacity-45' : '' }}"
+                            class="w-full grid grid-cols-12 gap-2 items-center py-2 px-2.5 rounded-xl text-xs transition cursor-pointer text-left {{ $idx === 0 ? 'bg-[#FCECF1] text-[#1A1718] font-semibold' : 'hover:bg-[#FAF7F8] text-[#6B6467]' }}"
                         >
-                            <div class="col-span-3 flex items-center gap-1.5 text-zinc-800">
-                                <svg class="w-3.5 h-3.5 text-zinc-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="col-span-2 flex items-center gap-1.5 text-[#1A1718]">
+                                <svg class="w-3.5 h-3.5 text-[#BE2B5B] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                 </svg>
-                                <span class="tabular-nums font-medium">{{ $ws['items_count'] }}</span>
+                                <span class="tabular-nums font-semibold">{{ $ws['items_count'] }}</span>
                             </div>
-                            <div class="col-span-6 truncate pr-2 text-zinc-800 font-medium" title="{{ $ws['origin_city'] }} to {{ $ws['dest_city'] }}">
-                                {{ $ws['origin_city'] }} to {{ $ws['dest_city'] }}
+                            <div class="col-span-6 truncate text-[#1A1718] font-medium" title="{{ $ws['origin_city'] }} to {{ $ws['dest_city'] }}">
+                                {{ $ws['origin_city'] }} &rarr; {{ $ws['dest_city'] }}
                             </div>
-                            <div class="col-span-3 flex items-center justify-end gap-1.5 text-[11px] font-medium text-zinc-700">
-                                <span class="w-1.5 h-1.5 rounded-full {{ $ws['is_delayed'] ? 'bg-[#E04879]' : 'bg-[#10B981]' }}"></span>
-                                <span class="truncate">{{ $ws['status_short'] }}</span>
+                            <div class="col-span-4 flex items-center justify-end gap-1.5 text-[11px] font-semibold text-[#1A1718] whitespace-nowrap">
+                                <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $ws['is_delayed'] ? 'bg-[#BE2B5B]' : 'bg-[#10B981]' }}"></span>
+                                <span class="whitespace-nowrap">{{ $ws['status_short'] }}</span>
                             </div>
                         </button>
                     @empty
-                        <div class="py-5 text-center text-xs text-zinc-400">
+                        <div class="py-5 text-center text-xs text-[#6B6467]">
                             No active shipments planned yet.
                         </div>
                     @endforelse
@@ -228,8 +228,8 @@
             </div>
         </div>
 
-        <!-- Center/Right Column (9 Cols on XL): Studio Semi-Truck Cab + Metallic Cutaway Cargo Bays -->
-        <div class="xl:col-span-9">
+        <!-- Center/Right Column (7 Cols on XL): Studio Semi-Truck Cab + Metallic Cutaway Cargo Bays -->
+        <div class="xl:col-span-7 min-w-0 flex flex-col justify-center h-full">
             <!-- Mobile Compact Cargo Bays Grid (< lg) -->
             <div class="grid grid-cols-2 gap-3 lg:hidden">
                 @foreach([['bay' => 'A9', 'idx' => 0, 'sh' => $bayA9], ['bay' => 'A1', 'idx' => 1, 'sh' => $bayA1], ['bay' => 'A3', 'idx' => 2, 'sh' => $bayA3], ['bay' => 'A8', 'idx' => 3, 'sh' => $bayA8]] as $slot)
@@ -237,29 +237,29 @@
                         type="button"
                         onclick="window.selectCargoWorkspaceShipment({{ isset($workspaceShipments[$slot['idx']]) ? $slot['idx'] : 0 }})"
                         data-ws-bay="{{ isset($workspaceShipments[$slot['idx']]) ? $slot['idx'] : 0 }}"
-                        class="cargo-bay-hatch rounded-2xl p-3.5 text-left flex flex-col justify-between h-28 border-[1.5px] {{ $slot['idx'] === 0 ? 'border-[#E04879]' : 'border-zinc-200/80' }} shadow-2xs cursor-pointer"
+                        class="cargo-bay-hatch rounded-xl p-3 text-left flex flex-col justify-between h-28 border-[1.5px] {{ $slot['idx'] === 0 ? 'border-[#BE2B5B]' : 'border-[#EFE6EA]' }} shadow-2xs cursor-pointer"
                     >
                         <div class="flex items-center justify-between w-full">
-                            <span class="text-xs font-semibold text-zinc-800">{{ $slot['bay'] }}</span>
-                            <span class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-700">
-                                <span class="w-1.5 h-1.5 rounded-full {{ $slot['sh']['is_delayed'] ? 'bg-[#E04879]' : 'bg-[#10B981]' }}"></span>
+                            <span class="text-xs font-bold text-[#1A1718]">{{ $slot['bay'] }}</span>
+                            <span class="inline-flex items-center gap-1 text-[11px] font-medium text-[#6B6467] whitespace-nowrap">
+                                <span class="w-1.5 h-1.5 rounded-full {{ $slot['sh']['is_delayed'] ? 'bg-[#BE2B5B]' : 'bg-[#10B981]' }}"></span>
                                 {{ $slot['sh']['status_short'] }}
                             </span>
                         </div>
                         <div>
-                            <div class="text-xs text-zinc-400 tabular-nums">{{ $slot['sh']['weight_formatted'] }}</div>
-                            <div class="text-sm font-bold text-zinc-900 truncate">{{ $slot['sh']['short_code'] }}</div>
+                            <div class="text-xs text-[#6B6467] tabular-nums">{{ $slot['sh']['weight_formatted'] }}</div>
+                            <div class="text-sm font-bold text-[#1A1718] truncate">{{ $slot['sh']['short_code'] }}</div>
                         </div>
                     </button>
                 @endforeach
             </div>
 
             <!-- Desktop Photorealistic Studio Truck + Cutaway 2-Row Cargo Container (lg+) -->
-            <div class="hidden lg:block overflow-x-auto pb-1">
-                <div class="relative min-w-[840px] pt-2">
-                    <div class="relative flex items-end">
-                        <!-- Studio 3D White Semi-Truck Tractor Unit (z-30 pointer-events-none so fender & fifth-wheel naturally tuck over chassis line) -->
-                        <div class="w-[475px] shrink-0 relative z-30 select-none pointer-events-none">
+            <div class="hidden lg:flex flex-col justify-center w-full h-full py-1">
+                <div class="relative w-full">
+                    <div class="relative flex items-end w-full">
+                        <!-- Studio 3D White Semi-Truck Tractor Unit (Cab Width ~138px, Total Image 320px so Fifth Wheel & Rear Axle Tuck Under Trailer Floor) -->
+                        <div class="w-[320px] shrink-0 relative z-30 select-none pointer-events-none">
                             <img
                                 src="{{ asset('images/scania-cab.png') }}"
                                 alt="Semi-truck tractor cab"
@@ -267,169 +267,144 @@
                             />
                         </div>
 
-                        <!-- Metallic Cutaway Cargo Container Box Seated Flush on Fifth Wheel & Chassis -->
-                        <div class="flex-1 relative z-20 -ml-[258px] mb-[92px]">
-                            <!-- Metallic Outer Container Shell -->
-                            <div class="bg-[#EFE9ED] border-[3px] border-[#9CA3AF] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.8),0_12px_24px_-10px_rgba(31,23,27,0.12)] rounded-[6px] p-2.5">
-                                <!-- Top Row: A1 (1 col), A2 (1 col dark +), A3 (2 cols wide) -->
-                                <div class="grid grid-cols-4 gap-2 mb-2">
-                                    <!-- Bay A1 -->
+                        <!-- Metallic Cutaway Cargo Container Box Seated Flush on Fifth Wheel & Chassis (Zero Horizontal Clipping) -->
+                        <div class="flex-1 min-w-0 relative z-20 -ml-[174px] pb-[63px]">
+                            <!-- Metallic Outer Container Shell (3 Columns Fully Visible: A1, A2, A3 on Top & A7, A8, A9 on Bottom) -->
+                            <div class="bg-[#EFE9ED] border-[3px] border-[#9CA3AF] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.85),0_12px_24px_-10px_rgba(31,23,27,0.12)] rounded-xl p-3">
+                                <div class="grid grid-cols-3 gap-2.5">
+                                    <!-- Top Row: Bay A1 -->
                                     <button
                                         type="button"
                                         onclick="window.selectCargoWorkspaceShipment({{ isset($workspaceShipments[1]) ? 1 : 0 }})"
                                         data-ws-bay="{{ isset($workspaceShipments[1]) ? 1 : 0 }}"
                                         data-bay-slot="A1"
-                                        class="cargo-bay-hatch group relative h-[108px] rounded-[12px] p-3 text-left flex flex-col justify-between border-[1.5px] border-transparent hover:border-[#F8C9DC] shadow-2xs transition cursor-pointer"
+                                        class="cargo-bay-hatch group relative h-[96px] rounded-xl p-2.5 text-left flex flex-col justify-between border-[1.5px] border-transparent hover:border-[#F8C9DC] shadow-2xs transition cursor-pointer min-w-0"
                                     >
-                                        <div class="flex items-center justify-between w-full">
-                                            <span class="text-xs font-semibold text-zinc-800">A1</span>
-                                            <span class="inline-flex items-center gap-1.5 text-[11px] font-medium text-zinc-700">
-                                                <span class="w-1.5 h-1.5 rounded-full {{ $bayA1['is_delayed'] ? 'bg-[#E04879]' : 'bg-[#10B981]' }}"></span>
-                                                {{ $bayA1['status_short'] }}
+                                        <div class="flex items-center justify-between w-full gap-1">
+                                            <span class="text-xs font-bold text-[#1A1718]">A1</span>
+                                            <span class="inline-flex items-center gap-1 text-[10px] font-medium text-[#6B6467] whitespace-nowrap">
+                                                <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $bayA1['is_delayed'] ? 'bg-[#BE2B5B]' : 'bg-[#10B981]' }}"></span>
+                                                <span>{{ $bayA1['status_short'] }}</span>
                                             </span>
                                         </div>
-                                        <div>
-                                            <div class="text-[11px] text-zinc-400 font-normal tabular-nums">{{ $bayA1['weight_formatted'] }}</div>
-                                            <div class="text-[13px] font-bold text-zinc-900 tracking-tight mt-0.5 truncate">{{ $bayA1['short_code'] }}</div>
+                                        <div class="min-w-0">
+                                            <div class="text-[11px] text-[#6B6467] font-normal tabular-nums leading-tight">{{ $bayA1['weight_formatted'] }}</div>
+                                            <div class="text-xs font-extrabold text-[#1A1718] tracking-tight mt-0.5 truncate">{{ $bayA1['short_code'] }}</div>
                                         </div>
                                     </button>
 
-                                    <!-- Bay A2 (Obsidian Bordered Add Slot) -->
+                                    <!-- Top Row: Bay A2 (Add Slot) -->
                                     <a
                                         href="{{ $createUrl }}"
-                                        class="group relative h-[108px] rounded-[12px] bg-white p-3 flex flex-col justify-between border-[1.5px] border-[#1F171B] hover:border-[#E04879] shadow-2xs transition"
+                                        class="group relative h-[96px] rounded-xl bg-white p-2.5 flex flex-col justify-between border-[1.5px] border-[#BE2B5B] hover:border-[#E04879] shadow-2xs transition min-w-0"
                                         title="{{ $canCreateShipment ? __('dashboard.workspace.new_shipment') : __('dashboard.workspace.all_shipments') }}"
                                     >
                                         <div class="flex items-center justify-between w-full">
-                                            <span class="text-xs font-semibold text-zinc-800">A2</span>
+                                            <span class="text-xs font-bold text-[#1A1718]">A2</span>
                                         </div>
                                         <div class="flex items-center justify-center my-auto">
-                                            <span class="w-9 h-9 rounded-full bg-[#1F171B] group-hover:bg-[#C93565] text-white flex items-center justify-center text-lg font-normal shadow-md transition-transform group-hover:scale-105">
+                                            <span class="w-8 h-8 rounded-full bg-[#BE2B5B] group-hover:bg-[#A0224B] text-white flex items-center justify-center text-base font-normal shadow-sm transition-transform group-hover:scale-105">
                                                 +
                                             </span>
                                         </div>
-                                        <div class="h-1"></div>
+                                        <div class="h-0.5"></div>
                                     </a>
 
-                                    <!-- Bay A3 (2-Column Wide Double Bay) -->
+                                    <!-- Top Row: Bay A3 (Fully Unclipped 3rd Column) -->
                                     <button
                                         type="button"
                                         onclick="window.selectCargoWorkspaceShipment({{ isset($workspaceShipments[2]) ? 2 : 0 }})"
                                         data-ws-bay="{{ isset($workspaceShipments[2]) ? 2 : 0 }}"
                                         data-bay-slot="A3"
-                                        class="col-span-2 cargo-bay-hatch group relative h-[108px] rounded-[12px] p-3 text-left flex flex-col justify-between border-[1.5px] border-transparent hover:border-[#F8C9DC] shadow-2xs transition cursor-pointer"
+                                        class="cargo-bay-hatch group relative h-[96px] rounded-xl p-2.5 text-left flex flex-col justify-between border-[1.5px] border-transparent hover:border-[#F8C9DC] shadow-2xs transition cursor-pointer min-w-0"
                                     >
-                                        <div class="flex items-center justify-between w-full">
-                                            <span class="text-xs font-semibold text-zinc-800">A3</span>
-                                            <span class="inline-flex items-center gap-1.5 text-[11px] font-medium text-zinc-700">
-                                                <span class="w-1.5 h-1.5 rounded-full {{ $bayA3['is_delayed'] ? 'bg-[#E04879]' : 'bg-[#10B981]' }}"></span>
-                                                {{ $bayA3['status_short'] }}
+                                        <div class="flex items-center justify-between w-full gap-1">
+                                            <span class="text-xs font-bold text-[#1A1718]">A3</span>
+                                            <span class="inline-flex items-center gap-1 text-[10px] font-medium text-[#6B6467] whitespace-nowrap">
+                                                <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $bayA3['is_delayed'] ? 'bg-[#BE2B5B]' : 'bg-[#10B981]' }}"></span>
+                                                <span>{{ $bayA3['status_short'] }}</span>
                                             </span>
                                         </div>
-                                        <div>
-                                            <div class="text-[11px] text-zinc-400 font-normal tabular-nums">{{ $bayA3['weight_formatted'] }}</div>
-                                            <div class="text-[13px] font-bold text-zinc-900 tracking-tight mt-0.5">{{ $bayA3['short_code'] }}</div>
+                                        <div class="min-w-0">
+                                            <div class="text-[11px] text-[#6B6467] font-normal tabular-nums leading-tight">{{ $bayA3['weight_formatted'] }}</div>
+                                            <div class="text-xs font-extrabold text-[#1A1718] tracking-tight mt-0.5 truncate">{{ $bayA3['short_code'] }}</div>
                                         </div>
                                     </button>
-                                </div>
 
-                                <!-- Bottom Row: A7 (+ slot), A8, A9 (Highlighted Active Bay with Camellia Pink Border), A10 -->
-                                <div class="grid grid-cols-4 gap-2">
-                                    <!-- Bay A7 (Auxiliary Add Slot) -->
+                                    <!-- Bottom Row: Bay A7 (Auxiliary Add Slot) -->
                                     <a
                                         href="{{ $createUrl }}"
-                                        class="group relative h-[108px] rounded-[12px] bg-white p-3 flex flex-col justify-between border-[1.5px] border-transparent hover:border-[#F8C9DC] shadow-2xs transition"
+                                        class="group relative h-[96px] rounded-xl bg-white p-2.5 flex flex-col justify-between border-[1.5px] border-transparent hover:border-[#F8C9DC] shadow-2xs transition min-w-0"
                                         title="{{ $canCreateShipment ? __('dashboard.workspace.new_shipment') : __('dashboard.workspace.all_shipments') }}"
                                     >
-                                        <div class="flex items-center justify-between w-full">
-                                            <span class="text-xs font-semibold text-zinc-800">A7</span>
-                                            <span class="inline-flex items-center gap-1.5 text-[11px] font-medium text-zinc-700">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
-                                                {{ __('dashboard.workspace.ready') }}
+                                        <div class="flex items-center justify-between w-full gap-1">
+                                            <span class="text-xs font-bold text-[#1A1718]">A7</span>
+                                            <span class="inline-flex items-center gap-1 text-[10px] font-medium text-[#6B6467] whitespace-nowrap">
+                                                <span class="w-1.5 h-1.5 rounded-full shrink-0 bg-[#10B981]"></span>
+                                                <span>{{ __('dashboard.workspace.ready') }}</span>
                                             </span>
                                         </div>
                                         <div class="flex items-center justify-center my-auto">
-                                            <span class="w-8 h-8 rounded-full bg-[#FAF7F9] group-hover:bg-[#1F171B] text-zinc-700 group-hover:text-white flex items-center justify-center text-base font-normal transition">
+                                            <span class="w-7 h-7 rounded-full bg-[#FAF7F8] group-hover:bg-[#BE2B5B] text-[#6B6467] group-hover:text-white flex items-center justify-center text-sm font-normal transition">
                                                 +
                                             </span>
                                         </div>
-                                        <div class="h-1"></div>
+                                        <div class="h-0.5"></div>
                                     </a>
 
-                                    <!-- Bay A8 -->
+                                    <!-- Bottom Row: Bay A8 -->
                                     <button
                                         type="button"
                                         onclick="window.selectCargoWorkspaceShipment({{ isset($workspaceShipments[3]) ? 3 : 0 }})"
                                         data-ws-bay="{{ isset($workspaceShipments[3]) ? 3 : 0 }}"
                                         data-bay-slot="A8"
-                                        class="cargo-bay-hatch group relative h-[108px] rounded-[12px] p-3 text-left flex flex-col justify-between border-[1.5px] border-transparent hover:border-[#F8C9DC] shadow-2xs transition cursor-pointer"
+                                        class="cargo-bay-hatch group relative h-[96px] rounded-xl p-2.5 text-left flex flex-col justify-between border-[1.5px] border-transparent hover:border-[#F8C9DC] shadow-2xs transition cursor-pointer min-w-0"
                                     >
-                                        <div class="flex items-center justify-between w-full">
-                                            <span class="text-xs font-semibold text-zinc-800">A8</span>
-                                            <span class="inline-flex items-center gap-1.5 text-[11px] font-medium text-zinc-700">
-                                                <span class="w-1.5 h-1.5 rounded-full {{ $bayA8['is_delayed'] ? 'bg-[#E04879]' : 'bg-[#10B981]' }}"></span>
-                                                {{ $bayA8['status_short'] }}
+                                        <div class="flex items-center justify-between w-full gap-1">
+                                            <span class="text-xs font-bold text-[#1A1718]">A8</span>
+                                            <span class="inline-flex items-center gap-1 text-[10px] font-medium text-[#6B6467] whitespace-nowrap">
+                                                <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $bayA8['is_delayed'] ? 'bg-[#BE2B5B]' : 'bg-[#10B981]' }}"></span>
+                                                <span>{{ $bayA8['status_short'] }}</span>
                                             </span>
                                         </div>
-                                        <div>
-                                            <div class="text-[11px] text-zinc-400 font-normal tabular-nums">{{ $bayA8['weight_formatted'] }}</div>
-                                            <div class="text-[13px] font-bold text-zinc-900 tracking-tight mt-0.5 truncate">{{ $bayA8['short_code'] }}</div>
+                                        <div class="min-w-0">
+                                            <div class="text-[11px] text-[#6B6467] font-normal tabular-nums leading-tight">{{ $bayA8['weight_formatted'] }}</div>
+                                            <div class="text-xs font-extrabold text-[#1A1718] tracking-tight mt-0.5 truncate">{{ $bayA8['short_code'] }}</div>
                                         </div>
                                     </button>
 
-                                    <!-- Bay A9 (Default Active Bay with Camellia Pink Border & Studio 3D Cardboard Boxes) -->
+                                    <!-- Bottom Row: Bay A9 (Active Bay: Cardboard Boxes Scaled & Positioned Top-Right/Middle-Right so Weight & Code at Bottom-Left Never Overlap) -->
                                     <button
                                         type="button"
                                         onclick="window.selectCargoWorkspaceShipment(0)"
                                         data-ws-bay="0"
                                         data-bay-slot="A9"
-                                        class="cargo-bay-hatch group relative h-[108px] rounded-[12px] p-3 text-left flex flex-col justify-between border-[1.5px] border-[#E04879] shadow-xs transition cursor-pointer overflow-hidden"
+                                        class="cargo-bay-hatch group relative h-[96px] rounded-xl p-2.5 text-left flex flex-col justify-between border-[1.5px] border-[#BE2B5B] shadow-xs transition cursor-pointer overflow-hidden min-w-0"
                                     >
-                                        <div class="flex items-center justify-between w-full relative z-10">
-                                            <span class="text-xs font-semibold text-zinc-900">A9</span>
-                                            <span class="inline-flex items-center gap-1.5 text-[11px] font-medium text-zinc-700">
-                                                <span class="w-1.5 h-1.5 rounded-full {{ $bayA9['is_delayed'] ? 'bg-[#E04879]' : 'bg-[#10B981]' }}"></span>
-                                                {{ $bayA9['status_short'] }}
+                                        <div class="flex items-center justify-between w-full gap-1 relative z-10">
+                                            <span class="text-xs font-extrabold text-[#BE2B5B]">A9</span>
+                                            <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-[#1A1718] whitespace-nowrap">
+                                                <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $bayA9['is_delayed'] ? 'bg-[#BE2B5B]' : 'bg-[#10B981]' }}"></span>
+                                                <span>{{ $bayA9['status_short'] }}</span>
                                             </span>
                                         </div>
 
                                         <img
                                             src="{{ asset('images/cargo-boxes.png') }}"
                                             alt="Stacked cargo boxes"
-                                            class="absolute right-1.5 bottom-2 w-[66px] h-[62px] object-contain pointer-events-none select-none drop-shadow-[0_6px_10px_rgba(120,75,35,0.16)]"
+                                            class="absolute right-1.5 top-6 w-[38px] h-[32px] object-contain pointer-events-none select-none drop-shadow-[0_4px_8px_rgba(120,75,35,0.16)]"
                                         />
 
-                                        <div class="relative z-10">
-                                            <div class="text-[11px] text-zinc-400 font-normal tabular-nums">{{ $bayA9['weight_formatted'] }}</div>
-                                            <div class="text-[13px] font-bold text-zinc-900 tracking-tight mt-0.5 truncate">{{ $bayA9['short_code'] }}</div>
-                                        </div>
-                                    </button>
-
-                                    <!-- Bay A10 -->
-                                    <button
-                                        type="button"
-                                        onclick="window.selectCargoWorkspaceShipment({{ isset($workspaceShipments[4]) ? 4 : 0 }})"
-                                        data-ws-bay="{{ isset($workspaceShipments[4]) ? 4 : 0 }}"
-                                        data-bay-slot="A10"
-                                        class="cargo-bay-hatch group relative h-[108px] rounded-[12px] p-3 text-left flex flex-col justify-between border-[1.5px] border-transparent hover:border-[#F8C9DC] shadow-2xs transition cursor-pointer"
-                                    >
-                                        <div class="flex items-center justify-between w-full">
-                                            <span class="text-xs font-semibold text-zinc-800">A10</span>
-                                            <span class="inline-flex items-center gap-1.5 text-[11px] font-medium text-zinc-700">
-                                                <span class="w-1.5 h-1.5 rounded-full {{ $bayA10['is_delayed'] ? 'bg-[#E04879]' : 'bg-[#10B981]' }}"></span>
-                                                {{ $bayA10['status_short'] }}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <div class="text-[11px] text-zinc-400 font-normal tabular-nums">{{ $bayA10['weight_formatted'] }}</div>
-                                            <div class="text-[13px] font-bold text-zinc-900 tracking-tight mt-0.5 truncate">{{ $bayA10['short_code'] }}</div>
+                                        <div class="relative z-10 pr-8 min-w-0">
+                                            <div class="text-[11px] text-[#6B6467] font-normal tabular-nums leading-tight">{{ $bayA9['weight_formatted'] }}</div>
+                                            <div class="text-xs font-extrabold text-[#1A1718] tracking-tight mt-0.5 truncate">{{ $bayA9['short_code'] }}</div>
                                         </div>
                                     </button>
                                 </div>
                             </div>
 
-                            <!-- Precision Trailer Undercarriage Rail, Telescopic Landing Gear & Dual-Bar Side Underrun Guard -->
-                            <div class="absolute top-full inset-x-0 h-[92px] pointer-events-none select-none">
+                            <!-- Precision Trailer Undercarriage Rail, Telescopic Landing Gear & Dual-Bar Side Underrun Guard Seated on Shared Tire Baseline -->
+                            <div class="absolute bottom-0 inset-x-0 h-[63px] pointer-events-none select-none">
                                 <svg viewBox="0 0 640 92" preserveAspectRatio="none" class="w-full h-full overflow-visible">
                                     <defs>
                                         <linearGradient id="trailerBeamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -438,75 +413,71 @@
                                             <stop offset="100%" stop-color="#141619" />
                                         </linearGradient>
                                         <radialGradient id="trailerFloorGlow" cx="50%" cy="50%" r="50%">
-                                            <stop offset="0%" stop-color="#18181B" stop-opacity="0.18" />
+                                            <stop offset="0%" stop-color="#18181B" stop-opacity="0.16" />
                                             <stop offset="100%" stop-color="#18181B" stop-opacity="0" />
                                         </radialGradient>
                                     </defs>
 
-                                    <!-- Ambient Studio Shadow along Ground Baseline -->
-                                    <ellipse cx="360" cy="83" rx="260" ry="7" fill="url(#trailerFloorGlow)" />
-
-                                    <!-- Full-Width Metallic I-Beam Subframe Rail Flush Under Container -->
+                                    <ellipse cx="360" cy="86" rx="270" ry="6" fill="url(#trailerFloorGlow)" />
                                     <rect x="2" y="0" width="636" height="12" rx="2" fill="url(#trailerBeamGrad)" />
                                     <rect x="295" y="2" width="7" height="8" fill="#111317" />
                                     <rect x="370" y="2" width="7" height="8" fill="#111317" />
                                     <rect x="445" y="2" width="7" height="8" fill="#111317" />
                                     <rect x="520" y="2" width="7" height="8" fill="#111317" />
                                     <rect x="595" y="2" width="7" height="8" fill="#111317" />
-
-                                    <!-- Telescopic Trailer Landing Gear Leg & Diagonal Support Strut -->
-                                    <path d="M286 12 L299 12 L297 73 L288 73 Z" fill="url(#trailerBeamGrad)" />
-                                    <rect x="281" y="72" width="23" height="5" rx="2" fill="#18181B" />
-                                    <line x1="298" y1="54" x2="328" y2="12" stroke="#272A30" stroke-width="4" stroke-linecap="round" />
-
-                                    <!-- Dual-Bar Horizontal Rear Side Underrun Guard & Vertical Hangers -->
-                                    <rect x="448" y="12" width="6" height="32" fill="#272A30" />
-                                    <rect x="586" y="12" width="6" height="32" fill="#272A30" />
+                                    <path d="M286 12 L299 12 L297 79 L288 79 Z" fill="url(#trailerBeamGrad)" />
+                                    <rect x="281" y="78" width="23" height="5" rx="2" fill="#18181B" />
+                                    <line x1="298" y1="58" x2="328" y2="12" stroke="#272A30" stroke-width="4" stroke-linecap="round" />
+                                    <rect x="448" y="12" width="6" height="34" fill="#272A30" />
+                                    <rect x="586" y="12" width="6" height="34" fill="#272A30" />
                                     <rect x="434" y="22" width="180" height="7" rx="2" fill="url(#trailerBeamGrad)" />
-                                    <rect x="434" y="36" width="180" height="7" rx="2" fill="url(#trailerBeamGrad)" />
+                                    <rect x="434" y="37" width="180" height="7" rx="2" fill="url(#trailerBeamGrad)" />
                                 </svg>
                             </div>
                         </div>
+
+                        <!-- Unified Continuous Ground / Road Shadow Baseline Spanning from Front Tractor Tire to Rear Trailer End -->
+                        <div class="pointer-events-none select-none absolute bottom-[3px] left-[22px] right-2 h-[7px] rounded-full bg-gradient-to-r from-[#1A1718]/20 via-[#1A1718]/14 to-[#1A1718]/18 blur-[2px] z-10"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bottom Row: 4 Equal White Bento Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <!-- Bottom Row: 4 Bento Cards (2x2 Grid on Laptop md:grid-cols-2, 4 Columns on Ultra-Wide 2xl:grid-cols-4) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-5">
 
         <!-- CARD 1: Shipment Informations -->
-        <div class="bg-white rounded-[22px] p-5 shadow-sm flex flex-col justify-between space-y-4">
-            <div class="space-y-3.5">
+        <div class="bg-white rounded-2xl border border-[#EFE6EA] p-5 shadow-sm flex flex-col justify-between space-y-4">
+            <div class="space-y-4">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-full bg-[#F4F5F7] text-zinc-800 flex items-center justify-center">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-8 h-8 rounded-xl bg-[#FCECF1] text-[#BE2B5B] flex items-center justify-center shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1" />
                         </svg>
                     </div>
-                    <h3 class="text-sm font-bold text-zinc-900">{{ __('dashboard.workspace.shipment_info') }}</h3>
+                    <h3 class="text-sm font-extrabold text-[#1A1718]">{{ __('dashboard.workspace.shipment_info') }}</h3>
                 </div>
 
-                <!-- Operator / Lead Row -->
-                <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2 min-w-0 flex-1">
-                        <div id="ws-operator-initials" class="w-8 h-8 rounded-full bg-[#1F171B] text-white shrink-0 flex items-center justify-center text-[11px] font-bold uppercase shadow-2xs">
+                <!-- Operator / Coordinator Row -->
+                <div class="flex items-center justify-between gap-2 bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-3">
+                    <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                        <div id="ws-operator-initials" class="w-8 h-8 rounded-full bg-[#BE2B5B] text-white shrink-0 flex items-center justify-center text-[11px] font-bold uppercase shadow-2xs">
                             {{ strtoupper(substr($firstShipment['operator_name'], 0, 2)) }}
                         </div>
                         <div class="min-w-0 flex-1">
-                            <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.coordinator') }}</div>
-                            <div id="ws-operator-name" class="text-[13px] font-bold text-zinc-900 truncate" title="{{ $firstShipment['operator_name'] }}">{{ $firstShipment['operator_name'] }}</div>
+                            <div class="text-[11px] text-[#6B6467]">{{ __('dashboard.workspace.coordinator') }}</div>
+                            <div id="ws-operator-name" class="text-xs font-bold text-[#1A1718] leading-snug" title="{{ $firstShipment['operator_name'] }}">{{ $firstShipment['operator_name'] }}</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-1 shrink-0">
-                        <a id="ws-info-search-link" href="{{ $firstShipment['show_url'] }}" class="w-7 h-7 rounded-lg bg-[#FAF7F9] hover:bg-[#FDF2F6] border border-[#ECE4E8] text-zinc-700 flex items-center justify-center transition" title="Inspect Shipment" aria-label="Inspect Shipment">
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <a id="ws-info-search-link" href="{{ $firstShipment['show_url'] }}" class="w-7 h-7 rounded-lg bg-white hover:bg-[#FCECF1] border border-[#EFE6EA] text-[#6B6467] hover:text-[#BE2B5B] flex items-center justify-center transition" title="Inspect Shipment" aria-label="Inspect Shipment">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </a>
-                        <a id="ws-info-card-link" href="{{ $firstShipment['show_url'] }}#milestone-timeline" class="w-7 h-7 rounded-lg bg-[#FAF7F9] hover:bg-[#FDF2F6] border border-[#ECE4E8] text-zinc-700 flex items-center justify-center transition" title="View Timeline" aria-label="View Timeline">
+                        <a id="ws-info-card-link" href="{{ $firstShipment['show_url'] }}#milestone-timeline" class="w-7 h-7 rounded-lg bg-white hover:bg-[#FCECF1] border border-[#EFE6EA] text-[#6B6467] hover:text-[#BE2B5B] flex items-center justify-center transition" title="View Timeline" aria-label="View Timeline">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                             </svg>
@@ -514,51 +485,51 @@
                     </div>
                 </div>
 
-                <!-- 3-Column Specs (Carrier ID | Cargo | Departure) -->
-                <div class="grid grid-cols-3 gap-2 pt-1">
-                    <div>
-                        <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.carrier_id') }}</div>
-                        <div id="ws-truck-id" class="text-xs font-bold text-zinc-900 mt-0.5 truncate">{{ $firstShipment['carrier_code'] }}</div>
+                <!-- 3-Column Specs (Carrier ID | Cargo | Departure) with Full Readability -->
+                <div class="grid grid-cols-3 gap-2.5">
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5">
+                        <div class="text-[10.5px] text-[#6B6467]">{{ __('dashboard.workspace.carrier_id') }}</div>
+                        <div id="ws-truck-id" class="text-xs font-bold text-[#1A1718] mt-0.5 font-mono">{{ $firstShipment['carrier_code'] }}</div>
                     </div>
-                    <div>
-                        <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.cargo_load') }}</div>
-                        <div id="ws-dock-label" class="text-xs font-bold text-zinc-900 mt-0.5 truncate">{{ $firstShipment['weight_formatted'] }}</div>
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5">
+                        <div class="text-[10.5px] text-[#6B6467]">{{ __('dashboard.workspace.cargo_load') }}</div>
+                        <div id="ws-dock-label" class="text-xs font-bold text-[#1A1718] mt-0.5">{{ $firstShipment['weight_formatted'] }}</div>
                     </div>
-                    <div>
-                        <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.departure') }}</div>
-                        <div id="ws-started-time" class="text-xs font-bold text-zinc-900 mt-0.5 tabular-nums truncate">{{ $firstShipment['started_time'] }}</div>
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5">
+                        <div class="text-[10.5px] text-[#6B6467]">{{ __('dashboard.workspace.departure') }}</div>
+                        <div id="ws-started-time" class="text-xs font-bold text-[#1A1718] mt-0.5 tabular-nums whitespace-nowrap">{{ $firstShipment['started_time'] }}</div>
                     </div>
                 </div>
 
                 <!-- Departure -> Arrival Hatched Progress Bar -->
                 <div>
-                    <div class="flex items-center justify-between text-[11px] text-zinc-400 mb-1">
+                    <div class="flex items-center justify-between text-[11px] text-[#6B6467] mb-1">
                         <span>{{ __('dashboard.workspace.departure') }}</span>
                         <span>{{ __('dashboard.workspace.arrival') }}</span>
                     </div>
                     <div class="flex items-center justify-between gap-2">
-                        <span id="ws-dep-city" class="text-xs font-bold text-zinc-900 truncate max-w-[85px]">{{ $firstShipment['origin_city'] }}</span>
+                        <span id="ws-dep-city" class="text-xs font-bold text-[#1A1718] whitespace-nowrap">{{ $firstShipment['origin_city'] }}</span>
                         <div class="flex-1 h-2.5 rounded-full route-track-hatch relative flex items-center justify-center mx-1">
-                            <span class="w-5 h-5 rounded-full bg-[#1F171B] text-white flex items-center justify-center shadow-xs">
+                            <span class="w-5 h-5 rounded-full bg-[#BE2B5B] text-white flex items-center justify-center shadow-xs">
                                 <svg class="w-2.5 h-2.5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
                                 </svg>
                             </span>
                         </div>
-                        <span id="ws-arr-city" class="text-xs font-bold text-zinc-900 truncate max-w-[85px] text-right">{{ $firstShipment['dest_city'] }}</span>
+                        <span id="ws-arr-city" class="text-xs font-bold text-[#1A1718] whitespace-nowrap text-right">{{ $firstShipment['dest_city'] }}</span>
                     </div>
                 </div>
             </div>
 
             <!-- Action Buttons (RBAC-Aware) -->
-            <div class="grid grid-cols-2 gap-2">
-                <a id="ws-view-btn" href="{{ $firstShipment['show_url'] }}" class="py-2.5 px-3 rounded-full border border-[#ECE4E8] hover:border-[#F8C9DC] hover:bg-[#FDF2F6] text-xs font-semibold text-zinc-800 text-center transition">
+            <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <a id="ws-view-btn" href="{{ $firstShipment['show_url'] }}" class="py-2.5 px-3 rounded-xl border border-[#EFE6EA] bg-[#FAF7F8] hover:border-[#F8C9DC] hover:bg-[#FCECF1] text-xs font-semibold text-[#1A1718] hover:text-[#BE2B5B] text-center transition whitespace-nowrap">
                     {{ __('dashboard.workspace.view_details') }}
                 </a>
                 <a
                     id="ws-edit-btn"
                     href="{{ $firstShipment['can_edit'] ? $firstShipment['edit_url'] : ($firstShipment['show_url'] . '#milestone-timeline') }}"
-                    class="py-2.5 px-3 rounded-full border border-[#ECE4E8] hover:border-[#F8C9DC] hover:bg-[#FDF2F6] text-xs font-semibold text-zinc-800 text-center transition"
+                    class="py-2.5 px-3 rounded-xl border border-[#EFE6EA] bg-[#FAF7F8] hover:border-[#F8C9DC] hover:bg-[#FCECF1] text-xs font-semibold text-[#1A1718] hover:text-[#BE2B5B] text-center transition whitespace-nowrap"
                 >
                     {{ $firstShipment['can_edit'] ? __('dashboard.workspace.edit_shipment') : __('dashboard.workspace.timeline') }}
                 </a>
@@ -566,45 +537,45 @@
         </div>
 
         <!-- CARD 2: Tracking Details -->
-        <div class="bg-white rounded-[22px] p-5 shadow-sm flex flex-col justify-between space-y-3">
-            <div class="space-y-3.5">
+        <div class="bg-white rounded-2xl border border-[#EFE6EA] p-5 shadow-sm flex flex-col justify-between space-y-4">
+            <div class="space-y-4">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-full bg-[#FAF7F9] text-[#1F171B] flex items-center justify-center">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-8 h-8 rounded-xl bg-[#FCECF1] text-[#BE2B5B] flex items-center justify-center shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <h3 class="text-sm font-bold text-zinc-900">{{ __('dashboard.workspace.tracking_details') }}</h3>
+                    <h3 class="text-sm font-extrabold text-[#1A1718]">{{ __('dashboard.workspace.tracking_details') }}</h3>
                 </div>
 
-                <!-- Tracking ID & Status Pill -->
-                <div class="flex items-center justify-between gap-2">
+                <!-- Tracking ID & Status Pill (Full Unclipped Tracking Number) -->
+                <div class="flex items-center justify-between gap-2 bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-3">
                     <div class="min-w-0 flex-1">
-                        <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.tracking_id') }}</div>
-                        <a id="ws-tracking-number" href="{{ $firstShipment['show_url'] }}" class="text-[13px] font-bold text-zinc-900 hover:text-[#C93565] truncate block mt-0.5 transition" title="#{{ $firstShipment['number'] }}">
+                        <div class="text-[11px] text-[#6B6467]">{{ __('dashboard.workspace.tracking_id') }}</div>
+                        <a id="ws-tracking-number" href="{{ $firstShipment['show_url'] }}" class="text-xs sm:text-[13px] font-extrabold font-mono text-[#1A1718] hover:text-[#BE2B5B] block mt-0.5 transition break-all" title="#{{ $firstShipment['number'] }}">
                             #{{ $firstShipment['number'] }}
                         </a>
                     </div>
-                    <span id="ws-tracking-status" class="px-2.5 py-0.5 rounded-full bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC] text-[10px] font-semibold whitespace-nowrap shrink-0">
+                    <span id="ws-tracking-status" class="px-2.5 py-1 rounded-full bg-[#FCECF1] text-[#BE2B5B] border border-[#F8C9DC] text-[10px] font-bold whitespace-nowrap shrink-0">
                         {{ strtolower($firstShipment['status_label']) }}
                     </span>
                 </div>
 
                 <!-- 3-Step Vertical Connected Timeline -->
-                <div class="relative pl-0.5 space-y-3.5 pt-1">
+                <div class="relative pl-1 space-y-3.5 pt-1">
                     <!-- Vertical Dashed Connector Line -->
-                    <div class="absolute left-[13px] top-3 bottom-3 w-px border-l border-dashed border-[#E6DCE1]"></div>
+                    <div class="absolute left-[15px] top-3 bottom-3 w-px border-l border-dashed border-[#E6DCE1]"></div>
 
                     <!-- Step 1: Current Location -->
                     <div class="relative flex items-start gap-3">
-                        <span class="w-6 h-6 rounded-full bg-[#E04879] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs shadow-[#E04879]/30 z-10">
+                        <span class="w-6 h-6 rounded-full bg-[#BE2B5B] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs z-10">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                             </svg>
                         </span>
                         <div class="min-w-0">
-                            <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.current_location') }}</div>
-                            <div id="ws-track-current" class="text-xs font-bold text-zinc-900 truncate mt-0.5">
+                            <div class="text-[11px] text-[#6B6467]">{{ __('dashboard.workspace.current_location') }}</div>
+                            <div id="ws-track-current" class="text-xs font-bold text-[#1A1718] mt-0.5">
                                 {{ $firstShipment['current_city'] }}, {{ $firstShipment['current_country'] }}
                             </div>
                         </div>
@@ -612,14 +583,14 @@
 
                     <!-- Step 2: Departure -->
                     <div class="relative flex items-start gap-3">
-                        <span class="w-6 h-6 rounded-full bg-[#F4F5F7] text-zinc-500 flex items-center justify-center shrink-0 mt-0.5 z-10">
+                        <span class="w-6 h-6 rounded-full bg-[#FAF7F8] border border-[#EFE6EA] text-[#6B6467] flex items-center justify-center shrink-0 mt-0.5 z-10">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
                         </span>
                         <div class="min-w-0">
-                            <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.departure') }}</div>
-                            <div id="ws-track-departure" class="text-xs font-bold text-zinc-900 truncate mt-0.5">
+                            <div class="text-[11px] text-[#6B6467]">{{ __('dashboard.workspace.departure') }}</div>
+                            <div id="ws-track-departure" class="text-xs font-bold text-[#1A1718] mt-0.5">
                                 {{ $firstShipment['origin_city'] }}, {{ $firstShipment['origin_country'] }}
                             </div>
                         </div>
@@ -627,14 +598,14 @@
 
                     <!-- Step 3: Arrival -->
                     <div class="relative flex items-start gap-3">
-                        <span class="w-6 h-6 rounded-full bg-[#F4F5F7] text-zinc-500 flex items-center justify-center shrink-0 mt-0.5 z-10">
+                        <span class="w-6 h-6 rounded-full bg-[#FAF7F8] border border-[#EFE6EA] text-[#6B6467] flex items-center justify-center shrink-0 mt-0.5 z-10">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
                         </span>
                         <div class="min-w-0">
-                            <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.arrival') }} &bull; ETA {{ $firstShipment['eta_formatted'] }}</div>
-                            <div id="ws-track-arrival" class="text-xs font-bold text-zinc-900 truncate mt-0.5">
+                            <div class="text-[11px] text-[#6B6467]">{{ __('dashboard.workspace.arrival') }} &bull; ETA {{ $firstShipment['eta_formatted'] }}</div>
+                            <div id="ws-track-arrival" class="text-xs font-bold text-[#1A1718] mt-0.5">
                                 {{ $firstShipment['dest_city'] }}, {{ $firstShipment['dest_country'] }}
                             </div>
                         </div>
@@ -643,23 +614,23 @@
             </div>
         </div>
 
-        <!-- CARD 3: Route Transportation (Interactive OpenStreetMap with Smooth Fractional Zoom) -->
-        <div class="bg-white rounded-[22px] p-5 shadow-sm flex flex-col justify-between space-y-3">
-            <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-2.5 min-w-0">
-                    <div class="w-7 h-7 rounded-full bg-[#F4F5F7] text-zinc-800 flex items-center justify-center shrink-0">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- CARD 3: Route Transportation (Interactive OpenStreetMap with Non-Overlapping Header & Arrow Icon) -->
+        <div class="bg-white rounded-2xl border border-[#EFE6EA] p-5 shadow-sm flex flex-col justify-between space-y-3.5">
+            <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                    <div class="w-8 h-8 rounded-xl bg-[#FCECF1] text-[#BE2B5B] flex items-center justify-center shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                         </svg>
                     </div>
-                    <div class="min-w-0">
-                        <h3 class="text-sm font-bold text-zinc-900 whitespace-nowrap">{{ __('dashboard.workspace.route_transport') }}</h3>
-                        <p id="ws-map-subtitle" class="text-[11px] text-zinc-400 truncate">
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-sm font-extrabold text-[#1A1718] leading-snug">{{ __('dashboard.workspace.route_transport') }}</h3>
+                        <p id="ws-map-subtitle" class="text-[11px] text-[#6B6467] truncate mt-0.5">
                             {{ $firstShipment['origin_city'] }} &rarr; {{ $firstShipment['dest_city'] }}
                         </p>
                     </div>
                 </div>
-                <a id="ws-map-expand-link" href="{{ $firstShipment['show_url'] }}" class="w-7 h-7 rounded-full hover:bg-zinc-100 text-zinc-700 hover:text-zinc-900 flex items-center justify-center transition shrink-0" title="Open Full Corridor Map" aria-label="Open Full Corridor Map">
+                <a id="ws-map-expand-link" href="{{ $firstShipment['show_url'] }}" class="w-8 h-8 rounded-xl bg-[#FAF7F8] hover:bg-[#FCECF1] border border-[#EFE6EA] text-[#6B6467] hover:text-[#BE2B5B] flex items-center justify-center transition shrink-0" title="Open Full Corridor Map" aria-label="Open Full Corridor Map">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H8M17 7v9" />
                     </svg>
@@ -667,36 +638,36 @@
             </div>
 
             <!-- Interactive OpenStreetMap Container with Top Hub Pill, Zoom Micro-Controls & Bottom Route Bar -->
-            <div class="relative rounded-2xl overflow-hidden border border-zinc-200/60 h-[214px] bg-[#E9ECEF]">
+            <div class="relative rounded-2xl overflow-hidden border border-[#EFE6EA] h-[220px] bg-[#F5EDF0]">
                 <div id="dashboard-osm-map" class="w-full h-full z-0"></div>
 
-                <!-- Floating White Hub Address Pill at Top Left/Center -->
-                <div class="absolute top-2.5 left-2.5 right-20 z-[400] pointer-events-none flex justify-start">
-                    <div id="ws-map-floating-hub" class="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-xs text-zinc-800 text-[10px] font-semibold shadow-md border border-black/[0.05] whitespace-nowrap truncate">
+                <!-- Floating White Hub Address Pill at Top Left -->
+                <div class="absolute top-2.5 left-2.5 right-24 z-[400] pointer-events-none flex justify-start">
+                    <div id="ws-map-floating-hub" class="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-xs text-[#1A1718] text-[10px] font-semibold shadow-md border border-[#EFE6EA] whitespace-nowrap truncate">
                         {{ $firstShipment['current_hub'] }}, {{ $firstShipment['current_city'] }}
                     </div>
                 </div>
 
                 <!-- Compact Floating Zoom & Reset Micro-Controls (Top Right Inside Map) -->
-                <div class="absolute top-2 right-2 z-[400] flex items-center gap-0.5 bg-white/95 backdrop-blur-xs rounded-full p-0.5 shadow-md border border-black/[0.05]">
+                <div class="absolute top-2.5 right-2.5 z-[400] flex items-center gap-0.5 bg-white/95 backdrop-blur-xs rounded-full p-0.5 shadow-md border border-[#EFE6EA]">
                     <button
                         type="button"
                         onclick="window.zoomCargoWorkspaceMap(1)"
-                        class="w-5 h-5 rounded-full hover:bg-[#C93565] hover:text-white text-zinc-700 flex items-center justify-center text-[11px] font-bold transition cursor-pointer"
+                        class="w-5 h-5 rounded-full hover:bg-[#BE2B5B] hover:text-white text-[#6B6467] flex items-center justify-center text-[11px] font-bold transition cursor-pointer"
                         title="Zoom In"
                         aria-label="Zoom In"
                     >+</button>
                     <button
                         type="button"
                         onclick="window.zoomCargoWorkspaceMap(-1)"
-                        class="w-5 h-5 rounded-full hover:bg-[#C93565] hover:text-white text-zinc-700 flex items-center justify-center text-[11px] font-bold transition cursor-pointer"
+                        class="w-5 h-5 rounded-full hover:bg-[#BE2B5B] hover:text-white text-[#6B6467] flex items-center justify-center text-[11px] font-bold transition cursor-pointer"
                         title="Zoom Out"
                         aria-label="Zoom Out"
                     >&minus;</button>
                     <button
                         type="button"
                         onclick="window.resetCargoWorkspaceMapBounds()"
-                        class="w-5 h-5 rounded-full hover:bg-[#FDF2F6] text-zinc-600 hover:text-[#1F171B] flex items-center justify-center transition cursor-pointer"
+                        class="w-5 h-5 rounded-full hover:bg-[#FCECF1] text-[#6B6467] hover:text-[#BE2B5B] flex items-center justify-center transition cursor-pointer"
                         title="Fit Corridor Bounds"
                         aria-label="Fit Corridor Bounds"
                     >
@@ -706,70 +677,70 @@
                     </button>
                 </div>
 
-                <!-- Floating Departure -> Arrival Overlay Card at Bottom (Clear Margin Above OSM Attribution) -->
-                <div class="absolute bottom-5 inset-x-2.5 z-[400] bg-white/95 backdrop-blur-md rounded-xl px-3 py-1.5 shadow-md border border-black/[0.04] pointer-events-none">
-                    <div class="flex items-center justify-between text-[10px] text-zinc-400">
+                <!-- Floating Departure -> Arrival Overlay Card at Bottom (Unclipped Port/City Names) -->
+                <div class="absolute bottom-5 inset-x-2.5 z-[400] bg-white/95 backdrop-blur-md rounded-xl px-3 py-1.5 shadow-md border border-[#EFE6EA] pointer-events-none">
+                    <div class="flex items-center justify-between text-[10px] text-[#6B6467]">
                         <span>{{ __('dashboard.workspace.departure') }}</span>
                         <span>{{ __('dashboard.workspace.arrival') }}</span>
                     </div>
                     <div class="flex items-center justify-between gap-2 mt-0.5">
-                        <span id="ws-map-dep-city" class="text-xs font-bold text-zinc-900 truncate max-w-[75px]">{{ $firstShipment['origin_city'] }}</span>
-                        <div class="flex-1 flex items-center justify-center relative">
-                            <div class="w-full border-t-2 border-dashed border-[#E04879]/35"></div>
-                            <span class="absolute w-5 h-5 rounded-full bg-[#E04879] text-white flex items-center justify-center shadow-xs">
+                        <span id="ws-map-dep-city" class="text-xs font-bold text-[#1A1718] whitespace-nowrap">{{ $firstShipment['origin_city'] }}</span>
+                        <div class="flex-1 flex items-center justify-center relative mx-1">
+                            <div class="w-full border-t-2 border-dashed border-[#BE2B5B]/35"></div>
+                            <span class="absolute w-5 h-5 rounded-full bg-[#BE2B5B] text-white flex items-center justify-center shadow-xs">
                                 <svg class="w-2.5 h-2.5 ml-0.5" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
                                 </svg>
                             </span>
                         </div>
-                        <span id="ws-map-arr-city" class="text-xs font-bold text-zinc-900 truncate max-w-[75px] text-right">{{ $firstShipment['dest_city'] }}</span>
+                        <span id="ws-map-arr-city" class="text-xs font-bold text-[#1A1718] whitespace-nowrap text-right">{{ $firstShipment['dest_city'] }}</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CARD 4: Operational Telemetry (100% Real DB Metrics + Chart.js Vertical Pill Bars) -->
-        <div class="bg-white rounded-[22px] p-5 shadow-sm flex flex-col justify-between space-y-3">
-            <div class="space-y-3">
-                <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-7 h-7 rounded-full bg-[#F4F5F7] text-zinc-800 flex items-center justify-center shrink-0">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- CARD 4: Operational Health (3 Metrics Aligned on Same Baseline + Chart.js Vertical Pill Bars) -->
+        <div class="bg-white rounded-2xl border border-[#EFE6EA] p-5 shadow-sm flex flex-col justify-between space-y-3.5">
+            <div class="space-y-3.5">
+                <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                        <div class="w-8 h-8 rounded-xl bg-[#FCECF1] text-[#BE2B5B] flex items-center justify-center shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <circle cx="12" cy="12" r="8" stroke-width="1.8" />
                                 <circle cx="12" cy="12" r="3" stroke-width="1.8" />
                             </svg>
                         </div>
-                        <div>
-                            <h3 class="text-sm font-bold text-zinc-900">{{ __('dashboard.workspace.operational_health') }}</h3>
-                            <p class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.sla_threshold', ['hours' => $thresholdHours . 'h']) }}</p>
+                        <div class="min-w-0 flex-1">
+                            <h3 class="text-sm font-extrabold text-[#1A1718] leading-snug">{{ __('dashboard.workspace.operational_health') }}</h3>
+                            <p class="text-[11px] text-[#6B6467] mt-0.5">{{ __('dashboard.workspace.sla_threshold', ['hours' => $thresholdHours . 'h']) }}</p>
                         </div>
                     </div>
-                    <a href="#operational-analytics" class="w-7 h-7 rounded-full hover:bg-zinc-100 text-zinc-700 hover:text-zinc-900 flex items-center justify-center transition" title="View Operational Analytics" aria-label="View Operational Analytics">
+                    <a href="#operational-analytics" class="w-8 h-8 rounded-xl bg-[#FAF7F8] hover:bg-[#FCECF1] border border-[#EFE6EA] text-[#6B6467] hover:text-[#BE2B5B] flex items-center justify-center transition shrink-0" title="View Operational Analytics" aria-label="View Operational Analytics">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H8M17 7v9" />
                         </svg>
                     </a>
                 </div>
 
-                <!-- 3 Real DB Metric Columns -->
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.shipments') }}</div>
-                        <div class="text-sm font-bold text-zinc-900 mt-0.5 tabular-nums">{{ $metrics['total_shipments'] ?? 0 }} units</div>
+                <!-- 3 Real DB Metric Columns with Aligned Baseline -->
+                <div class="grid grid-cols-3 gap-2.5 items-stretch">
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5 flex flex-col justify-between h-full">
+                        <div class="text-[10.5px] text-[#6B6467] leading-tight">{{ __('dashboard.workspace.shipments') }}</div>
+                        <div class="text-sm font-extrabold text-[#1A1718] mt-1.5 tabular-nums whitespace-nowrap">{{ $metrics['total_shipments'] ?? 0 }} units</div>
                     </div>
-                    <div>
-                        <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.on_time_sla') }}</div>
-                        <div class="text-sm font-bold text-zinc-900 mt-0.5 tabular-nums">{{ $metrics['kpis']['on_time_delivery_rate'] ?? 100 }}%</div>
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5 flex flex-col justify-between h-full">
+                        <div class="text-[10.5px] text-[#6B6467] leading-tight">{{ __('dashboard.workspace.on_time_sla') }}</div>
+                        <div class="text-sm font-extrabold text-emerald-700 mt-1.5 tabular-nums whitespace-nowrap">{{ $metrics['kpis']['on_time_delivery_rate'] ?? 100 }}%</div>
                     </div>
-                    <div>
-                        <div class="text-[11px] text-zinc-400">{{ __('dashboard.workspace.active_alert') }}</div>
-                        <div class="text-sm font-bold text-zinc-900 mt-0.5 tabular-nums">{{ $metrics['open_exceptions'] ?? 0 }}</div>
+                    <div class="bg-[#FAF7F8] border border-[#EFE6EA] rounded-xl p-2.5 flex flex-col justify-between h-full">
+                        <div class="text-[10.5px] text-[#6B6467] leading-tight">{{ __('dashboard.workspace.active_alert') }}</div>
+                        <div class="text-sm font-extrabold text-[#BE2B5B] mt-1.5 tabular-nums whitespace-nowrap">{{ $metrics['open_exceptions'] ?? 0 }}</div>
                     </div>
                 </div>
             </div>
 
             <!-- Real Chart.js Canvas Rendering Vertical Rounded Pill Bars -->
-            <div class="relative h-[126px] pt-1">
+            <div class="relative h-[132px] pt-1">
                 <canvas id="wsTelemetryChart"></canvas>
             </div>
         </div>
@@ -818,12 +789,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         dashboardMap.attributionControl.setPrefix(false);
 
-        window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        window.L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            subdomains: 'abcd',
             maxZoom: 19,
             keepBuffer: 6,
             updateWhenZooming: false,
             updateWhenIdle: false,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>'
         }).addTo(dashboardMap);
 
         routeLayerGroup = window.L.featureGroup().addTo(dashboardMap);
@@ -875,22 +847,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }).addTo(routeLayerGroup);
 
         window.L.polyline(remainingArc.length > 1 ? remainingArc : [currentPt, destPt], {
-            color: '#1F171B',
+            color: '#9E224B',
             weight: 2,
             opacity: 0.85,
             dashArray: '4, 5',
             lineCap: 'round',
         }).addTo(routeLayerGroup);
 
-        window.L.marker(originPt, { icon: createNexPin('#1F171B') })
+        window.L.marker(originPt, { icon: createNexPin('#9E224B') })
+            .bindTooltip(`<div class="px-2 py-1 text-[11px] font-bold text-[#1A1718]">${esc(sh.origin_city)} <span class="text-[#6B6467] font-normal">(${esc(sh.origin_name)})</span></div>`, { direction: 'top', offset: [0, -8], className: 'cargotrace-leaflet-tooltip' })
             .bindPopup(`<div class="text-xs space-y-0.5"><span class="text-[10px] font-bold uppercase text-[#EC6E9B] block">Departure</span><strong>${esc(sh.origin_city)}</strong><div class="text-zinc-300">${esc(sh.origin_name)}</div><div class="text-[10px] font-mono text-zinc-400">${esc(sh.started_time)}</div></div>`)
             .addTo(routeLayerGroup);
 
         window.L.marker(currentPt, { icon: createNexPin('#E04879') })
+            .bindTooltip(`<div class="px-2 py-1 text-[11px] font-bold text-[#BE2B5B]">${esc(sh.current_city)} <span class="text-[#6B6467] font-normal">(${esc(sh.current_hub)})</span></div>`, { direction: 'top', offset: [0, -8], className: 'cargotrace-leaflet-tooltip' })
             .bindPopup(`<div class="text-xs space-y-0.5"><span class="text-[10px] font-bold uppercase text-[#EC6E9B] block">${esc(sh.status_label)}</span><strong>${esc(sh.current_city)}</strong><div class="text-zinc-300">${esc(sh.current_hub)}</div><div class="text-[10px] font-mono text-zinc-400">${esc(sh.current_event_time)}</div></div>`)
             .addTo(routeLayerGroup);
 
-        window.L.marker(destPt, { icon: createNexPin('#1F171B') })
+        window.L.marker(destPt, { icon: createNexPin('#9E224B') })
+            .bindTooltip(`<div class="px-2 py-1 text-[11px] font-bold text-[#1A1718]">${esc(sh.dest_city)} <span class="text-[#6B6467] font-normal">(${esc(sh.dest_name)})</span></div>`, { direction: 'top', offset: [0, -8], className: 'cargotrace-leaflet-tooltip' })
             .bindPopup(`<div class="text-xs space-y-0.5"><span class="text-[10px] font-bold uppercase text-emerald-400 block">Arrival</span><strong>${esc(sh.dest_city)}</strong><div class="text-zinc-300">${esc(sh.dest_name)}</div><div class="text-[10px] font-mono text-zinc-400">ETA: ${esc(sh.eta_formatted)}</div></div>`)
             .addTo(routeLayerGroup);
 
@@ -937,7 +912,7 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.classList.toggle('text-white', active);
             btn.classList.toggle('shadow-sm', active);
             btn.classList.toggle('bg-white', !active);
-            btn.classList.toggle('text-zinc-700', !active);
+            btn.classList.toggle('text-[#6E545D]', !active);
         });
 
         let firstMatchedIdx = null;
@@ -968,7 +943,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('[data-ws-row]').forEach(el => {
             const isMatch = Number(el.getAttribute('data-ws-row')) === Number(index);
             el.classList.toggle('bg-[#FDF2F6]', isMatch);
-            el.classList.toggle('text-[#1F171B]', isMatch);
+            el.classList.toggle('text-[#4A2C35]', isMatch);
             el.classList.toggle('font-semibold', isMatch);
         });
 
@@ -1055,7 +1030,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: '#1F171B',
+                        backgroundColor: '#9E224B',
                         titleColor: '#ffffff',
                         bodyColor: '#f4f0f2',
                         padding: 8,

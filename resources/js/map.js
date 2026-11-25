@@ -68,10 +68,38 @@ function buildPopupContent(marker) {
 }
 
 /**
- * Attach OpenStreetMap tile layer with attribution and graceful failure handler.
+ * Build a crisp hover tooltip showing hub name and city/country without clicking.
  */
-function attachTileLayer(map) {
-    const tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+function buildTooltipContent(marker) {
+    const title = escapeHtml(marker.title || marker.name || '');
+    const typeLabel = escapeHtml(marker.typeLabel || marker.type || '');
+    const locationStr = escapeHtml(
+        marker.location ||
+        (marker.city ? (marker.country ? `${marker.city}, ${marker.country}` : marker.city) : '')
+    );
+
+    return `
+        <div class="px-2 py-1 text-left leading-tight">
+            <div class="text-[11px] font-extrabold text-[#1A1718]">${title}</div>
+            ${locationStr ? `<div class="text-[10px] font-medium text-[#6B6467]">${locationStr}${typeLabel ? ` &bull; <span class="text-[#BE2B5B] font-bold uppercase">${typeLabel}</span>` : ''}</div>` : ''}
+        </div>
+    `;
+}
+
+/**
+ * Attach CartoDB Voyager Retina/HD tile layer as default with an optional layer switcher for OpenStreetMap Standard.
+ */
+function attachTileLayer(map, includeLayerSwitcher = true) {
+    const voyagerLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        subdomains: 'abcd',
+        maxZoom: 19,
+        keepBuffer: 6,
+        updateWhenZooming: false,
+        updateWhenIdle: false,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="text-[#c93565] hover:underline font-medium">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" class="text-[#c93565] hover:underline font-medium">CARTO</a>'
+    });
+
+    const osmStandardLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         keepBuffer: 6,
         updateWhenZooming: false,
@@ -79,12 +107,24 @@ function attachTileLayer(map) {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="text-[#c93565] hover:underline font-medium">OpenStreetMap</a> contributors'
     });
 
-    tileLayer.on('tileerror', function (err) {
+    voyagerLayer.on('tileerror', function (err) {
         console.warn('Map tile loading issue handled gracefully:', err);
     });
 
-    tileLayer.addTo(map);
-    return tileLayer;
+    voyagerLayer.addTo(map);
+
+    if (includeLayerSwitcher) {
+        L.control.layers(
+            {
+                'Clean Map (Voyager HD)': voyagerLayer,
+                'Detailed Map (OpenStreetMap)': osmStandardLayer,
+            },
+            null,
+            { position: 'topright', collapsed: true }
+        ).addTo(map);
+    }
+
+    return voyagerLayer;
 }
 
 /**
@@ -137,6 +177,12 @@ function initSingleMap(container, config) {
         icon: createLocationPin(markerData.type)
     }).addTo(map);
 
+    marker.bindTooltip(buildTooltipContent(markerData), {
+        direction: 'top',
+        offset: [0, -16],
+        opacity: 0.98,
+        className: 'cargotrace-leaflet-tooltip',
+    });
     marker.bindPopup(buildPopupContent(markerData));
 
     marker.on('click', () => {
@@ -182,6 +228,12 @@ function initMultiMap(container, config) {
         const pin = L.marker([lat, lng], {
             icon: createLocationPin(m.type)
         });
+        pin.bindTooltip(buildTooltipContent(m), {
+            direction: 'top',
+            offset: [0, -16],
+            opacity: 0.98,
+            className: 'cargotrace-leaflet-tooltip',
+        });
         pin.bindPopup(buildPopupContent(m));
         pin.on('click', () => {
             map.flyTo([lat, lng], Math.max(map.getZoom(), 6), {
@@ -199,7 +251,7 @@ function initMultiMap(container, config) {
         const first = validMarkers[0];
         map.setView([parseFloat(first.lat ?? first.latitude), parseFloat(first.lng ?? first.longitude)], 12);
     } else {
-        map.fitBounds(featureGroup.getBounds().pad(0.15), { maxZoom: 12, animate: true });
+        map.fitBounds(featureGroup.getBounds(), { padding: [50, 50], maxZoom: 6, animate: true });
     }
 
     setupResizeObserver(map, container);

@@ -29,9 +29,9 @@ enum ExceptionSeverity: string
     {
         return match ($this) {
             self::Low => 'bg-amber-50 text-amber-800 border border-amber-200',
-            self::Medium => 'bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC]',
-            self::High => 'bg-red-50 text-red-700 border border-red-200',
-            self::Critical => 'bg-[#1F171B] text-[#F8C9DC] border border-[#9E224B] font-bold',
+            self::Medium => 'bg-[#FCECF1] text-[#BE2B5B] border border-[#F4D3DF]',
+            self::High => 'bg-rose-50 text-rose-700 border border-rose-200',
+            self::Critical => 'bg-[#BE2B5B] text-white border border-[#A0224B] font-bold',
         };
     }
 }

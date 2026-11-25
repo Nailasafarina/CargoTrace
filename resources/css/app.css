@@ -21,53 +21,64 @@
 
 :root {
     color-scheme: light;
-    caret-color: #c93565;
+    caret-color: #BE2B5B;
 }
 
 ::selection {
-    background-color: #e04879;
+    background-color: #BE2B5B;
     color: #ffffff;
 }
 
+/* Override browser blue/yellow autofill background globally */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 32px #ffffff inset !important;
+    -webkit-text-fill-color: #4A2C35 !important;
+    caret-color: #BE2B5B;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 .shadow-sm {
-    box-shadow: 0 6px 26px -6px rgba(31, 23, 27, 0.045), 0 1px 2px rgba(31, 23, 27, 0.025) !important;
+    box-shadow: 0 6px 22px -6px rgba(140, 60, 88, 0.05), 0 1px 2px rgba(140, 60, 88, 0.03) !important;
 }
 
 @layer components {
     .nex-card {
         background-color: #ffffff;
-        border-radius: 24px;
-        border: 1px solid rgba(31, 23, 27, 0.04);
-        box-shadow: 0 6px 26px -6px rgba(31, 23, 27, 0.045), 0 1px 2px rgba(31, 23, 27, 0.025);
+        border-radius: 20px;
+        border: 1px solid #EFE4E8;
+        box-shadow: 0 6px 22px -8px rgba(140, 60, 88, 0.05);
     }
 
     .nex-inset {
-        background-color: #faf7f9;
-        border-radius: 16px;
-        border: 1px solid #ece4e8;
+        background-color: #FAF6F8;
+        border-radius: 14px;
+        border: 1px solid #EFE4E8;
     }
 
     .nex-input {
         width: 100%;
-        padding: 0.5rem 0.875rem;
-        background-color: #faf7f9;
-        border: 1px solid #e6dce1;
+        padding: 0.55rem 0.875rem;
+        background-color: #ffffff;
+        border: 1px solid #EADCE1;
         border-radius: 0.75rem;
         font-size: 0.75rem;
-        line-height: 1rem;
-        color: #18181b;
+        line-height: 1.1rem;
+        color: #4A2C35;
         transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
     }
 
     .nex-input::placeholder {
-        color: #9a8d94;
+        color: #A08790;
     }
 
     .nex-input:focus {
         background-color: #ffffff;
         outline: none;
-        border-color: #e04879;
-        box-shadow: 0 0 0 3px rgba(224, 72, 121, 0.15);
+        border-color: #BE2B5B;
+        box-shadow: 0 0 0 3px rgba(190, 43, 91, 0.14);
     }
 }
 
@@ -76,20 +87,39 @@
     background-color: #ffffff;
     background-image: repeating-linear-gradient(
         -45deg,
-        rgba(31, 23, 27, 0.024),
-        rgba(31, 23, 27, 0.024) 12px,
+        rgba(190, 43, 91, 0.03),
+        rgba(190, 43, 91, 0.03) 12px,
         transparent 12px,
         transparent 24px
     );
 }
 
+/* Thin, sleek horizontal scrollbar for truck container on compact screens */
+.nex-thin-scrollbar::-webkit-scrollbar {
+    height: 6px;
+}
+
+.nex-thin-scrollbar::-webkit-scrollbar-track {
+    background: #FAF7F8;
+    border-radius: 9999px;
+}
+
+.nex-thin-scrollbar::-webkit-scrollbar-thumb {
+    background: #E5DCE0;
+    border-radius: 9999px;
+}
+
+.nex-thin-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #BE2B5B;
+}
+
 /* Diagonal hatch for the Departure -> Arrival progress track */
 .route-track-hatch {
-    background-color: #faf7f9;
+    background-color: #FAF6F8;
     background-image: repeating-linear-gradient(
         -45deg,
-        rgba(201, 53, 101, 0.08),
-        rgba(201, 53, 101, 0.08) 6px,
+        rgba(190, 43, 91, 0.08),
+        rgba(190, 43, 91, 0.08) 6px,
         transparent 6px,
         transparent 12px
     );
@@ -98,35 +128,61 @@
 /* OpenStreetMap & Leaflet Styling (native hardware-accelerated zoom preserved) */
 .leaflet-container {
     font-family: inherit !important;
-    background: #efe9ed !important;
+    background: #F5EDF0 !important;
 }
 
 .leaflet-zoom-animated {
     will-change: transform;
 }
 
-/* Dashboard Route Transportation card uses sleek silver-rose OpenStreetMap tiles */
-#dashboard-osm-map .leaflet-tile-pane {
-    filter: grayscale(0.76) contrast(1.03) brightness(1.04);
+/* All Leaflet maps (Dashboard, Global Logistics Network Map, and Shipment Corridor Map) render crisp HD CartoDB Voyager labels */
+#dashboard-osm-map .leaflet-tile-pane,
+.leaflet-tile-pane {
+    filter: contrast(1.03) saturate(1.04);
 }
 
-/* Full corridor and facility maps retain crisp natural cartographic tones */
-.leaflet-tile-pane {
-    filter: saturate(0.92) contrast(1.02);
+/* Crisp Hover Tooltip for Leaflet Markers */
+.leaflet-tooltip.cargotrace-leaflet-tooltip {
+    background: rgba(255, 255, 255, 0.97) !important;
+    color: #1A1718 !important;
+    border: 1px solid #EFE6EA !important;
+    border-radius: 10px !important;
+    box-shadow: 0 10px 22px -6px rgba(26, 23, 24, 0.16), 0 2px 6px rgba(190, 43, 91, 0.08) !important;
+    padding: 3px 6px !important;
+    font-family: inherit !important;
+}
+
+.leaflet-tooltip-top.cargotrace-leaflet-tooltip::before {
+    border-top-color: #ffffff !important;
+}
+
+/* Layer Switcher Control Styling */
+.leaflet-control-layers {
+    border: 1px solid #EFE6EA !important;
+    border-radius: 12px !important;
+    box-shadow: 0 6px 18px rgba(26, 23, 24, 0.10) !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    color: #1A1718 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+}
+
+.leaflet-control-layers-expanded {
+    padding: 8px 12px !important;
 }
 
 .leaflet-popup-content-wrapper {
-    background: #1f171b !important;
+    background: #9E224B !important;
     color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
     border-radius: 0.875rem !important;
-    box-shadow: 0 14px 28px -6px rgba(31, 23, 27, 0.32), 0 4px 10px -2px rgba(31, 23, 27, 0.18) !important;
+    box-shadow: 0 14px 28px -6px rgba(158, 34, 75, 0.28), 0 4px 10px -2px rgba(158, 34, 75, 0.16) !important;
     padding: 2px !important;
 }
 
 .leaflet-popup-content {
     margin: 10px 12px !important;
-    color: #f4f0f2 !important;
+    color: #FCECF1 !important;
 }
 
 .leaflet-popup-content strong,
@@ -135,21 +191,21 @@
 }
 
 .leaflet-popup-tip {
-    background: #1f171b !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: #9E224B !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
 }
 
 .leaflet-control-zoom {
     border: none !important;
-    box-shadow: 0 4px 14px rgba(31, 23, 27, 0.12) !important;
+    box-shadow: 0 4px 14px rgba(158, 34, 75, 0.12) !important;
     border-radius: 12px !important;
     overflow: hidden;
 }
 
 .leaflet-control-zoom a {
     background-color: rgba(255, 255, 255, 0.96) !important;
-    color: #1f171b !important;
-    border-bottom: 1px solid #f5f0f3 !important;
+    color: #4A2C35 !important;
+    border-bottom: 1px solid #F5EDF0 !important;
     width: 28px !important;
     height: 28px !important;
     line-height: 28px !important;
@@ -158,7 +214,7 @@
 }
 
 .leaflet-control-zoom a:hover {
-    background-color: #c93565 !important;
+    background-color: #BE2B5B !important;
     color: #ffffff !important;
 }
 

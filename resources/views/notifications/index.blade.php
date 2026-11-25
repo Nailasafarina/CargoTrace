@@ -23,8 +23,8 @@
             </div>
 
             <div>
-                <h1 class="text-2xl font-bold tracking-tight text-[#1F171B]">{{ __('notifications.title') }}</h1>
-                <p class="text-xs text-zinc-500 mt-1 leading-relaxed">
+                <h1 class="text-2xl font-bold tracking-tight text-[#4A2C35]">{{ __('notifications.title') }}</h1>
+                <p class="text-xs text-[#8C737B] mt-1 leading-relaxed">
                     {{ __('notifications.subtitle') }}
                 </p>
             </div>
@@ -32,7 +32,7 @@
             @if($unreadCount > 0)
                 <form method="POST" action="{{ route('notifications.mark-all-read') }}">
                     @csrf
-                    <button type="submit" class="w-full px-4 py-2.5 rounded-full bg-[#1F171B] hover:bg-[#C93565] text-white text-xs font-semibold shadow-xs transition flex items-center justify-center gap-2 cursor-pointer">
+                    <button type="submit" class="w-full px-4 py-2.5 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-xs transition flex items-center justify-center gap-2 cursor-pointer">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         {{ __('notifications.mark_all_read') }}
                     </button>
@@ -42,7 +42,7 @@
 
         <!-- Alert Channel Legend -->
         <div class="nex-card p-5 space-y-3">
-            <div class="text-xs font-bold text-zinc-900">{{ __('common.labels.status') }}</div>
+            <div class="text-xs font-bold text-[#4A2C35]">{{ __('common.labels.status') }}</div>
             <div class="space-y-2 text-[11px]">
                 <div class="nex-inset px-3 py-2 flex items-center justify-between">
                     <span class="font-mono font-semibold text-[#9E224B]">STATUS_UPDATED</span>
@@ -71,11 +71,11 @@
                     'EXCEPTION_LOGGED' => 'bg-red-50 text-red-700 border-red-200',
                     'EXCEPTION_RESOLVED' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
                 ];
-                $badge = $typeColors[$notif->type] ?? 'bg-[#FAF7F9] text-zinc-700 border-[#ECE4E8]';
+                $badge = $typeColors[$notif->type] ?? 'bg-[#FAF7F9] text-[#6E545D] border-[#ECE4E8]';
             @endphp
-            <div class="p-4 sm:p-5 rounded-[22px] border transition flex flex-col sm:flex-row sm:items-center justify-between gap-4 {{ $isUnread ? 'bg-[#FDF2F6]/70 border-[#F8C9DC] shadow-sm' : 'bg-white border-[#1F171B]/[0.04] shadow-sm text-zinc-600' }}">
+            <div class="p-4 sm:p-5 rounded-[22px] border transition flex flex-col sm:flex-row sm:items-center justify-between gap-4 {{ $isUnread ? 'bg-[#FDF2F6]/70 border-[#F8C9DC] shadow-sm' : 'bg-white border-[#BE2B5B]/[0.04] shadow-sm text-[#7D626B]' }}">
                 <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-0.5 {{ $isUnread ? 'bg-[#FCE5EE] text-[#C93565] border border-[#F8C9DC]' : 'bg-[#FAF7F9] text-zinc-500 border border-[#ECE4E8]' }}">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-0.5 {{ $isUnread ? 'bg-[#FCE5EE] text-[#C93565] border border-[#F8C9DC]' : 'bg-[#FAF7F9] text-[#8C737B] border border-[#ECE4E8]' }}">
                         @if(str_contains($notif->type, 'DELAY'))
                             <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         @elseif(str_contains($notif->type, 'EXCEPTION'))
@@ -96,24 +96,24 @@
                                     {{ __('common.badges.new') }}
                                 </span>
                             @endif
-                            <span class="text-xs text-zinc-500 font-mono">
+                            <span class="text-xs text-[#8C737B] font-mono">
                                 {{ $notif->created_at->translatedFormat('d M Y, H:i') }} ({{ $notif->created_at->diffForHumans() }})
                             </span>
                         </div>
 
-                        <p class="text-sm font-medium {{ $isUnread ? 'text-zinc-900' : 'text-zinc-700' }} leading-relaxed">
+                        <p class="text-sm font-medium {{ $isUnread ? 'text-[#4A2C35]' : 'text-[#6E545D]' }} leading-relaxed">
                             {{ $notif->message }}
                         </p>
 
                         @if($notif->shipment)
-                            <div class="text-xs text-zinc-500 flex items-center gap-2 pt-1 font-mono">
+                            <div class="text-xs text-[#8C737B] flex items-center gap-2 pt-1 font-mono">
                                 <span>Ref:</span>
                                 <a href="{{ route('shipments.show', $notif->shipment) }}" class="text-[#C93565] hover:underline font-semibold">
                                     {{ $notif->shipment->shipment_number }}
                                 </a>
                                 @if($notif->shipment->originLocation && $notif->shipment->destinationLocation)
                                     <span class="text-zinc-300">&bull;</span>
-                                    <span class="text-zinc-600">{{ $notif->shipment->originLocation->city }} &rarr; {{ $notif->shipment->destinationLocation->city }}</span>
+                                    <span class="text-[#7D626B]">{{ $notif->shipment->originLocation->city }} &rarr; {{ $notif->shipment->destinationLocation->city }}</span>
                                 @endif
                             </div>
                         @endif
@@ -122,7 +122,7 @@
 
                 <div class="flex items-center gap-2 shrink-0 sm:self-center pl-14 sm:pl-0">
                     @if($notif->shipment)
-                        <a href="{{ route('shipments.show', $notif->shipment) }}" class="px-3.5 py-1.5 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-zinc-700 transition">
+                        <a href="{{ route('shipments.show', $notif->shipment) }}" class="px-3.5 py-1.5 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-[#6E545D] transition">
                             {{ __('notifications.open_shipment') }} &rarr;
                         </a>
                     @endif
@@ -143,8 +143,8 @@
                 <div class="w-12 h-12 mx-auto rounded-full bg-[#FDF2F6] border border-[#F8C9DC] flex items-center justify-center text-[#C93565] mb-3">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                 </div>
-                <h3 class="text-sm font-semibold text-zinc-900">{{ __('notifications.empty.title') }}</h3>
-                <p class="text-xs text-zinc-500 mt-1">{{ __('notifications.empty.description') }}</p>
+                <h3 class="text-sm font-semibold text-[#4A2C35]">{{ __('notifications.empty.title') }}</h3>
+                <p class="text-xs text-[#8C737B] mt-1">{{ __('notifications.empty.description') }}</p>
             </div>
         @endforelse
 

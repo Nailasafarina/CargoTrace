@@ -68,12 +68,12 @@ enum ShipmentStatus: string
     public function badgeClasses(): string
     {
         return match ($this) {
-            self::Created => 'bg-[#F5F0F3] text-[#5C4F56] border border-[#E6DCE1]',
-            self::Booked => 'bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC]',
-            self::PickedUp => 'bg-[#1F171B] text-white border border-[#1F171B]',
-            self::InTransit => 'bg-[#FCE5EE] text-[#9E224B] border border-[#F29EC0]',
+            self::Created => 'bg-[#FAF3F6] text-[#7A5663] border border-[#EFE2E7]',
+            self::Booked => 'bg-[#FCECF1] text-[#BE2B5B] border border-[#F4D3DF]',
+            self::PickedUp => 'bg-[#F8DFEA] text-[#9E224B] border border-[#F2BFD2]',
+            self::InTransit => 'bg-[#BE2B5B] text-white border border-[#BE2B5B]',
             self::Delivered => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
-            self::Cancelled => 'bg-red-50 text-red-700 border border-red-200',
+            self::Cancelled => 'bg-rose-50 text-rose-700 border border-rose-200',
         };
     }
 
