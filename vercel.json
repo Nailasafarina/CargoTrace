@@ -30,7 +30,6 @@
         "APP_NAME": "CargoTrace",
         "APP_ENV": "production",
         "APP_DEBUG": "false",
-        "APP_KEY": "base64:+zKBcXgM0uhjgkBVpLcQiFPQnHMh54/5y3RkcBStsNk=",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",

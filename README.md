@@ -11,6 +11,8 @@
 > **UAS Web Programming 2 &middot; Final Portfolio Project**  
 > An enterprise-grade, full-stack logistics visibility platform built with **PHP 8.3**, **Laravel 12**, **MySQL 8**, **Tailwind CSS v4**, **Vanilla JavaScript (Fetch API)**, **Leaflet.js**, and **Chart.js**.
 
+**Live demo:** https://cargo-trace-kappa.vercel.app (demo accounts are listed in [section 6](#6-demo-accounts--documented-credentials)).
+
 ---
 
 ## 1. Problem Statement & Solution
