@@ -8,12 +8,11 @@
     <x-nex-workspace :metrics="$metrics" role="operator" />
 
     <!-- Header with Operational Role Badge -->
-    <div class="bg-white rounded-[24px] p-6 shadow-sm border border-black/[0.03] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div id="operational-analytics" class="bg-white rounded-[24px] p-6 shadow-sm border border-black/[0.03] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <div class="flex items-center gap-3">
                 <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900">{{ __('dashboard.operator.title') }}</h1>
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-zinc-900 text-white">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#FF6B1A]"></span>
                     {{ __('dashboard.operator.role_badge') }}
                 </span>
             </div>

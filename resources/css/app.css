@@ -2,14 +2,15 @@
 @import 'leaflet/dist/leaflet.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+@source '../../app/Enums/*.php';
 
 @theme {
     --font-sans: 'Plus Jakarta Sans', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 
     /* NexCargo / CargoTrace Clean Industrial Logistics Palette */
-    --color-slate-50: #f3f4f6;
+    --color-slate-50: #f2f3f5;
     --color-slate-100: #ebeef2;
     --color-slate-200: #e2e5ea;
 
@@ -40,36 +41,45 @@
 
 /* Soft ambient surface shadow matching NexCargo cards */
 .shadow-sm {
-    box-shadow: 0 4px 20px -2px rgba(24, 24, 27, 0.04), 0 1px 3px -1px rgba(24, 24, 27, 0.02) !important;
+    box-shadow: 0 4px 22px -2px rgba(24, 24, 27, 0.035), 0 1px 3px -1px rgba(24, 24, 27, 0.02) !important;
 }
 
-/* Diagonal hatch pattern for Cargo Bay cards and Route Progress Track */
+/* Subtle diagonal hatch pattern inside Cargo Bay cards (matching reference screenshot) */
 .cargo-bay-hatch {
+    background-color: #ffffff;
     background-image: repeating-linear-gradient(
         -45deg,
-        rgba(24, 24, 27, 0.018),
-        rgba(24, 24, 27, 0.018) 10px,
-        transparent 10px,
-        transparent 20px
+        rgba(24, 24, 27, 0.022),
+        rgba(24, 24, 27, 0.022) 12px,
+        transparent 12px,
+        transparent 24px
     );
 }
 
+/* Diagonal hatch pattern for the Departure -> Arrival progress track */
 .route-track-hatch {
+    background-color: #f4f5f7;
     background-image: repeating-linear-gradient(
         -45deg,
-        rgba(24, 24, 27, 0.06),
-        rgba(24, 24, 27, 0.06) 5px,
-        transparent 5px,
-        transparent 10px
+        rgba(24, 24, 27, 0.065),
+        rgba(24, 24, 27, 0.065) 6px,
+        transparent 6px,
+        transparent 12px
     );
 }
 
-/* Custom Leaflet OpenStreetMap styling with smooth zoom transitions */
+/* Custom Leaflet OpenStreetMap styling with buttery-smooth zoom transitions */
 .leaflet-container {
     font-family: inherit !important;
-    background: #eef0f3 !important;
+    background: #e9ecef !important;
 }
 
+/* Dashboard Route Transportation card uses clean light-silver OpenStreetMap tiles matching the reference screenshot */
+#dashboard-osm-map .leaflet-tile-pane {
+    filter: grayscale(0.75) contrast(1.02) brightness(1.04);
+}
+
+/* Full corridor and facility maps retain rich cartographic clarity */
 .leaflet-tile-pane {
     filter: saturate(0.88) contrast(1.03) brightness(1.01);
 }
@@ -119,9 +129,9 @@
     background-color: rgba(255, 255, 255, 0.95) !important;
     color: #18181b !important;
     border-bottom: 1px solid #f4f4f5 !important;
-    width: 30px !important;
-    height: 30px !important;
-    line-height: 30px !important;
+    width: 28px !important;
+    height: 28px !important;
+    line-height: 28px !important;
     font-weight: 700 !important;
     transition: all 0.15s ease !important;
 }

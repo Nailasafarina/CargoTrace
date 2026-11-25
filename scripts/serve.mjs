@@ -113,7 +113,11 @@ if (!fs.existsSync(vendorAutoload)) {
     });
 }
 
-const envContents = fs.readFileSync(envFile, 'utf8');
+let envContents = fs.readFileSync(envFile, 'utf8');
+if (!/^APP_KEY=/m.test(envContents)) {
+    envContents += 'APP_KEY=\n';
+    fs.writeFileSync(envFile, envContents, 'utf8');
+}
 if (!/^APP_KEY=base64:.+/m.test(envContents)) {
     execSync(`${phpBin} artisan key:generate --force`, {
         stdio: 'inherit',

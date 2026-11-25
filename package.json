@@ -4,7 +4,8 @@
     "type": "module",
     "scripts": {
         "build": "rm -f public/hot && vite build",
-        "dev": "vite build && node scripts/serve.mjs"
+        "dev": "vite build && node scripts/serve.mjs",
+        "lint": "node --check resources/js/map.js && node --check resources/js/map-utils.js && node --check scripts/serve.mjs"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",

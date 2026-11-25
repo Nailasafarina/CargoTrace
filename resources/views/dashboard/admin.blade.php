@@ -8,12 +8,11 @@
     <x-nex-workspace :metrics="$metrics" role="admin" />
 
     <!-- Header with Platform Metrics & Global Actions -->
-    <div class="bg-white rounded-[24px] p-6 shadow-sm border border-black/[0.03] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div id="operational-analytics" class="bg-white rounded-[24px] p-6 shadow-sm border border-black/[0.03] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <div class="flex items-center gap-3">
                 <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900">{{ __('dashboard.admin.title') }}</h1>
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-zinc-900 text-white">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#FF6B1A]"></span>
                     {{ __('dashboard.admin.role_badge') }}
                 </span>
             </div>
@@ -103,8 +102,7 @@
     <!-- Key Performance Indicators (KPIs) Strip -->
     <div class="p-6 rounded-[24px] bg-white border border-black/[0.03] shadow-sm">
         <div class="text-xs font-bold uppercase tracking-wider text-zinc-600 mb-4 flex items-center justify-between">
-            <span class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-[#FF6B1A] animate-ping"></span>
+            <span>
                 {{ __('dashboard.admin.kpi_heading') }} {{ __('dashboard.admin.kpi_corridor_benchmark') }}
             </span>
             <span class="text-[11px] text-zinc-400 lowercase font-mono">{{ __('dashboard.admin.corridor_benchmark_sub') }}</span>
