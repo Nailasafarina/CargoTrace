@@ -11,48 +11,65 @@ function escapeHtml(value) {
 }
 
 /**
- * Resolve facility pin styling by location type.
+ * Shared smooth-zoom Leaflet options for buttery OpenStreetMap navigation.
+ */
+const SMOOTH_MAP_OPTIONS = {
+    zoomControl: true,
+    scrollWheelZoom: true,
+    zoomSnap: 0.25,
+    zoomDelta: 0.5,
+    wheelPxPerZoomLevel: 65,
+    wheelDebounceTime: 20,
+    zoomAnimation: true,
+    fadeAnimation: true,
+    markerZoomAnimation: true,
+    inertia: true,
+    inertiaDeceleration: 3000,
+};
+
+/**
+ * Resolve facility pin styling by location type (NexCargo Orange & Charcoal palette).
  */
 function getPinStyle(type) {
     const normalized = String(type || '').toLowerCase();
     switch (normalized) {
         case 'port':
             return {
-                color: '#2563eb', // blue
+                color: '#ff6b1a', // NexCargo Orange
                 svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a3 3 0 00-3 3v2H6a2 2 0 00-2 2v2a2 2 0 002 2h1v4a5 5 0 0010 0v-4h1a2 2 0 002-2V9a2 2 0 00-2-2h-3V5a3 3 0 00-3-3z"/>'
             };
         case 'airport':
             return {
-                color: '#4f46e5', // indigo
+                color: '#18181b', // Deep Charcoal
                 svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>'
             };
         case 'warehouse':
             return {
-                color: '#d97706', // amber
+                color: '#ea580c', // Deep Orange
                 svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>'
             };
         case 'city':
         default:
             return {
-                color: '#059669', // emerald
+                color: '#10b981', // Emerald
                 svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>'
             };
     }
 }
 
 /**
- * Generate a modern, retina-ready Leaflet divIcon with clean light-theme styling.
+ * Generate a modern, retina-ready Leaflet divIcon.
  */
 function createLocationPin(type, isDraggable = false) {
     const style = getPinStyle(type);
-    const pulseRing = isDraggable ? '<span class="absolute -inset-1 rounded-full bg-blue-500/20 animate-ping"></span>' : '';
+    const pulseRing = isDraggable ? '<span class="absolute -inset-1.5 rounded-full bg-[#ff6b1a]/30 animate-ping"></span>' : '';
 
     return L.divIcon({
         className: 'cargotrace-pin-wrapper',
         html: `
             <div class="relative flex items-center justify-center">
                 ${pulseRing}
-                <div style="background-color: ${style.color};" class="w-8 h-8 rounded-full border-2 border-white shadow-md flex items-center justify-center text-white transition-transform hover:scale-110">
+                <div style="background-color: ${style.color};" class="w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white transition-transform duration-200 hover:scale-110">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         ${style.svg}
                     </svg>
@@ -85,11 +102,11 @@ function buildPopupContent(marker) {
 
     return `
         <div class="text-xs space-y-1.5 p-1 min-w-[200px]">
-            ${typeLabel ? `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">${typeLabel}</span>` : ''}
-            <strong class="text-slate-900 text-sm font-bold block">${title}</strong>
-            ${locationStr ? `<div class="text-slate-600 text-xs flex items-center gap-1">${locationStr}</div>` : ''}
-            ${coordsStr ? `<div class="text-[10px] font-mono text-slate-500">${escapeHtml(i18n.coordinates || 'Coordinates')}: ${coordsStr}</div>` : ''}
-            ${url ? `<div class="pt-1.5 border-t border-slate-100"><a href="${url}" class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-xs inline-flex items-center gap-1">${escapeHtml(i18n.view_details || 'View Details')} &rarr;</a></div>` : ''}
+            ${typeLabel ? `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#ff6b1a]/20 text-[#ff884d] border border-[#ff6b1a]/30">${typeLabel}</span>` : ''}
+            <strong class="text-white text-sm font-bold block">${title}</strong>
+            ${locationStr ? `<div class="text-zinc-300 text-xs flex items-center gap-1">${locationStr}</div>` : ''}
+            ${coordsStr ? `<div class="text-[10px] font-mono text-zinc-400">${escapeHtml(i18n.coordinates || 'Coordinates')}: ${coordsStr}</div>` : ''}
+            ${url ? `<div class="pt-1.5 border-t border-zinc-800"><a href="${url}" class="text-[#ff884d] hover:text-white hover:underline font-semibold text-xs inline-flex items-center gap-1">${escapeHtml(i18n.view_details || 'View Details')} &rarr;</a></div>` : ''}
         </div>
     `;
 }
@@ -100,7 +117,10 @@ function buildPopupContent(marker) {
 function attachTileLayer(map) {
     const tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">OpenStreetMap</a> contributors'
+        keepBuffer: 4,
+        updateWhenZooming: false,
+        updateWhenIdle: false,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="text-[#ff6b1a] hover:underline font-medium">OpenStreetMap</a> contributors'
     });
 
     tileLayer.on('tileerror', function (err) {
@@ -132,7 +152,7 @@ function setupResizeObserver(map, container) {
 }
 
 /**
- * Initialize a single location map (detail view).
+ * Initialize a single location map (detail view) with smooth fly-to on click.
  */
 function initSingleMap(container, config) {
     const lat = parseFloat(config.latitude);
@@ -143,10 +163,7 @@ function initSingleMap(container, config) {
     }
 
     const zoom = parseInt(config.zoom, 10) || 12;
-    const map = L.map(container, {
-        zoomControl: true,
-        scrollWheelZoom: false,
-    }).setView([lat, lng], zoom);
+    const map = L.map(container, SMOOTH_MAP_OPTIONS).setView([lat, lng], zoom);
 
     attachTileLayer(map);
 
@@ -165,8 +182,15 @@ function initSingleMap(container, config) {
     }).addTo(map);
 
     marker.bindPopup(buildPopupContent(markerData));
-    
-    // Auto-open popup on initial load for instant clarity
+
+    marker.on('click', () => {
+        map.flyTo([lat, lng], Math.max(map.getZoom(), 13), {
+            animate: true,
+            duration: 0.75,
+            easeLinearity: 0.25,
+        });
+    });
+
     setTimeout(() => {
         try { marker.openPopup(); } catch (e) {}
     }, 300);
@@ -176,7 +200,7 @@ function initSingleMap(container, config) {
 }
 
 /**
- * Initialize a multi-location summary map (index view).
+ * Initialize a multi-location summary map (index view) with smooth cluster bounds & fly-to.
  */
 function initMultiMap(container, config) {
     const markers = Array.isArray(config.markers) ? config.markers : [];
@@ -190,10 +214,7 @@ function initMultiMap(container, config) {
         return null;
     }
 
-    const map = L.map(container, {
-        zoomControl: true,
-        scrollWheelZoom: false,
-    });
+    const map = L.map(container, SMOOTH_MAP_OPTIONS);
 
     attachTileLayer(map);
 
@@ -206,6 +227,13 @@ function initMultiMap(container, config) {
             icon: createLocationPin(m.type)
         });
         pin.bindPopup(buildPopupContent(m));
+        pin.on('click', () => {
+            map.flyTo([lat, lng], Math.max(map.getZoom(), 6), {
+                animate: true,
+                duration: 0.75,
+                easeLinearity: 0.25,
+            });
+        });
         pin.addTo(featureGroup);
     });
 
@@ -215,7 +243,7 @@ function initMultiMap(container, config) {
         const first = validMarkers[0];
         map.setView([parseFloat(first.lat ?? first.latitude), parseFloat(first.lng ?? first.longitude)], 12);
     } else {
-        map.fitBounds(featureGroup.getBounds().pad(0.12), { maxZoom: 13 });
+        map.fitBounds(featureGroup.getBounds().pad(0.15), { maxZoom: 12, animate: true });
     }
 
     setupResizeObserver(map, container);
@@ -237,10 +265,7 @@ function initPickerMap(container, config) {
     const center = hasValidCoords ? [initLat, initLng] : [20, 0];
     const zoom = hasValidCoords ? (parseInt(config.zoom, 10) || 12) : 2;
 
-    const map = L.map(container, {
-        zoomControl: true,
-        scrollWheelZoom: true,
-    }).setView(center, zoom);
+    const map = L.map(container, SMOOTH_MAP_OPTIONS).setView(center, zoom);
 
     attachTileLayer(map);
 
@@ -273,7 +298,10 @@ function initPickerMap(container, config) {
         }
 
         if (pan) {
-            map.panTo([lat, lng]);
+            map.flyTo([lat, lng], Math.max(map.getZoom(), 10), {
+                animate: true,
+                duration: 0.65,
+            });
         }
     }
 
@@ -281,15 +309,13 @@ function initPickerMap(container, config) {
         setMarkerPosition(initLat, initLng, false);
     }
 
-    // Map click: move marker and populate inputs
     map.on('click', function (e) {
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
-        setMarkerPosition(lat, lng, false);
+        setMarkerPosition(lat, lng, true);
         updateInputs(lat, lng);
     });
 
-    // Inputs change: update marker position
     function handleInputChange() {
         if (!latInput || !lngInput) return;
         const lat = parseFloat(latInput.value);
@@ -342,7 +368,6 @@ export function initCargoTraceMaps() {
     });
 }
 
-// Auto-boot on DOM ready
 if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initCargoTraceMaps);
@@ -351,7 +376,6 @@ if (typeof document !== 'undefined') {
     }
 }
 
-// Expose globally for dynamic components / SPA navigations
 if (typeof window !== 'undefined') {
     window.initCargoTraceMaps = initCargoTraceMaps;
 }

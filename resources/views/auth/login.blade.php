@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', __('auth.sign_in_title'))
+@section('title', __('auth.login_title'))
 
 @section('content')
 <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">

@@ -8,6 +8,7 @@ use App\Models\Carrier;
 use App\Models\Shipment;
 use App\Models\ShipmentException;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class DashboardService
@@ -90,7 +91,6 @@ class DashboardService
         if ($delivered > 0) {
             $onTimeDeliveryRate = round(($onTimeDeliveredCount / $delivered) * 100, 1);
         } else {
-            // If no shipments delivered yet, compute on-time percentage across all active shipments
             $totalOnTime = $rawDelayCounts[DelayStatus::OnTime->value] ?? 0;
             $onTimeDeliveryRate = $totalShipments > 0 ? round(($totalOnTime / $totalShipments) * 100, 1) : 100.0;
         }
@@ -105,16 +105,24 @@ class DashboardService
             ? 0.0
             : round((float) $resolvedExceptions->avg(fn ($ex) => $ex->detected_at->diffInHours($ex->resolved_at)), 1);
 
-        // 7. Recent Items for Feed / Tables
+        // 7. Recent Items for Feed / Tables & Interactive Workspace
         $recentExceptions = ShipmentException::with(['shipment.carrier', 'creator'])
             ->whereIn('status', ['OPEN', 'INVESTIGATING'])
             ->latest('detected_at')
             ->take(5)
             ->get();
 
-        $recentShipments = Shipment::with(['carrier', 'originLocation', 'destinationLocation', 'customer'])
+        $recentShipments = Shipment::with([
+            'carrier',
+            'originLocation',
+            'destinationLocation',
+            'customer',
+            'creator',
+            'items',
+            'trackingEvents.location',
+        ])
             ->latest('updated_at')
-            ->take(5)
+            ->take(6)
             ->get();
 
         return [
@@ -135,7 +143,8 @@ class DashboardService
                 'delay_rate' => $totalShipments > 0 ? round(($delayed / $totalShipments) * 100, 1) : 0.0,
             ],
             'recent_exceptions' => $recentExceptions,
-            'recent_shipments' => $recentShipments,
+            'recent_shipments' => $recentShipments->take(5),
+            'workspace_shipments' => $this->formatWorkspaceShipments($recentShipments),
         ];
     }
 
@@ -188,9 +197,18 @@ class DashboardService
 
         // Recent customer shipments & notifications
         $recentShipments = (clone $baseQuery)
-            ->with(['carrier', 'originLocation', 'destinationLocation', 'exceptions'])
+            ->with([
+                'carrier',
+                'originLocation',
+                'destinationLocation',
+                'customer',
+                'creator',
+                'items',
+                'trackingEvents.location',
+                'exceptions',
+            ])
             ->latest('updated_at')
-            ->take(5)
+            ->take(6)
             ->get();
 
         $recentNotifications = $customer->notifications()
@@ -209,8 +227,108 @@ class DashboardService
                 'on_time_delivery_rate' => $onTimeRate,
                 'delay_rate' => $totalShipments > 0 ? round(($delayed / $totalShipments) * 100, 1) : 0.0,
             ],
-            'recent_shipments' => $recentShipments,
+            'recent_shipments' => $recentShipments->take(5),
             'recent_notifications' => $recentNotifications,
+            'workspace_shipments' => $this->formatWorkspaceShipments($recentShipments),
         ];
+    }
+
+    /**
+     * Format shipments for the interactive cargo bay & OpenStreetMap workspace component.
+     *
+     * @param  Collection<int, Shipment>  $shipments
+     * @return array<int, array<string, mixed>>
+     */
+    protected function formatWorkspaceShipments(Collection $shipments): array
+    {
+        $bays = ['A1', 'A3', 'A8', 'A9', 'A10', 'A4'];
+
+        return $shipments->values()->map(function (Shipment $sh, int $idx) use ($bays) {
+            $latestEvent = $sh->trackingEvents->sortByDesc('occurred_at')->first();
+            $origin = $sh->originLocation;
+            $dest = $sh->destinationLocation;
+
+            $originLat = $origin?->latitude !== null ? (float) $origin->latitude : 1.2644;
+            $originLng = $origin?->longitude !== null ? (float) $origin->longitude : 103.8222;
+            $destLat = $dest?->latitude !== null ? (float) $dest->latitude : 51.9500;
+            $destLng = $dest?->longitude !== null ? (float) $dest->longitude : 4.1333;
+
+            $currentLat = ($latestEvent && $latestEvent->latitude !== null)
+                ? (float) $latestEvent->latitude
+                : round(($originLat + $destLat) / 2, 4);
+            $currentLng = ($latestEvent && $latestEvent->longitude !== null)
+                ? (float) $latestEvent->longitude
+                : round(($originLng + $destLng) / 2, 4);
+
+            $currentCity = $latestEvent?->location?->city
+                ?? ($sh->current_status === ShipmentStatus::Delivered ? ($dest?->city ?? 'Rotterdam') : ($origin?->city ?? 'Singapore'));
+            $currentCountry = $latestEvent?->location?->country
+                ?? ($sh->current_status === ShipmentStatus::Delivered ? ($dest?->country ?? 'NL') : ($origin?->country ?? 'SG'));
+            $currentHub = $latestEvent?->location?->name
+                ?? ($origin?->name ?? 'International Logistics Hub');
+
+            $waypoints = $sh->trackingEvents
+                ->sortBy('occurred_at')
+                ->filter(fn ($ev) => $ev->latitude !== null && $ev->longitude !== null)
+                ->values()
+                ->map(fn ($ev) => [
+                    'lat' => (float) $ev->latitude,
+                    'lng' => (float) $ev->longitude,
+                    'title' => $ev->location?->name ?? $ev->event_type->label(),
+                    'city' => $ev->location?->city ?? '',
+                    'status' => $ev->event_type->label(),
+                    'time' => $ev->occurred_at?->format('d M Y, H:i') ?? '',
+                    'is_exception' => (bool) $ev->is_exception,
+                ])
+                ->toArray();
+
+            $digits = preg_replace('/[^0-9]/', '', $sh->shipment_number);
+            $shortSuffix = strlen($digits) >= 3 ? substr($digits, -4) : str_pad((string) $sh->id, 4, '5430', STR_PAD_LEFT);
+
+            return [
+                'id' => $sh->id,
+                'bay' => $bays[$idx] ?? ('B' . ($idx + 1)),
+                'number' => $sh->shipment_number,
+                'short_code' => 'SHP - ' . $shortSuffix,
+                'status_value' => $sh->current_status->value,
+                'status_label' => $sh->current_status->label(),
+                'status_short' => match ($sh->current_status) {
+                    ShipmentStatus::InTransit => 'Transit',
+                    ShipmentStatus::Delivered => 'Delivered',
+                    default => 'Loading',
+                },
+                'delay_label' => $sh->delay_status->label(),
+                'delay_hours' => (int) ($sh->delay_hours ?? 0),
+                'weight_kg' => (float) ($sh->weight_kg ?? 500),
+                'weight_formatted' => number_format((float) ($sh->weight_kg ?? 500), 0) . 'kg',
+                'cargo_type' => $sh->cargo_type ?? 'General Freight',
+                'items_count' => max(1, $sh->items->count()),
+                'carrier_name' => $sh->carrier?->name ?? 'Scania E3360 Freight',
+                'carrier_code' => ($sh->carrier?->code ?? 'TRC') . '-' . (200 + ($sh->id % 99)),
+                'operator_name' => $sh->creator?->name ?? $sh->customer?->name ?? 'Clark Kent',
+                'customer_name' => $sh->customer?->name ?? 'Global Consignee',
+                'dock_label' => 'Dock #' . (($sh->id % 5) + 1),
+                'started_time' => $sh->expected_departure_at ? $sh->expected_departure_at->format('h:i A') : '08:30 AM',
+                'eta_formatted' => ($sh->estimated_arrival_at ?? $sh->expected_arrival_at)?->format('d M Y, H:i') ?? 'Scheduled',
+                'origin_city' => $origin?->city ?? 'Jakarta',
+                'origin_country' => $origin?->country ?? 'ID',
+                'origin_name' => $origin?->name ?? 'Origin Terminal',
+                'origin_lat' => $originLat,
+                'origin_lng' => $originLng,
+                'dest_city' => $dest?->city ?? 'Rotterdam',
+                'dest_country' => $dest?->country ?? 'NL',
+                'dest_name' => $dest?->name ?? 'Destination Terminal',
+                'dest_lat' => $destLat,
+                'dest_lng' => $destLng,
+                'current_city' => $currentCity,
+                'current_country' => $currentCountry,
+                'current_hub' => $currentHub,
+                'current_lat' => $currentLat,
+                'current_lng' => $currentLng,
+                'waypoints' => $waypoints,
+                'show_url' => route('shipments.show', $sh),
+                'edit_url' => route('shipments.edit', $sh),
+            ];
+        })->toArray();
     }
 }

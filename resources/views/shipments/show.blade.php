@@ -4,24 +4,6 @@
 
 @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-<style>
-    /* Custom Leaflet styling for light theme */
-    .leaflet-popup-content-wrapper {
-        background: #ffffff !important;
-        color: #1e293b !important;
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 0.75rem !important;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
-    }
-    .leaflet-popup-tip {
-        background: #ffffff !important;
-        border: 1px solid #e2e8f0 !important;
-    }
-    .leaflet-container {
-        font-family: inherit !important;
-        background: #f8fafc !important;
-    }
-</style>
 @endpush
 
 @section('content')
@@ -245,8 +227,15 @@
                 <p class="text-xs text-slate-500 mt-0.5">{{ __('shipments.show.interactive_map_desc') }}</p>
             </div>
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold bg-slate-100 border border-slate-200 text-slate-700">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> {{ __('shipments.show.osm_tiles') }}
+                <button
+                    type="button"
+                    id="corridor-reset-zoom-btn"
+                    class="px-3 py-1 rounded-full text-[11px] font-semibold bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-700 shadow-2xs transition cursor-pointer"
+                >
+                    Reset Corridor View
+                </button>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold bg-white border border-zinc-200 text-zinc-700">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#FF6B1A]"></span> {{ __('shipments.show.osm_tiles') }}
                 </span>
             </div>
         </div>
@@ -724,30 +713,52 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // Initialize Leaflet Map
-    const map = L.map('shipment-corridor-map');
+    const LRef = window.L;
+    if (!LRef) return;
 
-    // Add OpenStreetMap Tile Layer with standard required attribution
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // Initialize Leaflet Map with buttery smooth fractional zoom
+    const map = LRef.map('shipment-corridor-map', {
+        zoomControl: true,
+        scrollWheelZoom: true,
+        zoomSnap: 0.25,
+        zoomDelta: 0.5,
+        wheelPxPerZoomLevel: 60,
+        wheelDebounceTime: 20,
+        zoomAnimation: true,
+        fadeAnimation: true,
+        markerZoomAnimation: true,
+        inertia: true,
+        inertiaDeceleration: 3000
+    });
+
+    // Add OpenStreetMap Tile Layer with keepBuffer for smooth zooming
+    LRef.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" class="text-blue-600 hover:underline">OpenStreetMap</a> contributors'
+        keepBuffer: 4,
+        updateWhenZooming: false,
+        updateWhenIdle: false,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" class="text-[#FF6B1A] hover:underline font-medium">OpenStreetMap</a> contributors'
     }).addTo(map);
 
     const latlngs = [];
     const bounds = [];
 
-    // Custom Map Pin HTML Generator (Light theme with crisp white borders & clean shadow)
-    function createMapPin(bgColor, labelText, ringColor = 'border-white') {
-        return L.divIcon({
+    function createMapPin(bgColor, labelText, isPulse = false) {
+        const pulseHtml = isPulse
+            ? `<span style="background-color: ${bgColor};" class="absolute -inset-1.5 rounded-full opacity-35 animate-ping"></span>`
+            : '';
+        return LRef.divIcon({
             className: 'custom-leaflet-marker',
-            html: `<div style="background-color: ${bgColor};" class="w-6 h-6 rounded-full border-2 ${ringColor} shadow-md flex items-center justify-center text-[10px] font-bold text-white font-mono">${labelText}</div>`,
-            iconSize: [24, 24],
-            iconAnchor: [12, 12],
+            html: `<div class="relative flex items-center justify-center">
+                ${pulseHtml}
+                <div style="background-color: ${bgColor};" class="w-7 h-7 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-[10px] font-bold text-white font-mono transition-transform hover:scale-110">${labelText}</div>
+            </div>`,
+            iconSize: [28, 28],
+            iconAnchor: [14, 14],
             popupAnchor: [0, -14]
         });
     }
 
-    // HTML sanitization helper for Leaflet popups (prevents DOM XSS injection)
     function escapeHtml(str) {
         if (!str) return '';
         const div = document.createElement('div');
@@ -761,18 +772,22 @@ document.addEventListener('DOMContentLoaded', function () {
         latlngs.push(originPoint);
         bounds.push(originPoint);
 
-        const originMarker = L.marker(originPoint, {
-            icon: createMapPin('#2563eb', 'O', 'border-white')
+        const originMarker = LRef.marker(originPoint, {
+            icon: createMapPin('#18181B', 'O', false)
         }).addTo(map);
 
         originMarker.bindPopup(`
             <div class="text-xs space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 block">${escapeHtml(window.i18n?.leaflet?.origin || 'Port of Origin')}</span>
-                <strong class="text-slate-900 text-sm block">${escapeHtml(mapData.origin.name)}</strong>
-                <span class="text-slate-600 block">${escapeHtml(mapData.origin.city)}, ${escapeHtml(mapData.origin.country)}</span>
-                <span class="font-mono text-[10px] text-slate-500 block">${escapeHtml(window.i18n?.leaflet?.coordinates || 'GPS')}: ${mapData.origin.lat.toFixed(4)}, ${mapData.origin.lng.toFixed(4)}</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-[#FF884D] block">${escapeHtml(window.i18n?.leaflet?.origin || 'Port of Origin')}</span>
+                <strong class="text-white text-sm block">${escapeHtml(mapData.origin.name)}</strong>
+                <span class="text-zinc-300 block">${escapeHtml(mapData.origin.city)}, ${escapeHtml(mapData.origin.country)}</span>
+                <span class="font-mono text-[10px] text-zinc-400 block">${escapeHtml(window.i18n?.leaflet?.coordinates || 'GPS')}: ${mapData.origin.lat.toFixed(4)}, ${mapData.origin.lng.toFixed(4)}</span>
             </div>
         `);
+
+        originMarker.on('click', () => {
+            map.flyTo(originPoint, Math.max(map.getZoom(), 6), { animate: true, duration: 0.85, easeLinearity: 0.25 });
+        });
     }
 
     // 2. Waypoint Milestones Markers
@@ -782,21 +797,26 @@ document.addEventListener('DOMContentLoaded', function () {
             latlngs.push(wpPoint);
             bounds.push(wpPoint);
 
-            const color = wp.is_exception ? '#ef4444' : '#6366f1';
-            const marker = L.marker(wpPoint, {
-                icon: createMapPin(color, (index + 1).toString())
+            const isLatest = index === mapData.waypoints.length - 1;
+            const color = wp.is_exception ? '#EF4444' : '#FF6B1A';
+            const marker = LRef.marker(wpPoint, {
+                icon: createMapPin(color, (index + 1).toString(), isLatest)
             }).addTo(map);
 
             marker.bindPopup(`
                 <div class="text-xs space-y-1">
-                    <span class="text-[10px] font-bold uppercase tracking-wider ${wp.is_exception ? 'text-rose-600' : 'text-indigo-600'} block">
+                    <span class="text-[10px] font-bold uppercase tracking-wider ${wp.is_exception ? 'text-rose-400' : 'text-[#FF884D]'} block">
                         Milestone #${index + 1}: ${escapeHtml(wp.status)}
                     </span>
-                    <strong class="text-slate-900 block">${escapeHtml(wp.location_name)}</strong>
-                    <p class="text-slate-700 text-[11px] leading-relaxed">${escapeHtml(wp.description)}</p>
-                    <span class="font-mono text-[10px] text-slate-500 block mt-1">Recorded: ${escapeHtml(wp.occurred_at)}</span>
+                    <strong class="text-white block">${escapeHtml(wp.location_name)}</strong>
+                    <p class="text-zinc-300 text-[11px] leading-relaxed">${escapeHtml(wp.description)}</p>
+                    <span class="font-mono text-[10px] text-zinc-400 block mt-1">Recorded: ${escapeHtml(wp.occurred_at)}</span>
                 </div>
             `);
+
+            marker.on('click', () => {
+                map.flyTo(wpPoint, Math.max(map.getZoom(), 6), { animate: true, duration: 0.85, easeLinearity: 0.25 });
+            });
         });
     }
 
@@ -805,36 +825,64 @@ document.addEventListener('DOMContentLoaded', function () {
         const destPoint = [mapData.destination.lat, mapData.destination.lng];
         bounds.push(destPoint);
 
-        const destMarker = L.marker(destPoint, {
-            icon: createMapPin('#10b981', 'D', 'border-white')
+        const destMarker = LRef.marker(destPoint, {
+            icon: createMapPin('#10B981', 'D', false)
         }).addTo(map);
 
         destMarker.bindPopup(`
             <div class="text-xs space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 block">${escapeHtml(window.i18n?.leaflet?.destination || 'Port of Destination')}</span>
-                <strong class="text-slate-900 text-sm block">${escapeHtml(mapData.destination.name)}</strong>
-                <span class="text-slate-600 block">${escapeHtml(mapData.destination.city)}, ${escapeHtml(mapData.destination.country)}</span>
-                <span class="font-mono text-[10px] text-slate-500 block">${escapeHtml(window.i18n?.leaflet?.coordinates || 'GPS')}: ${mapData.destination.lat.toFixed(4)}, ${mapData.destination.lng.toFixed(4)}</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block">${escapeHtml(window.i18n?.leaflet?.destination || 'Port of Destination')}</span>
+                <strong class="text-white text-sm block">${escapeHtml(mapData.destination.name)}</strong>
+                <span class="text-zinc-300 block">${escapeHtml(mapData.destination.city)}, ${escapeHtml(mapData.destination.country)}</span>
+                <span class="font-mono text-[10px] text-zinc-400 block">${escapeHtml(window.i18n?.leaflet?.coordinates || 'GPS')}: ${mapData.destination.lat.toFixed(4)}, ${mapData.destination.lng.toFixed(4)}</span>
             </div>
         `);
+
+        destMarker.on('click', () => {
+            map.flyTo(destPoint, Math.max(map.getZoom(), 6), { animate: true, duration: 0.85, easeLinearity: 0.25 });
+        });
     }
 
-    // 4. Polyline Transit Corridor (following chronological milestones)
+    // 4. Polyline Transit Corridor (solid active segment + dashed remaining segment to destination)
     if (latlngs.length >= 2) {
-        L.polyline(latlngs, {
-            color: '#2563eb',
-            weight: 3.5,
+        LRef.polyline(latlngs, {
+            color: '#18181B',
+            weight: 3,
+            opacity: 0.9,
+            lineJoin: 'round'
+        }).addTo(map);
+    }
+
+    if (mapData.destination && latlngs.length >= 1) {
+        const lastActive = latlngs[latlngs.length - 1];
+        const destPoint = [mapData.destination.lat, mapData.destination.lng];
+        LRef.polyline([lastActive, destPoint], {
+            color: '#FF6B1A',
+            weight: 2.5,
             opacity: 0.85,
             dashArray: '6, 8',
             lineJoin: 'round'
         }).addTo(map);
     }
 
-    // 5. Fit Bounds
-    if (bounds.length > 0) {
-        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 8 });
-    } else {
-        map.setView([15, 60], 3);
+    // 5. Fit Bounds & Wire Reset Button
+    function fitCorridor(animate = false) {
+        if (bounds.length > 0) {
+            if (animate) {
+                map.flyToBounds(bounds, { padding: [50, 50], maxZoom: 7, duration: 0.9 });
+            } else {
+                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 7 });
+            }
+        } else {
+            map.setView([15, 60], 3);
+        }
+    }
+
+    fitCorridor(false);
+
+    const resetBtn = document.getElementById('corridor-reset-zoom-btn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => fitCorridor(true));
     }
 });
 </script>
