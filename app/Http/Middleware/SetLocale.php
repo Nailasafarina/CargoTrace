@@ -13,7 +13,7 @@ class SetLocale
      * Handle an incoming request and apply localization.
      * Priority: users.locale (if authenticated) -> session -> Accept-Language header (API) -> default id.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {

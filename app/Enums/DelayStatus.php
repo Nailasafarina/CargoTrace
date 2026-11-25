@@ -43,10 +43,10 @@ enum DelayStatus: string
     {
         return match ($this) {
             self::OnTime => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
-            self::Low => 'bg-yellow-50 text-yellow-800 border border-yellow-300',
-            self::Medium => 'bg-orange-50 text-orange-800 border border-orange-200',
-            self::High, self::CriticalDelay => 'bg-rose-50 text-rose-700 border border-rose-200 animate-pulse',
-            self::Delayed => 'bg-orange-50 text-orange-800 border border-orange-200',
+            self::Low => 'bg-amber-50 text-amber-800 border border-amber-200',
+            self::Medium => 'bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC]',
+            self::High, self::CriticalDelay => 'bg-red-50 text-red-700 border border-red-200',
+            self::Delayed => 'bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC]',
         };
     }
 

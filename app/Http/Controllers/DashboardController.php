@@ -30,7 +30,7 @@ class DashboardController extends Controller
      */
     public function admin(Request $request): View
     {
-        $metrics = $this->dashboardService->getAdminOperatorMetrics();
+        $metrics = $this->dashboardService->getAdminOperatorMetrics($request->user());
 
         return view('dashboard.admin', [
             'user' => $request->user(),
@@ -43,7 +43,7 @@ class DashboardController extends Controller
      */
     public function operator(Request $request): View
     {
-        $metrics = $this->dashboardService->getAdminOperatorMetrics();
+        $metrics = $this->dashboardService->getAdminOperatorMetrics($request->user());
 
         return view('dashboard.operator', [
             'user' => $request->user(),

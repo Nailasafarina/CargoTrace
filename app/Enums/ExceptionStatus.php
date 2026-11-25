@@ -58,7 +58,7 @@ enum ExceptionStatus: string
     public function badgeClasses(): string
     {
         return match ($this) {
-            self::Open => 'bg-rose-50 text-rose-700 border border-rose-200',
+            self::Open => 'bg-red-50 text-red-700 border border-red-200',
             self::Investigating => 'bg-amber-50 text-amber-800 border border-amber-200',
             self::Resolved => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
         };

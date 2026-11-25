@@ -24,7 +24,7 @@ return [
 
     'compiled' => env(
         'VIEW_COMPILED_PATH',
-        sys_get_temp_dir()
+        realpath(storage_path('framework/views'))
     ),
 
 ];

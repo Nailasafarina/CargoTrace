@@ -30,6 +30,7 @@ class CheckLanguageParityCommand extends Command
 
         if (! is_dir($idPath) || ! is_dir($enPath)) {
             $this->error('Language directories lang/id and lang/en must exist.');
+
             return Command::FAILURE;
         }
 
@@ -106,10 +107,12 @@ class CheckLanguageParityCommand extends Command
 
         if ($hasError) {
             $this->error('Parity check failed: translation keys are not synchronized.');
+
             return Command::FAILURE;
         }
 
-        $this->info("✓ Language parity verified! Checked {$totalKeysChecked} keys across ".count($allBasenames)." files with 0 orphan keys.");
+        $this->info("✓ Language parity verified! Checked {$totalKeysChecked} keys across ".count($allBasenames).' files with 0 orphan keys.');
+
         return Command::SUCCESS;
     }
 

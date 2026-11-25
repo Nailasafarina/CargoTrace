@@ -53,20 +53,20 @@
 @endphp
 
 @if($hasValidCoords)
-    <div {{ $attributes->merge(['class' => 'p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4']) }}>
+    <div {{ $attributes->merge(['class' => 'nex-card p-6 space-y-4']) }}>
         @if($title || $subtitle || $osmUrl)
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 border-b border-slate-100">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 border-b border-[#F5F0F3]">
                 <div>
                     @if($title)
-                        <h2 class="text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                            <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <h2 class="text-base font-bold text-zinc-900 tracking-tight flex items-center gap-2">
+                            <svg class="w-4 h-4 text-[#E04879] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                             </svg>
                             {{ $title }}
                         </h2>
                     @endif
                     @if($subtitle)
-                        <p class="text-xs text-slate-500 mt-0.5">{{ $subtitle }}</p>
+                        <p class="text-xs text-zinc-500 mt-0.5">{{ $subtitle }}</p>
                     @endif
                 </div>
 
@@ -76,7 +76,7 @@
                             href="{{ $osmUrl }}"
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline transition"
+                            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#C93565] hover:text-[#9E224B] hover:underline transition"
                         >
                             <span>{{ __('locations.view_osm') }}</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,20 +89,20 @@
         @endif
 
         <!-- Leaflet Map Canvas Container -->
-        <div class="rounded-xl overflow-hidden border border-slate-200 relative">
+        <div class="rounded-2xl overflow-hidden border border-[#ECE4E8] relative">
             <div
                 id="{{ $id }}"
                 data-component="map"
                 data-map-config="{{ json_encode($mapConfig, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) }}"
                 style="height: {{ $height }}; min-height: 280px;"
-                class="w-full z-0 bg-slate-50"
+                class="w-full z-0 bg-[#FAF7F9]"
             ></div>
         </div>
     </div>
 @else
     <!-- Fallback Card for Missing or Invalid Coordinates -->
-    <div {{ $attributes->merge(['class' => 'p-8 rounded-2xl bg-white border border-slate-200 shadow-sm text-center flex flex-col items-center justify-center space-y-3']) }}>
-        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center mb-1">
+    <div {{ $attributes->merge(['class' => 'nex-card p-8 text-center flex flex-col items-center justify-center space-y-3']) }}>
+        <div class="w-12 h-12 rounded-2xl bg-[#FDF2F6] text-[#C93565] border border-[#F8C9DC] flex items-center justify-center mb-1">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -110,13 +110,13 @@
             </svg>
         </div>
         <div>
-            <h4 class="text-sm font-bold text-slate-900 tracking-tight">{{ __('locations.map.no_coordinates') }}</h4>
-            <p class="text-xs text-slate-500 max-w-sm mt-1 leading-relaxed">{{ __('locations.map.no_coordinates_desc') }}</p>
+            <h4 class="text-sm font-bold text-zinc-900 tracking-tight">{{ __('locations.map.no_coordinates') }}</h4>
+            <p class="text-xs text-zinc-500 max-w-sm mt-1 leading-relaxed">{{ __('locations.map.no_coordinates_desc') }}</p>
         </div>
         @if($editUrl)
             <a
                 href="{{ $editUrl }}"
-                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs hover:shadow transition"
+                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#C93565] hover:bg-[#b32956] text-white text-xs font-semibold shadow-xs hover:shadow transition"
             >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />

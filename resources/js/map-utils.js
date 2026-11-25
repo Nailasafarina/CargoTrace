@@ -6,15 +6,15 @@
 export const SMOOTH_MAP_OPTIONS = {
     zoomControl: true,
     scrollWheelZoom: true,
-    zoomSnap: 0.25,
+    zoomSnap: 0.1,
     zoomDelta: 0.5,
-    wheelPxPerZoomLevel: 60,
-    wheelDebounceTime: 18,
+    wheelPxPerZoomLevel: 85,
+    wheelDebounceTime: 20,
     zoomAnimation: true,
     fadeAnimation: true,
     markerZoomAnimation: true,
     inertia: true,
-    inertiaDeceleration: 3000,
+    inertiaDeceleration: 2800,
 };
 
 /**
@@ -43,24 +43,24 @@ export function isValidCoordinate(lat, lng) {
 }
 
 /**
- * Resolve facility pin styling by location type (NexCargo Orange & Charcoal palette).
+ * Resolve facility pin styling by location type (Camellia Pink & Obsidian palette).
  */
 export function getPinStyle(type) {
     const normalized = String(type || '').toLowerCase();
     switch (normalized) {
         case 'port':
             return {
-                color: '#ff6b1a',
+                color: '#e04879',
                 svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2a3 3 0 00-3 3v2H6a2 2 0 00-2 2v2a2 2 0 002 2h1v4a5 5 0 0010 0v-4h1a2 2 0 002-2V9a2 2 0 00-2-2h-3V5a3 3 0 00-3-3z"/>',
             };
         case 'airport':
             return {
-                color: '#18181b',
+                color: '#1f171b',
                 svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>',
             };
         case 'warehouse':
             return {
-                color: '#ea580c',
+                color: '#9e224b',
                 svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>',
             };
         case 'city':

@@ -41,6 +41,7 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($user = $request->user()) {
                 if (! empty($user->locale) && in_array($user->locale, ['id', 'en'], true)) {
                     app()->setLocale($user->locale);
+
                     return;
                 }
             }
@@ -49,6 +50,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     $code = substr(strtolower(trim(explode(';', $part)[0])), 0, 2);
                     if (in_array($code, ['id', 'en'], true)) {
                         app()->setLocale($code);
+
                         return;
                     }
                 }
@@ -59,6 +61,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (AuthenticationException $e, Request $request) use ($resolveLocale) {
             if ($request->is('api/*') || $request->expectsJson()) {
                 $resolveLocale($request);
+
                 return response()->json([
                     'message' => __('api.unauthenticated'),
                     'errors' => null,
@@ -86,6 +89,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (ModelNotFoundException|NotFoundHttpException $e, Request $request) use ($resolveLocale) {
             if ($request->is('api/*') || $request->expectsJson()) {
                 $resolveLocale($request);
+
                 return response()->json([
                     'message' => __('api.not_found'),
                     'errors' => null,
@@ -97,6 +101,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (HttpException $e, Request $request) use ($resolveLocale) {
             if ($request->is('api/*') || $request->expectsJson()) {
                 $resolveLocale($request);
+
                 return response()->json([
                     'message' => $e->getMessage() ?: 'An HTTP error occurred.',
                     'errors' => null,

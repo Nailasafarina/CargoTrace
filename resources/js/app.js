@@ -1,4 +1,6 @@
 import L from 'leaflet';
-window.L = L;
-
+import Chart from 'chart.js/auto';
 import './map.js';
+
+window.L = L;
+window.Chart = Chart;

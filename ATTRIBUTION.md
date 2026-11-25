@@ -5,7 +5,7 @@
 ---
 
 ## 1. Core Framework & Backend Libraries
-- **Laravel Framework (v12.x)**
+- **Laravel Framework (v12.x / v13.x)**
   - License: [MIT License](https://opensource.org/licenses/MIT)
   - Author: Taylor Otwell and the Laravel Core Team
   - Usage: Core application architecture, Eloquent ORM, Routing, Dependency Injection, Validation, and Testing Harness.
@@ -20,15 +20,15 @@
 - **Tailwind CSS (v4.x)**
   - License: [MIT License](https://opensource.org/licenses/MIT)
   - Author: Tailwind Labs, Inc.
-  - Usage: Responsive utility-first dark maritime UI styling.
+  - Usage: Responsive utility-first light industrial logistics UI styling.
 - **Heroicons**
   - License: [MIT License](https://opensource.org/licenses/MIT)
   - Author: Tailwind Labs, Inc.
-  - Usage: SVG iconography for maritime markers, alerts, status pills, and navigation.
-- **Instrument Sans Typography**
+  - Usage: SVG iconography for logistics markers, alerts, status pills, and navigation.
+- **Plus Jakarta Sans, Instrument Sans & JetBrains Mono Typography**
   - License: [SIL Open Font License 1.1](https://scripts.sil.org/OFL)
-  - Author: Instrument & Rodrigo Fuenzalida (served via Bunny Fonts)
-  - Usage: Primary typography across the CargoTrace application.
+  - Author: Tokotype, Instrument, Rodrigo Fuenzalida & JetBrains (served via Bunny Fonts / Vite)
+  - Usage: Primary UI and monospace telemetry typography across the CargoTrace application.
 
 ---
 
@@ -36,7 +36,7 @@
 - **Leaflet.js (v1.9.4)**
   - License: [BSD 2-Clause License](https://opensource.org/licenses/BSD-2-Clause)
   - Author: Volodymyr Agafonkin and Leaflet contributors
-  - Usage: Interactive shipment corridor visualization, markers, and polyline navigation.
+  - Usage: Interactive shipment corridor visualization, markers, smooth fractional zoom, and polyline navigation.
 - **OpenStreetMap**
   - License: [Open Database License (ODbL)](https://www.openstreetmap.org/copyright)
   - Copyright: &copy; OpenStreetMap contributors
@@ -51,21 +51,13 @@
 ---
 
 ## 4. Visualizations & Analytical Charts
-- **Chart.js (v4.4.7)**
+- **Chart.js (v4.x)**
   - License: [MIT License](https://opensource.org/licenses/MIT)
-  - Usage: Interactive dark-themed operational charts (Lifecycle Status Doughnut, Carrier Allocation Bar, Delay Severity Bar, and Exception Doughnut).
+  - Usage: Interactive operational charts (Lifecycle Status Doughnut, Carrier Allocation Bar, Delay Severity Bar, Exception Doughnut, and Operational Health Telemetry).
 
 ---
 
 ## 5. Development & Testing Infrastructure
-- **PHPUnit (v11.x)**: [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause) by Sebastian Bergmann.
+- **PHPUnit (v12.x)**: [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause) by Sebastian Bergmann.
 - **Laravel Pint**: [MIT License](https://opensource.org/licenses/MIT) by Nuno Maduro and Laravel LLC.
 - **Vite**: [MIT License](https://opensource.org/licenses/MIT) by Evan You and the Vite Core Team.
-
----
-
-## 6. Artificial Intelligence Assistance Disclosure
-In accordance with academic and engineering integrity standards:
-- **Google Antigravity AI Assistant (Google DeepMind)** was utilized as an autonomous senior engineering pair-programmer throughout the development lifecycle of this project.
-- AI contributions included assisting with domain boundary modeling, test-driven development scenario authoring, FSM lifecycle transitions, Dockerfile multi-stage drafting, and architectural documentation synthesis.
-- All architectural decisions, security audits, database schemas, and unit/feature tests were rigorously verified and validated through local test execution (`php artisan test`) and code quality linters (`pint`).

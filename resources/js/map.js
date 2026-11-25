@@ -10,6 +10,7 @@ import {
 if (typeof window !== 'undefined') {
     window.buildCurvedSegment = buildCurvedSegment;
     window.SMOOTH_MAP_OPTIONS = SMOOTH_MAP_OPTIONS;
+    window.escapeHtml = escapeHtml;
 }
 
 /**
@@ -17,7 +18,7 @@ if (typeof window !== 'undefined') {
  */
 function createLocationPin(type, isDraggable = false) {
     const style = getPinStyle(type);
-    const pulseRing = isDraggable ? '<span class="absolute -inset-1.5 rounded-full bg-[#ff6b1a]/30 animate-ping"></span>' : '';
+    const pulseRing = isDraggable ? '<span class="absolute -inset-1.5 rounded-full bg-[#e04879]/30 animate-ping"></span>' : '';
 
     return L.divIcon({
         className: 'cargotrace-pin-wrapper',
@@ -57,11 +58,11 @@ function buildPopupContent(marker) {
 
     return `
         <div class="text-xs space-y-1.5 p-1 min-w-[200px]">
-            ${typeLabel ? `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#ff6b1a]/20 text-[#ff884d] border border-[#ff6b1a]/30">${typeLabel}</span>` : ''}
+            ${typeLabel ? `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#e04879]/20 text-[#ec6e9b] border border-[#e04879]/30">${typeLabel}</span>` : ''}
             <strong class="text-white text-sm font-bold block">${title}</strong>
             ${locationStr ? `<div class="text-zinc-300 text-xs flex items-center gap-1">${locationStr}</div>` : ''}
             ${coordsStr ? `<div class="text-[10px] font-mono text-zinc-400">${escapeHtml(i18n.coordinates || 'Coordinates')}: ${coordsStr}</div>` : ''}
-            ${url ? `<div class="pt-1.5 border-t border-zinc-800"><a href="${url}" class="text-[#ff884d] hover:text-white hover:underline font-semibold text-xs inline-flex items-center gap-1">${escapeHtml(i18n.view_details || 'View Details')} &rarr;</a></div>` : ''}
+            ${url ? `<div class="pt-1.5 border-t border-zinc-800"><a href="${url}" class="text-[#ec6e9b] hover:text-white hover:underline font-semibold text-xs inline-flex items-center gap-1">${escapeHtml(i18n.view_details || 'View Details')} &rarr;</a></div>` : ''}
         </div>
     `;
 }
@@ -72,10 +73,10 @@ function buildPopupContent(marker) {
 function attachTileLayer(map) {
     const tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        keepBuffer: 4,
+        keepBuffer: 6,
         updateWhenZooming: false,
         updateWhenIdle: false,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="text-[#ff6b1a] hover:underline font-medium">OpenStreetMap</a> contributors'
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="text-[#c93565] hover:underline font-medium">OpenStreetMap</a> contributors'
     });
 
     tileLayer.on('tileerror', function (err) {

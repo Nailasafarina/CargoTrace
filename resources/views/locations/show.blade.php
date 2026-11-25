@@ -3,87 +3,100 @@
 @section('title', __('locations.details_title') . ' - ' . $location->name)
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-6">
-    <div class="pb-4 border-b border-slate-200 flex items-center justify-between">
-        <div>
-            <div class="flex items-center gap-3">
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900">{{ $location->name }}</h1>
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
-                    {{ $location->type->label() }}
-                </span>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <!-- Left Hub Telemetry Rail -->
+    <aside class="lg:col-span-5 space-y-4">
+        <div class="nex-card p-6 space-y-4">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC]">
+                        {{ $location->type->label() }}
+                    </span>
+                    <h1 class="text-2xl font-bold tracking-tight text-[#1F171B] mt-3">{{ $location->name }}</h1>
+                    <p class="text-xs text-zinc-500 mt-1">{{ $location->city }}, {{ $location->country }}</p>
+                </div>
             </div>
-            <p class="text-xs text-slate-500 mt-1">{{ $location->city }}, {{ $location->country }}</p>
-        </div>
-        <div class="flex items-center gap-2">
-            <a href="{{ route('locations.index') }}" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 transition">&larr; {{ __('common.actions.back') }}</a>
-            @can('update', $location)
-                <a href="{{ route('locations.edit', $location) }}" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-semibold transition">{{ __('common.actions.edit') }}</a>
-            @endcan
-        </div>
-    </div>
 
-    <!-- Metadata & Statistics -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-            <span class="text-xs text-slate-500">{{ __('locations.departing_shipments') }}</span>
-            <div class="text-2xl font-bold text-blue-700 mt-1">{{ $location->origin_shipments_count }}</div>
-        </div>
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-            <span class="text-xs text-slate-500">{{ __('locations.arriving_shipments') }}</span>
-            <div class="text-2xl font-bold text-emerald-700 mt-1">{{ $location->destination_shipments_count }}</div>
-        </div>
-        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-            <span class="text-xs text-slate-500">{{ __('locations.milestone_events') }}</span>
-            <div class="text-2xl font-bold text-indigo-700 mt-1">{{ $location->tracking_events_count }}</div>
-        </div>
-    </div>
-
-    <!-- Geographic Coordinates (WGS84 Format) -->
-    <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm">
-        <h2 class="text-base font-bold text-slate-900 mb-2">{{ __('locations.coords_title') }}</h2>
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 font-mono text-xs text-slate-800 flex items-center justify-between flex-wrap gap-2">
-            <div>
-                <span class="text-slate-500">{{ __('locations.fields.latitude') }}:</span>
-                <span class="text-blue-700 font-semibold">{{ $location->latitude !== null ? number_format($location->latitude, 7) : '—' }}</span>
-                <span class="text-slate-300 px-3">|</span>
-                <span class="text-slate-500">{{ __('locations.fields.longitude') }}:</span>
-                <span class="text-emerald-700 font-semibold">{{ $location->longitude !== null ? number_format($location->longitude, 7) : '—' }}</span>
-            </div>
-            @if($location->latitude !== null && $location->longitude !== null)
-                <a
-                    href="https://www.openstreetmap.org/?mlat={{ $location->latitude }}&mlon={{ $location->longitude }}#map=12/{{ $location->latitude }}/{{ $location->longitude }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-[11px] inline-flex items-center gap-1"
-                >
-                    <span>{{ __('locations.view_osm') }}</span>
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
+            <div class="flex items-center gap-2 pt-1">
+                <a href="{{ route('locations.index') }}" class="flex-1 py-2.5 px-4 rounded-full bg-[#FAF7F9] hover:bg-[#ECE4E8] border border-[#ECE4E8] text-xs font-semibold text-zinc-700 text-center transition">
+                    &larr; {{ __('common.actions.back') }}
                 </a>
-            @endif
+                @can('update', $location)
+                    <a href="{{ route('locations.edit', $location) }}" class="flex-1 py-2.5 px-4 rounded-full bg-[#FDF2F6] hover:bg-[#FCE5EE] text-[#9E224B] border border-[#F8C9DC] text-xs font-semibold text-center transition">
+                        {{ __('common.actions.edit') }}
+                    </a>
+                @endcan
+            </div>
         </div>
-    </div>
 
-    <!-- Interactive Location Map Card (Leaflet + OpenStreetMap) -->
-    <x-map
-        id="location-detail-map"
-        mode="single"
-        :latitude="$location->latitude"
-        :longitude="$location->longitude"
-        :zoom="12"
-        height="400px"
-        :title="__('locations.map.title')"
-        :subtitle="__('locations.map.subtitle')"
-        :marker="[
-            'title' => $location->name,
-            'type' => $location->type->value,
-            'typeLabel' => $location->type->label(),
-            'city' => $location->city,
-            'country' => $location->country,
-        ]"
-        :edit-url="auth()->user()?->can('update', $location) ? route('locations.edit', $location) : null"
-        :osm-url="$location->latitude !== null && $location->longitude !== null ? 'https://www.openstreetmap.org/?mlat=' . $location->latitude . '&mlon=' . $location->longitude . '#map=12/' . $location->latitude . '/' . $location->longitude : null"
-    />
+        <!-- Hub Throughput Bento Strip -->
+        <div class="grid grid-cols-3 gap-3">
+            <div class="nex-card p-4">
+                <span class="text-[11px] text-zinc-500 block">{{ __('locations.departing_shipments') }}</span>
+                <div class="text-xl font-bold text-[#C93565] mt-1 tabular-nums">{{ $location->origin_shipments_count }}</div>
+            </div>
+            <div class="nex-card p-4">
+                <span class="text-[11px] text-zinc-500 block">{{ __('locations.arriving_shipments') }}</span>
+                <div class="text-xl font-bold text-emerald-700 mt-1 tabular-nums">{{ $location->destination_shipments_count }}</div>
+            </div>
+            <div class="nex-card p-4">
+                <span class="text-[11px] text-zinc-500 block">{{ __('locations.milestone_events') }}</span>
+                <div class="text-xl font-bold text-[#1F171B] mt-1 tabular-nums">{{ $location->tracking_events_count }}</div>
+            </div>
+        </div>
+
+        <!-- Geographic Coordinates (WGS84 Format) -->
+        <div class="nex-card p-6 space-y-3">
+            <h2 class="text-sm font-bold text-[#1F171B]">{{ __('locations.coords_title') }}</h2>
+            <div class="nex-inset p-4 font-mono text-xs text-zinc-800 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-zinc-500">{{ __('locations.fields.latitude') }}:</span>
+                    <span class="text-[#C93565] font-semibold tabular-nums">{{ $location->latitude !== null ? number_format($location->latitude, 7) : '—' }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-zinc-500">{{ __('locations.fields.longitude') }}:</span>
+                    <span class="text-emerald-700 font-semibold tabular-nums">{{ $location->longitude !== null ? number_format($location->longitude, 7) : '—' }}</span>
+                </div>
+                @if($location->latitude !== null && $location->longitude !== null)
+                    <div class="pt-2 border-t border-[#ECE4E8]">
+                        <a
+                            href="https://www.openstreetmap.org/?mlat={{ $location->latitude }}&mlon={{ $location->longitude }}#map=12/{{ $location->latitude }}/{{ $location->longitude }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-[#C93565] hover:underline font-semibold text-[11px] inline-flex items-center gap-1"
+                        >
+                            <span>{{ __('locations.view_osm') }}</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </aside>
+
+    <!-- Right Interactive Location Map Stage -->
+    <div class="lg:col-span-7">
+        <x-map
+            id="location-detail-map"
+            mode="single"
+            :latitude="$location->latitude"
+            :longitude="$location->longitude"
+            :zoom="12"
+            height="480px"
+            :title="__('locations.map.title')"
+            :subtitle="__('locations.map.subtitle')"
+            :marker="[
+                'title' => $location->name,
+                'type' => $location->type->value,
+                'typeLabel' => $location->type->label(),
+                'city' => $location->city,
+                'country' => $location->country,
+            ]"
+            :edit-url="auth()->user()?->can('update', $location) ? route('locations.edit', $location) : null"
+            :osm-url="$location->latitude !== null && $location->longitude !== null ? 'https://www.openstreetmap.org/?mlat=' . $location->latitude . '&mlon=' . $location->longitude . '#map=12/' . $location->latitude . '/' . $location->longitude : null"
+        />
+    </div>
 </div>
 @endsection

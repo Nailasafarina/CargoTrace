@@ -3,7 +3,7 @@
 [![Laravel 12](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat&logo=laravel)](https://laravel.com)
 [![PHP 8.3+](https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=flat&logo=php)](https://php.net)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com)
-[![Tests Passing](https://img.shields.io/badge/Tests-117%20Passed-10B981?style=flat&logo=checkmarx)](https://phpunit.de)
+[![Tests Passing](https://img.shields.io/badge/Tests-136%20Passed-10B981?style=flat&logo=checkmarx)](https://phpunit.de)
 [![API Sanctum](https://img.shields.io/badge/API-Laravel%20Sanctum-blue?style=flat)](https://laravel.com/docs/sanctum)
 [![Leaflet.js](https://img.shields.io/badge/Map-Leaflet.js%20%2B%20OSM-199900?style=flat&logo=leaflet)](https://leafletjs.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -48,8 +48,8 @@ Global supply chains suffer from fragmented milestone updates, opaque delay clas
 - **API & Authentication**: Laravel Sanctum (Stateful session authentication + Bearer Tokens with rate limiting).
 - **Maps & Geodata**: Leaflet.js 1.9.4, OpenStreetMap Cartographic Tiles, OpenStreetMap Nominatim Geocoding API.
 - **Meteorological Telemetry**: Open-Meteo API (WMO Code mapping, ambient conditions).
-- **Data Visualizations**: Chart.js 4.4.7 (Doughnut & Bar charts with dark-mode palette).
-- **Testing**: PHPUnit 11 with SQLite in-memory testing configuration (`117 tests, 485 assertions`).
+- **Data Visualizations**: Chart.js 4.6.x (Doughnut & Bar charts with Camellia Pink & Obsidian palette).
+- **Testing**: PHPUnit 12 with SQLite in-memory testing configuration (`136 tests, 617 assertions`).
 - **Code Quality**: Laravel Pint (PSR-12 / Laravel opinionated formatting).
 
 ---
@@ -116,7 +116,7 @@ All accounts are pre-seeded with password **`Password123!`**:
 ### Step-by-Step Installation
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/cargotrace.git
+   git clone https://github.com/Nailasafarina/CargoTrace.git
    cd cargotrace
    ```
 
@@ -164,7 +164,7 @@ All accounts are pre-seeded with password **`Password123!`**:
 
 ## 8. Running Automated Tests
 
-CargoTrace features a comprehensive suite of **117 automated unit and feature tests**:
+CargoTrace features a comprehensive suite of **136 automated unit and feature tests**:
 
 ```bash
 # Execute entire test suite (using in-memory SQLite database)

@@ -28,10 +28,10 @@ enum ExceptionSeverity: string
     public function badgeClasses(): string
     {
         return match ($this) {
-            self::Low => 'bg-yellow-50 text-yellow-800 border border-yellow-300',
-            self::Medium => 'bg-orange-50 text-orange-800 border border-orange-200',
-            self::High => 'bg-rose-50 text-rose-700 border border-rose-200',
-            self::Critical => 'bg-red-100 text-red-800 border border-red-300 font-bold',
+            self::Low => 'bg-amber-50 text-amber-800 border border-amber-200',
+            self::Medium => 'bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC]',
+            self::High => 'bg-red-50 text-red-700 border border-red-200',
+            self::Critical => 'bg-[#1F171B] text-[#F8C9DC] border border-[#9E224B] font-bold',
         };
     }
 }

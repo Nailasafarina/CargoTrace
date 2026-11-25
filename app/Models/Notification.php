@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\ExceptionType;
+use App\Enums\ShipmentStatus;
 use Database\Factories\NotificationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -47,17 +49,18 @@ class Notification extends Model
                 }
             }
             if (isset($params['type']) && is_string($params['type'])) {
-                $typeEnum = \App\Enums\ExceptionType::tryFrom($params['type']);
+                $typeEnum = ExceptionType::tryFrom($params['type']);
                 if ($typeEnum) {
                     $params['type'] = $typeEnum->label();
                 }
             }
             if (isset($params['status']) && is_string($params['status'])) {
-                $statusEnum = \App\Enums\ShipmentStatus::tryFrom($params['status']);
+                $statusEnum = ShipmentStatus::tryFrom($params['status']);
                 if ($statusEnum) {
                     $params['status'] = $statusEnum->label();
                 }
             }
+
             return __($decoded['key'], $params);
         }
 

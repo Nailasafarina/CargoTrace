@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\DelayStatus;
 use App\Enums\ShipmentStatus;
 use App\Models\Carrier;
+use App\Models\Setting;
 use App\Models\Shipment;
 use App\Models\ShipmentException;
 use App\Models\User;
@@ -18,8 +19,10 @@ class DashboardService
      *
      * @return array<string, mixed>
      */
-    public function getAdminOperatorMetrics(): array
+    public function getAdminOperatorMetrics(?User $user = null): array
     {
+        $thresholdHours = (int) Setting::get('delay_threshold_hours', config('cargotrace.delay_threshold_hours', 24));
+
         // 1. Metric Cards Aggregations (Single DB pass where possible to avoid N+1)
         $totalShipments = Shipment::count();
         $inTransit = Shipment::where('current_status', ShipmentStatus::InTransit->value)->count();
@@ -144,7 +147,8 @@ class DashboardService
             ],
             'recent_exceptions' => $recentExceptions,
             'recent_shipments' => $recentShipments->take(5),
-            'workspace_shipments' => $this->formatWorkspaceShipments($recentShipments),
+            'delay_threshold_hours' => $thresholdHours,
+            'workspace_shipments' => $this->formatWorkspaceShipments($recentShipments, $user),
         ];
     }
 
@@ -216,6 +220,8 @@ class DashboardService
             ->take(5)
             ->get();
 
+        $thresholdHours = (int) Setting::get('delay_threshold_hours', config('cargotrace.delay_threshold_hours', 24));
+
         return [
             'total_shipments' => $totalShipments,
             'in_transit' => $inTransit,
@@ -229,7 +235,8 @@ class DashboardService
             ],
             'recent_shipments' => $recentShipments->take(5),
             'recent_notifications' => $recentNotifications,
-            'workspace_shipments' => $this->formatWorkspaceShipments($recentShipments),
+            'delay_threshold_hours' => $thresholdHours,
+            'workspace_shipments' => $this->formatWorkspaceShipments($recentShipments, $customer),
         ];
     }
 
@@ -239,11 +246,11 @@ class DashboardService
      * @param  Collection<int, Shipment>  $shipments
      * @return array<int, array<string, mixed>>
      */
-    protected function formatWorkspaceShipments(Collection $shipments): array
+    protected function formatWorkspaceShipments(Collection $shipments, ?User $actor = null): array
     {
-        $bays = ['A1', 'A3', 'A8', 'A9', 'A10', 'A4'];
+        $bays = ['A9', 'A1', 'A3', 'A8', 'A10', 'A4'];
 
-        return $shipments->values()->map(function (Shipment $sh, int $idx) use ($bays) {
+        return $shipments->values()->map(function (Shipment $sh, int $idx) use ($bays, $actor) {
             $latestEvent = $sh->trackingEvents->sortByDesc('occurred_at')->first();
             $origin = $sh->originLocation;
             $dest = $sh->destinationLocation;
@@ -283,40 +290,44 @@ class DashboardService
                 ->toArray();
 
             $digits = preg_replace('/[^0-9]/', '', $sh->shipment_number);
-            $shortSuffix = strlen($digits) >= 3 ? substr($digits, -4) : str_pad((string) $sh->id, 4, '5430', STR_PAD_LEFT);
+            $shortSuffix = strlen($digits) >= 3 ? substr($digits, -4) : str_pad((string) $sh->id, 4, '0', STR_PAD_LEFT);
 
             return [
                 'id' => $sh->id,
-                'bay' => $bays[$idx] ?? ('B' . ($idx + 1)),
+                'bay' => $bays[$idx] ?? ('B'.($idx + 1)),
                 'number' => $sh->shipment_number,
-                'short_code' => 'SHP - ' . $shortSuffix,
+                'short_code' => 'SHP - '.$shortSuffix,
                 'status_value' => $sh->current_status->value,
                 'status_label' => $sh->current_status->label(),
                 'status_short' => match ($sh->current_status) {
                     ShipmentStatus::InTransit => 'Transit',
                     ShipmentStatus::Delivered => 'Delivered',
+                    ShipmentStatus::Cancelled => 'Cancelled',
                     default => 'Loading',
                 },
+                'is_delayed' => $sh->delay_status !== DelayStatus::OnTime,
                 'delay_label' => $sh->delay_status->label(),
                 'delay_hours' => (int) ($sh->delay_hours ?? 0),
-                'weight_kg' => (float) ($sh->weight_kg ?? 500),
-                'weight_formatted' => number_format((float) ($sh->weight_kg ?? 500), 0) . 'kg',
+                'weight_kg' => (float) ($sh->weight_kg ?? 0),
+                'weight_formatted' => number_format((float) ($sh->weight_kg ?? 0), 0).'kg',
+                'volume_formatted' => $sh->volume_cbm ? number_format((float) $sh->volume_cbm, 1).' m³' : '—',
                 'cargo_type' => $sh->cargo_type ?? 'General Freight',
                 'items_count' => max(1, $sh->items->count()),
-                'carrier_name' => $sh->carrier?->name ?? 'Scania E3360 Freight',
-                'carrier_code' => ($sh->carrier?->code ?? 'TRC') . '-' . (200 + ($sh->id % 99)),
-                'operator_name' => $sh->creator?->name ?? $sh->customer?->name ?? 'Clark Kent',
-                'customer_name' => $sh->customer?->name ?? 'Global Consignee',
-                'dock_label' => 'Dock #' . (($sh->id % 5) + 1),
-                'started_time' => $sh->expected_departure_at ? $sh->expected_departure_at->format('h:i A') : '08:30 AM',
+                'carrier_name' => $sh->carrier?->name ?? 'Assigned Carrier',
+                'carrier_code' => ($sh->carrier?->code ?? 'CAR').'-'.(200 + ($sh->id % 99)),
+                'operator_name' => $sh->creator?->name ?? $sh->customer?->name ?? 'Operations Lead',
+                'customer_name' => $sh->customer?->name ?? 'Consignee',
+                'dock_label' => 'Bay '.($bays[$idx] ?? 'A9'),
+                'started_time' => $sh->expected_departure_at ? $sh->expected_departure_at->format('d M, H:i') : 'Scheduled',
+                'current_event_time' => $latestEvent?->occurred_at?->format('d M Y, H:i') ?? ($sh->updated_at?->format('d M Y, H:i') ?? '—'),
                 'eta_formatted' => ($sh->estimated_arrival_at ?? $sh->expected_arrival_at)?->format('d M Y, H:i') ?? 'Scheduled',
-                'origin_city' => $origin?->city ?? 'Jakarta',
-                'origin_country' => $origin?->country ?? 'ID',
+                'origin_city' => $origin?->city ?? 'Origin',
+                'origin_country' => $origin?->country ?? '',
                 'origin_name' => $origin?->name ?? 'Origin Terminal',
                 'origin_lat' => $originLat,
                 'origin_lng' => $originLng,
-                'dest_city' => $dest?->city ?? 'Rotterdam',
-                'dest_country' => $dest?->country ?? 'NL',
+                'dest_city' => $dest?->city ?? 'Destination',
+                'dest_country' => $dest?->country ?? '',
                 'dest_name' => $dest?->name ?? 'Destination Terminal',
                 'dest_lat' => $destLat,
                 'dest_lng' => $destLng,
@@ -328,6 +339,7 @@ class DashboardService
                 'waypoints' => $waypoints,
                 'show_url' => route('shipments.show', $sh),
                 'edit_url' => route('shipments.edit', $sh),
+                'can_edit' => $actor ? $actor->can('update', $sh) : false,
             ];
         })->toArray();
     }

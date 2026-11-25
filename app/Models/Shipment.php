@@ -61,6 +61,7 @@ class Shipment extends Model
         $decoded = json_decode($value, true);
         if (json_last_error() === JSON_ERROR_NONE && is_array($decoded) && isset($decoded['key'])) {
             $params = $decoded['params'] ?? [];
+
             return __($decoded['key'], $params);
         }
 
