@@ -694,13 +694,12 @@ document.addEventListener('DOMContentLoaded', function () {
         inertiaDeceleration: 2800
     });
 
-    const voyagerLayer = LRef.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
-        maxZoom: 19,
+    const esriStreetLayer = LRef.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
         keepBuffer: 6,
         updateWhenZooming: false,
         updateWhenIdle: false,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="text-[#C93565] hover:underline font-medium">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" class="text-[#C93565] hover:underline font-medium">CARTO</a>'
+        attribution: 'Tiles &copy; Esri'
     }).addTo(map);
 
     const osmStandardLayer = LRef.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -713,7 +712,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     LRef.control.layers(
         {
-            'Clean Map (Voyager HD)': voyagerLayer,
+            'Clean Map (Esri Street)': esriStreetLayer,
             'Detailed Map (OpenStreetMap)': osmStandardLayer,
         },
         null,

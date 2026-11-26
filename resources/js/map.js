@@ -87,16 +87,15 @@ function buildTooltipContent(marker) {
 }
 
 /**
- * Attach CartoDB Voyager Retina/HD tile layer as default with an optional layer switcher for OpenStreetMap Standard.
+ * Attach Esri World Street Map (no-API-key required) tile layer as default with an optional layer switcher for OpenStreetMap Standard.
  */
 function attachTileLayer(map, includeLayerSwitcher = true) {
-    const voyagerLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
-        maxZoom: 19,
+    const esriStreetLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
         keepBuffer: 6,
         updateWhenZooming: false,
         updateWhenIdle: false,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="text-[#c93565] hover:underline font-medium">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer" class="text-[#c93565] hover:underline font-medium">CARTO</a>'
+        attribution: 'Tiles &copy; Esri'
     });
 
     const osmStandardLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -107,16 +106,16 @@ function attachTileLayer(map, includeLayerSwitcher = true) {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" class="text-[#c93565] hover:underline font-medium">OpenStreetMap</a> contributors'
     });
 
-    voyagerLayer.on('tileerror', function (err) {
+    esriStreetLayer.on('tileerror', function (err) {
         console.warn('Map tile loading issue handled gracefully:', err);
     });
 
-    voyagerLayer.addTo(map);
+    esriStreetLayer.addTo(map);
 
     if (includeLayerSwitcher) {
         L.control.layers(
             {
-                'Clean Map (Voyager HD)': voyagerLayer,
+                'Clean Map (Esri Street)': esriStreetLayer,
                 'Detailed Map (OpenStreetMap)': osmStandardLayer,
             },
             null,
@@ -124,7 +123,7 @@ function attachTileLayer(map, includeLayerSwitcher = true) {
         ).addTo(map);
     }
 
-    return voyagerLayer;
+    return esriStreetLayer;
 }
 
 /**

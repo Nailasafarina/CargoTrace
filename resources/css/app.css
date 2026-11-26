@@ -168,7 +168,7 @@ canvas {
     will-change: transform;
 }
 
-/* All Leaflet maps (Dashboard, Global Logistics Network Map, and Shipment Corridor Map) render crisp HD CartoDB Voyager labels */
+/* All Leaflet maps (Dashboard, Global Logistics Network Map, and Shipment Corridor Map) render crisp Esri World Street Map labels */
 #dashboard-osm-map .leaflet-tile-pane,
 .leaflet-tile-pane {
     filter: contrast(1.03) saturate(1.04);

@@ -789,13 +789,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         dashboardMap.attributionControl.setPrefix(false);
 
-        window.L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            subdomains: 'abcd',
-            maxZoom: 19,
+        window.L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 18,
             keepBuffer: 6,
             updateWhenZooming: false,
             updateWhenIdle: false,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>'
+            attribution: 'Tiles &copy; Esri'
         }).addTo(dashboardMap);
 
         routeLayerGroup = window.L.featureGroup().addTo(dashboardMap);
