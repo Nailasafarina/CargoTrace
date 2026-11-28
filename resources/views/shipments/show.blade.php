@@ -319,17 +319,21 @@
         </div>
     </div>
 
+    @php
+        $canManageMilestone = Auth::user()->isAdmin() || Auth::user()->isOperator();
+    @endphp
+
     <!-- Bottom Asymmetric 12-Col Operations Split -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <!-- Left 7 Cols: Chronological Timeline & Cargo Manifest -->
-        <div class="lg:col-span-7 space-y-6">
+        <!-- Left Cols: Chronological Timeline, Cargo Manifest & Operational Exceptions -->
+        <div class="{{ $canManageMilestone ? 'lg:col-span-7' : 'lg:col-span-12' }} space-y-6">
             <div id="milestone-timeline" class="nex-card p-6 space-y-6">
-                <div class="flex items-center justify-between pb-4 border-b border-[#F5F0F3]">
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-[#F5F0F3]">
                     <div>
                         <h2 class="text-base font-bold text-[#4A2C35]">{{ __('shipments.show.timeline_title') }}</h2>
                         <p class="text-xs text-[#8C737B] mt-0.5">{{ __('shipments.show.timeline_desc') }}</p>
                     </div>
-                    <span class="px-3 py-1 rounded-full bg-[#FAF7F9] border border-[#ECE4E8] text-xs text-[#7D626B] font-mono">{{ __('shipments.show.milestones_logged', ['count' => $shipment->trackingEvents->count()]) }}</span>
+                    <span class="px-3 py-1 rounded-full bg-[#FAF7F9] border border-[#ECE4E8] text-xs text-[#7D626B] font-mono whitespace-nowrap">{{ __('shipments.show.milestones_logged', ['count' => $shipment->trackingEvents->count()]) }}</span>
                 </div>
 
                 <div class="relative border-l-2 border-[#ECE4E8] ml-4 space-y-4 pt-1">
@@ -369,7 +373,7 @@
                                 </p>
 
                                 @if($event->latitude && $event->longitude)
-                                    <div class="mt-2 text-[11px] font-mono text-[#8C737B] flex items-center gap-3">
+                                    <div class="mt-2 text-[11px] font-mono text-[#8C737B] flex flex-wrap items-center gap-3">
                                         <span>GPS: {{ number_format($event->latitude, 6) }}, {{ number_format($event->longitude, 6) }}</span>
                                         <a
                                             href="https://www.openstreetmap.org/?mlat={{ $event->latitude }}&mlon={{ $event->longitude }}#map=12/{{ $event->latitude }}/{{ $event->longitude }}"
@@ -394,7 +398,7 @@
 
             <!-- Cargo Manifest Items Table -->
             <div class="nex-card p-6 space-y-4">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-2">
                     <h2 class="text-sm font-bold text-[#4A2C35] uppercase tracking-wider">{{ __('shipments.show.manifest_title', ['count' => $shipment->items->count()]) }}</h2>
                     <span class="text-xs text-[#8C737B]">{{ __('shipments.show.total_weight') }}: <strong class="text-[#4A2C35] font-mono">{{ number_format($shipment->weight_kg, 2) }} kg</strong></span>
                 </div>
@@ -426,122 +430,19 @@
                     </table>
                 </div>
             </div>
-        </div>
 
-        <!-- Right 5 Cols: Operator Milestone Form & Exceptions Console -->
-        <div class="lg:col-span-5 space-y-6">
-            @if(Auth::user()->isAdmin() || Auth::user()->isOperator())
-                <div class="nex-card p-6 space-y-4">
-                    <div class="flex items-center justify-between pb-3 border-b border-[#F5F0F3]">
-                        <div>
-                            <h2 class="text-base font-bold text-[#4A2C35]">{{ __('shipments.show.log_milestone_title') }}</h2>
-                            <p class="text-xs text-[#8C737B] mt-0.5">{{ __('shipments.show.log_milestone_desc') }}</p>
-                        </div>
-                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC] whitespace-nowrap shrink-0">
-                            {{ __('shipments.show.operator_console') }}
-                        </span>
-                    </div>
-
-                    @if($shipment->current_status === \App\Enums\ShipmentStatus::Delivered)
-                        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-3">
-                            <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                            <span>{{ __('shipments.show.delivered_terminal_notice') }}</span>
-                        </div>
-                    @else
-                        <form method="POST" action="{{ route('shipments.events.store', $shipment) }}" class="space-y-3.5">
-                            @csrf
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label for="status" class="block text-xs font-semibold text-[#6E545D] mb-1">{{ __('shipments.show.target_lifecycle_status') }}</label>
-                                    <select id="status" name="status" required class="nex-input">
-                                        @foreach($statuses as $st)
-                                            <option value="{{ $st->value }}" {{ old('status', $shipment->current_status->value) === $st->value ? 'selected' : '' }}>
-                                                {{ $st->label() }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('status') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
-                                </div>
-
-                                <div>
-                                    <label for="event_type" class="block text-xs font-semibold text-[#6E545D] mb-1">{{ __('shipments.show.milestone_event_type') }}</label>
-                                    <select id="event_type" name="event_type" required class="nex-input">
-                                        @foreach($eventTypes as $et)
-                                            <option value="{{ $et->value }}" {{ old('event_type') === $et->value ? 'selected' : '' }}>
-                                                {{ $et->label() }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('event_type') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div>
-                                    <label for="location_id" class="block text-xs font-semibold text-[#6E545D] mb-1">{{ __('shipments.show.waypoint_hub_port') }}</label>
-                                    <select id="location_id" name="location_id" class="nex-input">
-                                        <option value="">{{ __('shipments.show.select_waypoint') }}</option>
-                                        @foreach($locations as $loc)
-                                            <option value="{{ $loc->id }}" {{ old('location_id') == $loc->id ? 'selected' : '' }}>
-                                                {{ $loc->name }} ({{ $loc->city }})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('location_id') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
-                                </div>
-
-                                <div>
-                                    <label for="occurred_at" class="block text-xs font-semibold text-[#6E545D] mb-1">{{ __('shipments.show.event_timestamp') }}</label>
-                                    <input type="datetime-local" id="occurred_at" name="occurred_at" value="{{ old('occurred_at', now()->format('Y-m-d\TH:i')) }}" required class="nex-input" />
-                                    @error('occurred_at') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label for="latitude" class="block text-xs font-semibold text-[#6E545D] mb-1">{{ __('shipments.show.latitude_opt') }}</label>
-                                    <input type="number" step="0.0000001" id="latitude" name="latitude" value="{{ old('latitude') }}" placeholder="e.g. 1.2644120" class="nex-input font-mono" />
-                                </div>
-
-                                <div>
-                                    <label for="longitude" class="block text-xs font-semibold text-[#6E545D] mb-1">{{ __('shipments.show.longitude_opt') }}</label>
-                                    <input type="number" step="0.0000001" id="longitude" name="longitude" value="{{ old('longitude') }}" placeholder="e.g. 103.8222180" class="nex-input font-mono" />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label for="description" class="block text-xs font-semibold text-[#6E545D] mb-1">{{ __('shipments.show.milestone_desc') }}</label>
-                                <textarea id="description" name="description" rows="2" required placeholder="{{ __('shipments.show.milestone_desc_placeholder') }}" class="nex-input">{{ old('description') }}</textarea>
-                                @error('description') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
-                            </div>
-
-                            <div class="flex items-center justify-between gap-2 pt-1">
-                                <label class="flex items-center gap-2 text-xs text-[#6E545D] cursor-pointer">
-                                    <input type="checkbox" name="is_exception" value="1" {{ old('is_exception') ? 'checked' : '' }} class="w-4 h-4 rounded border-[#E6DCE1] text-red-600 focus:ring-red-500/20" />
-                                    {{ __('shipments.show.mark_exception_event') }}
-                                </label>
-                                <button type="submit" class="px-5 py-2.5 rounded-full bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-semibold shadow-sm transition cursor-pointer shrink-0">
-                                    {{ __('shipments.show.record_milestone_button') }}
-                                </button>
-                            </div>
-                        </form>
-                    @endif
-                </div>
-            @endif
-
-            <!-- Operational Exceptions & Incident Management -->
+            <!-- Operational Exceptions & Incident Management (Moved to Left Column Below Cargo Manifest Table) -->
             <div class="nex-card p-6 space-y-5">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-wrap items-center justify-between gap-2">
                     <div>
                         <h2 class="text-sm font-bold text-[#4A2C35] uppercase tracking-wider flex items-center gap-2">
-                            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                            {{ __('shipments.show.exceptions_title', ['count' => $shipment->exceptions->count()]) }}
+                            <svg class="w-4 h-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            <span>{{ __('shipments.show.exceptions_title', ['count' => $shipment->exceptions->count()]) }}</span>
                         </h2>
                         <p class="text-xs text-[#8C737B] mt-0.5">{{ __('shipments.show.exceptions_subtitle') }}</p>
                     </div>
                     @if($shipment->exceptions->whereIn('status.value', ['OPEN', 'INVESTIGATING'])->isNotEmpty())
-                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-amber-50 text-amber-800 border border-amber-200">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-amber-50 text-amber-800 border border-amber-200 whitespace-nowrap">
                             {{ __('shipments.show.active_disruptions') }}
                         </span>
                     @endif
@@ -583,19 +484,19 @@
                                                 @csrf
                                                 @method('PATCH')
                                                 <input type="hidden" name="status" value="{{ \App\Enums\ExceptionStatus::Investigating->value }}">
-                                                <button type="submit" class="px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-semibold transition cursor-pointer">
+                                                <button type="submit" class="px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-semibold transition cursor-pointer whitespace-nowrap">
                                                     {{ __('shipments.show.mark_investigating') }}
                                                 </button>
                                             </form>
                                         @endif
 
-                                        <form method="POST" action="{{ route('exceptions.status.update', $exception) }}" class="flex flex-1 items-center gap-2 min-w-[220px]">
+                                        <form method="POST" action="{{ route('exceptions.status.update', $exception) }}" class="flex flex-1 flex-wrap sm:flex-nowrap items-center gap-2 min-w-[220px]">
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="{{ \App\Enums\ExceptionStatus::Resolved->value }}">
                                             <input type="text" name="resolution_notes" placeholder="{{ __('shipments.show.resolution_notes_placeholder') }}" required
-                                                class="flex-1 px-3 py-1.5 rounded-full bg-white border border-[#ECE4E8] text-xs text-[#4A2C35] placeholder-zinc-400 focus:outline-none focus:border-emerald-500">
-                                            <button type="submit" class="px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition cursor-pointer shrink-0">
+                                                class="w-full sm:flex-1 px-3 py-1.5 rounded-full bg-white border border-[#ECE4E8] text-xs text-[#4A2C35] placeholder-zinc-400 focus:outline-none focus:border-emerald-500">
+                                            <button type="submit" class="w-full sm:w-auto px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition cursor-pointer shrink-0 whitespace-nowrap">
                                                 {{ __('shipments.show.resolve_and_clear') }}
                                             </button>
                                         </form>
@@ -613,9 +514,9 @@
                 @if(auth()->user()->isAdmin() || auth()->user()->isOperator())
                     <div class="pt-3 border-t border-[#F5F0F3]">
                         <details class="group">
-                            <summary class="flex items-center justify-between cursor-pointer text-xs font-bold uppercase tracking-wider text-[#9E224B] hover:text-[#C93565]">
-                                <span>{{ __('shipments.show.flag_new_exception') }}</span>
-                                <span class="text-zinc-400 group-open:rotate-180 transition">&darr;</span>
+                            <summary class="flex items-center justify-between gap-3 cursor-pointer text-xs font-bold uppercase tracking-wider text-[#9E224B] hover:text-[#C93565] py-1 list-none [&::-webkit-details-marker]:hidden">
+                                <span class="leading-snug">{{ __('shipments.show.flag_new_exception') }}</span>
+                                <span class="w-6 h-6 rounded-full bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC] flex items-center justify-center shrink-0 group-open:rotate-180 transition">&darr;</span>
                             </summary>
                             <form action="{{ route('shipments.exceptions.store', $shipment) }}" method="POST" class="mt-4 nex-inset p-4 space-y-3">
                                 @csrf
@@ -629,7 +530,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="grid grid-cols-2 gap-3">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                         <div>
                                             <label for="exc_severity" class="block text-xs font-semibold text-[#6E545D] mb-1">{{ __('shipments.show.severity_level') }}</label>
                                             <select id="exc_severity" name="severity" required class="nex-input bg-white">
@@ -654,7 +555,7 @@
                                 </div>
 
                                 <div class="flex justify-end">
-                                    <button type="submit" class="px-5 py-2 rounded-full bg-[#C93565] hover:bg-[#b32956] text-white font-semibold text-xs shadow-sm transition cursor-pointer">
+                                    <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#C93565] hover:bg-[#b32956] text-white font-semibold text-xs shadow-sm transition cursor-pointer">
                                         {{ __('shipments.show.log_exception_button') }}
                                     </button>
                                 </div>
@@ -664,6 +565,110 @@
                 @endif
             </div>
         </div>
+
+        <!-- Right 5 Cols: Standalone Operator Milestone Form (Sticky on Desktop) -->
+        @if($canManageMilestone)
+            <div class="lg:col-span-5 lg:sticky lg:top-6 space-y-6">
+                <div class="nex-card p-6 space-y-4">
+                    <div class="flex items-start justify-between gap-3 pb-3 border-b border-[#F5F0F3]">
+                        <div>
+                            <h2 class="text-base font-bold text-[#4A2C35]">{{ __('shipments.show.log_milestone_title') }}</h2>
+                            <p class="text-xs text-[#8C737B] mt-0.5">{{ __('shipments.show.log_milestone_desc') }}</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#FDF2F6] text-[#9E224B] border border-[#F8C9DC] whitespace-nowrap shrink-0">
+                            {{ __('shipments.show.operator_console') }}
+                        </span>
+                    </div>
+
+                    @if($shipment->current_status === \App\Enums\ShipmentStatus::Delivered)
+                        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-3">
+                            <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <span>{{ __('shipments.show.delivered_terminal_notice') }}</span>
+                        </div>
+                    @else
+                        <form method="POST" action="{{ route('shipments.events.store', $shipment) }}" class="space-y-4">
+                            @csrf
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label for="status" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.show.target_lifecycle_status') }}</label>
+                                    <select id="status" name="status" required class="nex-input">
+                                        @foreach($statuses as $st)
+                                            <option value="{{ $st->value }}" {{ old('status', $shipment->current_status->value) === $st->value ? 'selected' : '' }}>
+                                                {{ $st->label() }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('status') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label for="event_type" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.show.milestone_event_type') }}</label>
+                                    <select id="event_type" name="event_type" required class="nex-input">
+                                        @foreach($eventTypes as $et)
+                                            <option value="{{ $et->value }}" {{ old('event_type') === $et->value ? 'selected' : '' }}>
+                                                {{ $et->label() }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('event_type') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label for="location_id" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.show.waypoint_hub_port') }}</label>
+                                    <select id="location_id" name="location_id" class="nex-input">
+                                        <option value="">{{ __('shipments.show.select_waypoint') }}</option>
+                                        @foreach($locations as $loc)
+                                            <option value="{{ $loc->id }}" {{ old('location_id') == $loc->id ? 'selected' : '' }}>
+                                                {{ $loc->name }} ({{ $loc->city }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('location_id') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label for="occurred_at" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.show.event_timestamp') }}</label>
+                                    <input type="datetime-local" id="occurred_at" name="occurred_at" value="{{ old('occurred_at', now()->format('Y-m-d\TH:i')) }}" required class="nex-input" />
+                                    @error('occurred_at') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label for="latitude" class="block text-xs font-semibold text-[#6E545D] mb-1.5 whitespace-nowrap">{{ __('shipments.show.latitude_opt') }}</label>
+                                    <input type="number" step="0.0000001" id="latitude" name="latitude" value="{{ old('latitude') }}" placeholder="e.g. 1.2644120" class="nex-input font-mono" />
+                                </div>
+
+                                <div>
+                                    <label for="longitude" class="block text-xs font-semibold text-[#6E545D] mb-1.5 whitespace-nowrap">{{ __('shipments.show.longitude_opt') }}</label>
+                                    <input type="number" step="0.0000001" id="longitude" name="longitude" value="{{ old('longitude') }}" placeholder="e.g. 103.8222180" class="nex-input font-mono" />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="description" class="block text-xs font-semibold text-[#6E545D] mb-1.5">{{ __('shipments.show.milestone_desc') }}</label>
+                                <textarea id="description" name="description" rows="3" required placeholder="{{ __('shipments.show.milestone_desc_placeholder') }}" class="nex-input">{{ old('description') }}</textarea>
+                                @error('description') <p class="text-xs text-red-600 mt-1 font-medium">{{ $message }}</p> @enderror
+                            </div>
+
+                            <!-- Vertically Stacked Full-Width Exception Checkbox & Submit Button -->
+                            <div class="flex flex-col gap-4 pt-2 border-t border-[#F5F0F3]">
+                                <label class="w-full flex items-start gap-2.5 p-3 rounded-xl bg-[#FAF7F9] border border-[#ECE4E8] text-xs text-[#6E545D] cursor-pointer hover:border-[#F8C9DC] transition">
+                                    <input type="checkbox" name="is_exception" value="1" {{ old('is_exception') ? 'checked' : '' }} class="mt-0.5 w-4 h-4 rounded border-[#E6DCE1] text-red-600 focus:ring-red-500/20 shrink-0" />
+                                    <span class="leading-relaxed">{{ __('shipments.show.mark_exception_event') }}</span>
+                                </label>
+                                <button type="submit" class="w-full py-2.5 px-5 rounded-xl bg-[#BE2B5B] hover:bg-[#A0224B] text-white text-xs font-bold shadow-sm transition cursor-pointer inline-flex items-center justify-center gap-1.5">
+                                    <span>{{ __('shipments.show.record_milestone_button') }}</span>
+                                </button>
+                            </div>
+                        </form>
+                    @endif
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 @endsection
